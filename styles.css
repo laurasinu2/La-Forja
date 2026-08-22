@@ -2779,7 +2779,7 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
 .atlas-marker, .player-marker { padding: 0 !important; min-width: 0 !important; min-height: 0 !important; }
 
 
-/* Version 2.9.0 · Historia, contenido latente y archivo del Cuaderno */
+/* Version 2.9.1 · Historia, marcadores latentes y archivo del Cuaderno */
 .collection-items { display: flex; flex-direction: column; }
 .collection-archive { margin-top: auto; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 88%, var(--bg)); }
 .collection-archive > summary { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 38px; padding: 7px 9px; cursor: pointer; list-style: none; color: var(--muted); background: var(--surface-2); border-top: 1px solid var(--line-soft); font-size: 12px; font-weight: 800; z-index: 2; }

@@ -1,12 +1,12 @@
-const CACHE = "forja-narrador-v290-history-latent-archive";
+const CACHE = "forja-narrador-v291-history-marker-unlocks";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.9.0",
-  "./app.js?v=2.9.0",
-  "./history.js?v=2.9.0",
-  "./atlas.js?v=2.9.0",
-  "./dungeon.js?v=2.9.0",
+  "./styles.css?v=2.9.1",
+  "./app.js?v=2.9.1",
+  "./history.js?v=2.9.1",
+  "./atlas.js?v=2.9.1",
+  "./dungeon.js?v=2.9.1",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

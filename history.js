@@ -53,8 +53,9 @@
     const [icon, label] = STATUS[event.status] || STATUS.available;
     const dependentCount = history().events.filter(candidate => candidate.requirementIds?.includes(event.id)).length;
     const sceneCount = campaign().atlas?.scenes?.filter(scene => scene.unlockEventId === event.id).length || 0;
+    const markerCount = campaign().atlas?.scenes?.reduce((total, scene) => total + (scene.markers || []).filter(marker => marker.unlockEventId === event.id).length, 0) || 0;
     const reqText = event.requirementIds?.length ? `${event.requirementIds.length} requisito${event.requirementIds.length === 1 ? "" : "s"}` : "Sin requisitos";
-    button.innerHTML = `<span class="history-event-card__status">${icon}</span><span class="history-event-card__body"><strong></strong><small>${label} · ${reqText}</small><span class="history-event-card__effects">${dependentCount ? `⌁ ${dependentCount}` : ""}${sceneCount ? `⌖ ${sceneCount}` : ""}</span></span>`;
+    button.innerHTML = `<span class="history-event-card__status">${icon}</span><span class="history-event-card__body"><strong></strong><small>${label} · ${reqText}</small><span class="history-event-card__effects">${dependentCount ? `⌁ ${dependentCount}` : ""}${sceneCount ? `⌖ ${sceneCount}` : ""}${markerCount ? `📍 ${markerCount}` : ""}</span></span>`;
     button.querySelector("strong").textContent = event.title || "Suceso sin nombre";
     button.addEventListener("click", () => { history().selectedEventId = event.id; app.saveState(); render(); });
     return button;
@@ -113,8 +114,13 @@
 
     els.latentAtlas.replaceChildren();
     const scenes = campaign().atlas?.scenes?.filter(scene => scene.unlockEventId === event.id) || [];
-    if (!scenes.length) { const p = document.createElement("p"); p.className = "history-empty-list"; p.textContent = "No hay escenas del Atlas vinculadas a este suceso."; els.latentAtlas.append(p); }
-    scenes.forEach(scene => els.latentAtlas.append(effectRow(event.status === "occurred" ? "⌖" : "🔒", scene.name, event.status === "occurred" ? "Ya visible en el Atlas del DM" : "Latente hasta que ocurra este suceso", { label: "Editar", run: () => window.ForjaAtlas?.openSceneDialog?.(scene.id) })));
+    const markers = (campaign().atlas?.scenes || []).flatMap(scene => (scene.markers || []).filter(marker => marker.unlockEventId === event.id).map(marker => ({ scene, marker })));
+    if (!scenes.length && !markers.length) { const p = document.createElement("p"); p.className = "history-empty-list"; p.textContent = "No hay escenas ni marcadores del Atlas vinculados a este suceso."; els.latentAtlas.append(p); }
+    scenes.forEach(scene => els.latentAtlas.append(effectRow(event.status === "occurred" ? "⌖" : "🔒", scene.name, event.status === "occurred" ? "Escena ya visible en el Atlas del DM" : "Escena latente hasta que ocurra este suceso", { label: "Editar", run: () => window.ForjaAtlas?.openSceneDialog?.(scene.id) })));
+    markers.forEach(({ scene, marker }) => {
+      const name = marker.name || marker.alias || "Marcador sin nombre";
+      els.latentAtlas.append(effectRow(event.status === "occurred" ? "📍" : "🔒", name, `${scene.name} · ${event.status === "occurred" ? "Marcador ya visible para el DM" : "Marcador latente hasta que ocurra este suceso"}`, { label: "Editar", run: () => window.ForjaAtlas?.openMarkerDialog?.(scene.id, marker.id) }));
+    });
   }
 
   function renderDetail() {
@@ -151,11 +157,14 @@
   function deleteSelected() {
     const event = selectedEvent(); if (!event) return;
     const linkedScenes = campaign().atlas?.scenes?.filter(scene => scene.unlockEventId === event.id) || [];
-    const extra = linkedScenes.length ? `\n\n${linkedScenes.length} escena${linkedScenes.length === 1 ? "" : "s"} del Atlas dejarán de estar latentes y pasarán a ser visibles para el DM.` : "";
+    const linkedMarkers = (campaign().atlas?.scenes || []).flatMap(scene => (scene.markers || []).filter(marker => marker.unlockEventId === event.id));
+    const linkedTotal = linkedScenes.length + linkedMarkers.length;
+    const extra = linkedTotal ? `\n\n${linkedScenes.length ? `${linkedScenes.length} escena${linkedScenes.length === 1 ? "" : "s"}` : ""}${linkedScenes.length && linkedMarkers.length ? " y " : ""}${linkedMarkers.length ? `${linkedMarkers.length} marcador${linkedMarkers.length === 1 ? "" : "es"}` : ""} del Atlas ${linkedTotal === 1 ? "dejará" : "dejarán"} de estar latente${linkedTotal === 1 ? "" : "s"} y ${linkedTotal === 1 ? "pasará" : "pasarán"} a ser visible${linkedTotal === 1 ? "" : "s"} para el DM.` : "";
     if (!confirm(`¿Eliminar el suceso “${event.title}”?${extra}`)) return;
     history().events = history().events.filter(candidate => candidate.id !== event.id);
     history().events.forEach(candidate => { candidate.requirementIds = candidate.requirementIds.filter(id => id !== event.id); });
     linkedScenes.forEach(scene => { scene.unlockEventId = ""; scene.updatedAt = app.now(); });
+    linkedMarkers.forEach(marker => { marker.unlockEventId = ""; });
     history().selectedEventId = history().events[0]?.id || ""; refreshUnlocks(); notifyStructuralChange(); render();
   }
 

@@ -1,3 +1,11 @@
+# Versión 2.9.1 · Marcadores desbloqueables por Historia
+
+- Los **marcadores individuales del Atlas** pueden vincularse a un suceso desde el propio editor del marcador.
+- Mientras el suceso no haya ocurrido, el marcador queda **latente**: no aparece en el mapa normal del DM, en la lista de capas ni en la proyección de jugadores.
+- Los marcadores latentes siguen accesibles desde **Historia → Contenido latente del Atlas**, indicando además la escena a la que pertenecen.
+- Al marcar el suceso como **Ha ocurrido**, los marcadores vinculados aparecen automáticamente respetando su visibilidad normal (Solo DM / Visible / Descubierto).
+- Si se elimina un suceso, sus escenas y marcadores vinculados dejan de estar latentes para evitar contenido inaccesible.
+
 # Versión 2.9.0 · Historia, desbloqueos y archivo
 
 - Nueva vista **Historia** al mismo nivel que Cuaderno, Calendario y Atlas.
