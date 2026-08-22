@@ -1,0 +1,12 @@
+{
+  "name": "La Forja del Narrador",
+  "short_name": "La Forja",
+  "description": "Gestor local de campañas de rol con campañas, árboles, vendedores, calendario de partida, mapa mental de conexiones y tirador de dados.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#101214",
+  "theme_color": "#151719",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

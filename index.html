@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#151719" />
+  <meta name="description" content="Gestor local de campañas de rol para narradores y directores de juego." />
+  <title>La Forja del Narrador</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css?v=2.8.0" />
+</head>
+<body>
+  <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
+    <form id="accessGateForm" class="access-gate__card">
+      <img src="assets/icon.svg" alt="" class="access-gate__icon" />
+      <p class="access-gate__eyebrow">Acceso privado</p>
+      <h1 id="accessGateTitle">La Forja del Narrador</h1>
+      <p>Introduce el código de este dispositivo para acceder a la aplicación.</p>
+      <label>Código de acceso<input id="accessGateCode" type="password" inputmode="numeric" autocomplete="one-time-code" maxlength="12" required /></label>
+      <p id="accessGateError" class="form-error" hidden></p>
+      <button class="role-card__button" type="submit">Entrar</button>
+    </form>
+  </section>
+  <section id="roleGate" class="role-gate" aria-labelledby="roleGateTitle">
+    <div class="role-gate__ornament" aria-hidden="true">✦</div>
+    <header class="role-gate__header">
+      <img src="assets/icon.svg" alt="" />
+      <h1 id="roleGateTitle">La Forja del Narrador</h1>
+      <p class="role-gate__subtitle">Forja mundos, criaturas y aventuras</p>
+      <span class="role-gate__divider" aria-hidden="true"></span>
+      <p>Bienvenido, aventurero. Elige tu rol para continuar.</p>
+      <label class="role-campaign-select">Campaña<select id="roleCampaignSelect"></select></label>
+    </header>
+    <div class="role-cards">
+      <article class="role-card role-card--dm">
+        <div class="role-card__crest" aria-hidden="true">♛</div>
+        <h2>DM / Director de juego</h2>
+        <p>Crea campañas, controla el Atlas y guía la historia desde las sombras.</p>
+        <button id="chooseDmRole" class="role-card__button" type="button">♛ Entrar como DM</button>
+      </article>
+      <article class="role-card role-card--player">
+        <div class="role-card__crest" aria-hidden="true">⛨</div>
+        <h2>Jugador</h2>
+        <p>Accede únicamente al Atlas proyectado y a las escenas que el DM haya descubierto.</p>
+        <button id="choosePlayerRole" class="role-card__button" type="button">♟ Entrar como jugador</button>
+      </article>
+    </div>
+    <form id="dmAuthForm" class="dm-auth-card" hidden>
+      <button id="backToRoles" class="dm-auth-card__back" type="button">← Volver</button>
+      <h2 id="dmAuthTitle">Acceso de DM</h2>
+      <p id="dmAuthHint"></p>
+      <label id="dmPasswordLabel">Contraseña<input id="dmPassword" type="password" minlength="8" autocomplete="current-password" required /></label>
+      <label id="dmPasswordConfirmLabel" hidden>Repite la contraseña<input id="dmPasswordConfirm" type="password" minlength="8" autocomplete="new-password" /></label>
+      <label class="check-row"><input id="rememberDmDevice" type="checkbox" /> Recordar este dispositivo como DM</label>
+      <p id="dmAuthError" class="form-error" hidden></p>
+      <button class="role-card__button" type="submit">Entrar en la campaña</button>
+    </form>
+    <footer>Organiza. Proyecta. Crea leyendas.</footer>
+  </section>
+
+  <section id="playerApp" class="player-app" hidden>
+    <header class="player-topbar">
+      <div><img src="assets/icon.svg" alt="" /><strong>La Forja del Narrador</strong></div>
+      <div id="playerModeBadge" class="player-mode-badge">Siguiendo al DM</div>
+      <button id="leavePlayerMode" class="icon-button" type="button" aria-label="Salir">×</button>
+    </header>
+    <div id="playerWaiting" class="player-waiting"><span>✦</span><h1>Esperando al Director de juego</h1><p>El mapa aparecerá cuando el DM pulse «Mostrar esta escena».</p></div>
+    <main id="playerAtlas" class="player-atlas" hidden>
+      <nav id="playerBreadcrumbs" class="atlas-breadcrumbs"></nav>
+      <div id="playerMapViewport" class="player-map-viewport">
+        <div id="playerMapStage" class="player-map-stage"></div>
+        <div class="player-zoom-controls" aria-label="Zoom del mapa">
+          <button id="playerZoomOut" type="button" aria-label="Alejar">−</button>
+          <button id="playerZoomReset" type="button" aria-label="Restablecer zoom">100%</button>
+          <button id="playerZoomIn" type="button" aria-label="Acercar">+</button>
+        </div>
+      </div>
+      <section id="playerMerchantPanel" class="player-merchant-panel" hidden></section>
+    </main>
+  </section>
+
+  <div class="app-shell" id="dmApp" hidden>
+    <header class="topbar">
+      <div class="brand">
+        <img src="assets/icon.svg" alt="" class="brand__icon" />
+        <div>
+          <strong>La Forja del Narrador</strong>
+          <small>Forja mundos, criaturas y aventuras</small>
+        </div>
+      </div>
+
+      <nav class="view-tabs" aria-label="Vistas">
+        <button class="view-tab is-active" data-view="notebook" type="button" title="Cuaderno"><span aria-hidden="true">☷</span><span class="view-tab__label">Cuaderno</span></button>
+        <button class="view-tab" data-view="calendar" type="button" title="Calendario"><span aria-hidden="true">▦</span><span class="view-tab__label">Calendario</span></button>
+        <button class="view-tab" data-view="atlas" type="button" title="Atlas interactivo"><span aria-hidden="true">⌖</span><span class="view-tab__label">Atlas</span></button>
+        <button class="view-tab" data-view="mindmap" type="button" title="Mapa de conexiones"><span aria-hidden="true">✦</span><span class="view-tab__label">Mapa</span></button>
+        <button class="view-tab" data-view="dice" type="button" title="Tirador de dados"><span aria-hidden="true">⚄</span><span class="view-tab__label">Dados</span></button>
+      </nav>
+
+      <div class="topbar__actions">
+        <label class="campaign-switcher" title="Cambiar de campaña">
+          <span>Campaña</span>
+          <select id="campaignSelect" aria-label="Campaña activa"></select>
+        </label>
+        <button class="icon-button" id="campaignManagerBtn" title="Gestionar campañas" aria-label="Gestionar campañas">⚜</button>
+        <button class="icon-button legacy-transfer-button" id="exportBtn" title="Exportar perfil completo" aria-label="Exportar perfil">⇩</button>
+        <button class="icon-button legacy-transfer-button" id="importBtn" title="Importar copia de seguridad" aria-label="Importar">⇧</button>
+        <button class="icon-button" id="settingsBtn" title="Campaña, seguridad y copias" aria-label="Abrir panel lateral">☰</button>
+        <button class="icon-button" id="themeBtn" title="Cambiar tema" aria-label="Cambiar tema">◐</button>
+        <button class="icon-button" id="helpBtn" title="Ayuda" aria-label="Ayuda">?</button>
+        <input id="importFile" type="file" accept="application/json" hidden />
+      </div>
+    </header>
+
+    <div class="workspace" id="notebookView">
+      <aside class="collections" id="collectionsPanel" aria-label="Colecciones de campaña">
+        <div class="collections__toolbar">
+          <input id="globalSearch" type="search" placeholder="Buscar en la campaña…" />
+          <button id="clearSearch" class="mini-button" type="button" title="Limpiar búsqueda">×</button>
+        </div>
+        <nav id="collectionTabs" class="collection-tabs" aria-label="Categorías del cuaderno"></nav>
+        <div id="connectionModeBanner" class="connection-mode-banner" hidden>
+          <span id="selectionModeText"><strong>Modo conexión:</strong> pulsa cualquier entrada de las cinco columnas.</span>
+          <button id="cancelConnectionBanner" class="button button--quiet" type="button">Cancelar</button>
+        </div>
+        <div id="columns" class="columns"></div>
+      </aside>
+
+      <div id="detailPanelPlaceholder" hidden></div>
+      <main class="detail" id="detailPanel">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-state__rune">✦</div>
+          <h1>Selecciona o crea una entrada</h1>
+          <p>Todo se guarda automáticamente en el perfil local de este navegador.</p>
+        </div>
+
+        <div id="editor" hidden>
+          <section class="detail-header">
+            <div class="detail-header__row">
+              <label class="select-field select-field--type">
+                <span>Clase</span>
+                <select id="entrySubtype" aria-label="Clase de la entrada"></select>
+              </label>
+              <label class="select-field select-field--status">
+                <span>Estado</span>
+                <select id="entryStatus" aria-label="Estado de la entrada"></select>
+              </label>
+              <button id="duplicateBtn" class="button button--quiet" type="button">Duplicar</button>
+              <button id="deleteBtn" class="button button--danger" type="button">Eliminar</button>
+            </div>
+            <div class="entry-heading">
+              <span id="entryHeadingIcon" class="entry-heading__icon" aria-hidden="true"></span>
+              <input id="entryName" class="entry-title" maxlength="100" aria-label="Nombre de la entrada" />
+            </div>
+          </section>
+
+          <section class="panel description-panel">
+            <div class="panel__titlebar">
+              <h2>Descripción</h2>
+              <span id="saveState" class="save-state">Guardado</span>
+            </div>
+            <div class="rich-editor-shell">
+              <div id="descriptionPreview" class="rich-editor rich-editor--preview" tabindex="0" data-placeholder="Escribe la descripción, historia, pistas, apariencia…"></div>
+              <textarea id="entryDescription" class="rich-editor rich-editor--source" aria-label="Descripción en Markdown" placeholder="Escribe usando # títulos, **negrita**, - listas y > notas…" hidden></textarea>
+              <div class="editor-toolbar" role="toolbar" aria-label="Formato de descripción">
+                <button type="button" data-markdown="paragraph" title="Texto normal">¶</button>
+                <button type="button" data-markdown="heading1" title="Título grande (#)">H1</button>
+                <button type="button" data-markdown="heading2" title="Título pequeño (##)">H2</button>
+                <span class="toolbar-divider"></span>
+                <button type="button" data-markdown="bold" title="Negrita (**texto**)"><strong>B</strong></button>
+                <button type="button" data-markdown="italic" title="Cursiva (*texto*)"><em>I</em></button>
+                <button type="button" data-markdown="strike" title="Tachado (~~texto~~)"><s>S</s></button>
+                <span class="toolbar-divider"></span>
+                <button type="button" data-markdown="ul" title="Lista con viñetas (-)">• Lista</button>
+                <button type="button" data-markdown="ol" title="Lista numerada (1.)">1. Lista</button>
+                <button type="button" data-markdown="quote" title="Nota resaltada (>)">▌ Nota</button>
+                <button type="button" id="insertLinkBtn" title="Añadir enlace">↗</button>
+                <button type="button" id="removeFormatBtn" title="Quitar formato">Tx</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel vendor-panel" id="vendorPanel" hidden>
+            <div class="panel__titlebar">
+              <h2>Items para vender</h2>
+              <span class="panel__hint">Inventario comercial de la tienda o del PNJ vendedor.</span>
+            </div>
+            <div class="merchant-table-head" aria-hidden="true">
+              <span>Nombre</span>
+              <span>Precio</span>
+              <span>Descripción</span>
+              <span></span>
+            </div>
+            <div id="vendorItemsList" class="merchant-items-list"></div>
+            <form id="vendorItemForm" class="merchant-table-row merchant-table-form panel-add-form">
+              <label>
+                <span class="sr-only">Nombre del artículo</span>
+                <input id="vendorItemName" required maxlength="100" placeholder="Ej.: Poción de curación" autocomplete="off" />
+              </label>
+              <label class="merchant-price-label">
+                <span class="sr-only">Precio del artículo</span>
+                <div class="merchant-price-control">
+                  <input id="vendorItemPriceAmount" class="merchant-price-amount" type="number" min="0" step="1" inputmode="numeric" value="0" placeholder="0" autocomplete="off" aria-label="Cantidad del precio" />
+                  <span id="vendorItemCoin" class="coin-icon coin-icon--gp" title="Moneda de oro" aria-hidden="true"></span>
+                  <select id="vendorItemCurrency" class="merchant-currency-select" aria-label="Moneda del precio">
+                    <option value="cp">cp · Cobre</option>
+                    <option value="sp">sp · Plata</option>
+                    <option value="gp" selected>gp · Oro</option>
+                    <option value="ptp">ptp · Platino</option>
+                  </select>
+                </div>
+              </label>
+              <label>
+                <span class="sr-only">Descripción del artículo</span>
+                <input id="vendorItemDescription" maxlength="240" placeholder="Efecto, estado, procedencia…" autocomplete="off" />
+              </label>
+              <button class="button merchant-add" type="submit" title="Añadir artículo" aria-label="Añadir artículo">+</button>
+            </form>
+          </section>
+
+          <section class="panel creature-panel" id="creaturePanel" hidden>
+            <div class="panel__titlebar">
+              <h2>Estadísticas</h2>
+              <span class="panel__hint">Los modificadores se calculan solos.</span>
+            </div>
+            <div class="stats-primary">
+              <label>HP <span><input id="statHp" type="number" min="0" /> / <input id="statMaxHp" type="number" min="0" /></span></label>
+              <label>AC <input id="statAc" type="number" min="0" /></label>
+              <label>Velocidad <span><input id="statSpeed" type="number" min="0" /> ft.</span></label>
+              <label>Iniciativa <input id="statInitiative" type="number" min="-99" max="99" step="1" /></label>
+            </div>
+            <div id="abilities" class="abilities"></div>
+          </section>
+
+          <section class="panel location-loot-panel" id="locationLootPanel" hidden>
+            <div class="panel__titlebar">
+              <h2>Items que se pueden conseguir</h2>
+              <span class="panel__hint">Recompensas, recursos o hallazgos disponibles en esta localización.</span>
+            </div>
+            <div class="loot-table-head" aria-hidden="true">
+              <span>Item</span>
+              <span>Rareza</span>
+              <span>Cómo conseguirlo</span>
+              <span>Relacionado con</span>
+              <span></span>
+            </div>
+            <div id="locationItemsList" class="loot-items-list"></div>
+            <form id="locationItemForm" class="loot-table-row loot-table-form panel-add-form">
+              <label>
+                <span class="sr-only">Nombre del item</span>
+                <input id="locationItemName" required maxlength="100" placeholder="Ej.: Espada de cristal" autocomplete="off" />
+              </label>
+              <label>
+                <span class="sr-only">Rareza</span>
+                <select id="locationItemRarity" aria-label="Rareza del item">
+                  <option value="common">Común</option>
+                  <option value="rare">Raro</option>
+                  <option value="ultrarare">Ultrararo</option>
+                  <option value="legendary">Legendario</option>
+                </select>
+              </label>
+              <label>
+                <span class="sr-only">Cómo conseguirlo</span>
+                <input id="locationItemHow" maxlength="240" placeholder="Ej.: Resolver el acertijo del altar" autocomplete="off" />
+              </label>
+              <button id="locationItemTargetButton" class="relation-picker-field" type="button" title="Elegir una entrada relacionada">✦ Elegir relación</button>
+              <button class="button loot-add" type="submit" title="Añadir item" aria-label="Añadir item">+</button>
+            </form>
+          </section>
+
+
+          <section class="panel thing-details-panel" id="thingDetailsPanel" hidden>
+            <div class="panel__titlebar">
+              <h2>Detalles del elemento</h2>
+              <span class="panel__hint">Añade varios apuntes y ordénalos según su importancia.</span>
+            </div>
+            <div class="thing-details-grid">
+              <section class="thing-detail-collection thing-detail-field--location" aria-labelledby="thingLocationTitle">
+                <h3 class="thing-detail-field__title" id="thingLocationTitle"><span aria-hidden="true">⌖</span> Ubicación</h3>
+                <div id="thingLocationList" class="thing-detail-list"></div>
+                <form id="thingLocationForm" class="thing-detail-add panel-add-form">
+                  <input id="thingLocationInput" maxlength="240" placeholder="Ej.: Bajo el altar de la capilla, en manos de Maela…" autocomplete="off" />
+                  <button class="button" type="submit">Añadir</button>
+                </form>
+              </section>
+
+              <section class="thing-detail-collection" aria-labelledby="thingLoreTitle">
+                <h3 class="thing-detail-field__title" id="thingLoreTitle"><span aria-hidden="true">✧</span> Leyenda o qué se sabe</h3>
+                <div id="thingLoreList" class="thing-detail-list"></div>
+                <form id="thingLoreForm" class="thing-detail-add panel-add-form">
+                  <textarea id="thingLoreInput" rows="2" maxlength="1000" placeholder="Rumor, historia, procedencia, pista o información conocida…"></textarea>
+                  <button class="button" type="submit">Añadir</button>
+                </form>
+              </section>
+
+              <section class="thing-detail-collection" aria-labelledby="thingAbilitiesTitle">
+                <h3 class="thing-detail-field__title" id="thingAbilitiesTitle"><span aria-hidden="true">✹</span> Habilidades que tiene</h3>
+                <div id="thingAbilitiesList" class="thing-detail-list"></div>
+                <form id="thingAbilitiesForm" class="thing-detail-add panel-add-form">
+                  <textarea id="thingAbilitiesInput" rows="2" maxlength="1000" placeholder="Efecto, poder, uso, propiedad especial o limitación…"></textarea>
+                  <button class="button" type="submit">Añadir</button>
+                </form>
+              </section>
+            </div>
+          </section>
+
+          <section class="panel" id="carryItemsPanel">
+            <div class="panel__titlebar">
+              <h2>Items que lleva encima</h2>
+              <span class="panel__hint">Objetos, equipo, recursos o pertenencias del personaje.</span>
+            </div>
+            <div id="consumablesList" class="card-list"></div>
+            <form id="consumableForm" class="inline-form panel-add-form">
+              <input id="consumableInput" placeholder="Ej.: Mochila, 3 pociones, 12 flechas…" maxlength="100" />
+              <button class="button" type="submit">Añadir</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="panel__titlebar">
+              <h2>Conexiones</h2>
+              <span class="panel__hint">Crea relaciones pulsando directamente otra entrada.</span>
+            </div>
+            <div id="connectionsList" class="connection-list"></div>
+            <div class="connection-addbar panel-add-form">
+              <button id="startConnectionBtn" class="button" type="button">✦ Crear conexión</button>
+              <span id="connectionModeHint" class="connection-mode-hint">Después podrás elegir cualquier entrada de la izquierda.</span>
+              <button id="cancelConnectionBtn" class="button button--quiet" type="button" hidden>Cancelar</button>
+            </div>
+          </section>
+
+          <section class="panel journal-panel">
+            <div class="panel__titlebar">
+              <h2>Journal</h2>
+              <span class="panel__hint">Notas cronológicas de la partida.</span>
+            </div>
+            <div id="journalList" class="journal-list"></div>
+            <form id="journalForm" class="journal-form panel-add-form">
+              <textarea id="journalInput" rows="3" placeholder="Escribe una nota y pulsa +"></textarea>
+              <button class="journal-add" type="submit" title="Añadir nota" aria-label="Añadir nota">+</button>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <main class="calendar-view" id="calendarView" hidden>
+      <section class="calendar-shell">
+        <header class="calendar-toolbar campaign-calendar-toolbar">
+          <div class="calendar-toolbar__nav">
+            <button id="calendarPrev" class="icon-button" type="button" aria-label="Mes anterior">‹</button>
+            <button id="calendarToday" class="button button--quiet" type="button">Día actual</button>
+            <button id="calendarNext" class="icon-button" type="button" aria-label="Mes siguiente">›</button>
+          </div>
+          <div class="calendar-heading">
+            <h1 id="calendarTitle"></h1>
+            <span id="calendarCampaignDay" class="calendar-campaign-day"></span>
+          </div>
+          <div class="calendar-toolbar__actions">
+            <button id="calendarSettingsBtn" class="button button--quiet" type="button">⚙ Calendario</button>
+            <button id="advanceCampaignDay" class="button button--sleep" type="button">☾ Dormir · +1 día</button>
+            <button id="newCalendarEvent" class="button" type="button">+ Nuevo evento</button>
+          </div>
+        </header>
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+        </div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </section>
+    </main>
+
+    <main class="mindmap-view" id="mindmapView" hidden>
+      <section class="mindmap-shell">
+        <header class="mindmap-toolbar">
+          <div>
+            <h1>Mapa de conexiones</h1>
+            <p>Visualiza las relaciones creadas en el cuaderno. Pulsa un nodo para abrir su ficha.</p>
+          </div>
+          <label class="mindmap-filter">
+            <span>Filtrar por localización</span>
+            <select id="mindmapLocationFilter"></select>
+          </label>
+          <div class="mindmap-zoom" aria-label="Controles del mapa">
+            <button id="mindmapZoomOut" class="icon-button" type="button" aria-label="Alejar">−</button>
+            <button id="mindmapReset" class="button button--quiet" type="button">Centrar</button>
+            <button id="mindmapZoomIn" class="icon-button" type="button" aria-label="Acercar">+</button>
+          </div>
+        </header>
+        <div id="mindmapCanvas" class="mindmap-canvas">
+          <svg id="mindmapSvg" class="mindmap-svg" role="img" aria-label="Mapa mental de conexiones">
+            <defs>
+              <marker id="mindmapArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" class="mindmap-arrow" />
+              </marker>
+            </defs>
+            <g id="mindmapStage"></g>
+          </svg>
+          <div id="mindmapEmpty" class="mindmap-empty" hidden>
+            <span>✦</span>
+            <h2>Todavía no hay conexiones para mostrar</h2>
+            <p>Crea conexiones desde las fichas o relaciona items obtenibles con otras entradas.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <main class="dice-view" id="diceView" hidden>
+      <section class="dice-shell">
+        <header class="dice-toolbar">
+          <div>
+            <h1>Mesa de dados</h1>
+            <p>Elige los dados y el modificador, o escribe directamente una fórmula como <strong>2d20 + 4</strong>.</p>
+          </div>
+          <button id="diceClearSelection" class="button button--quiet" type="button">Limpiar selección</button>
+        </header>
+
+        <div class="dice-layout">
+          <aside class="dice-panel dice-panel--types">
+            <div class="dice-panel__heading">
+              <h2>Dados</h2>
+              <span>Pulsa + o el dado</span>
+            </div>
+            <div id="diceTypes" class="dice-types" aria-label="Tipos y cantidad de dados"></div>
+          </aside>
+
+          <aside class="dice-panel dice-panel--modifier">
+            <div class="dice-panel__heading">
+              <h2>Modificador</h2>
+              <span>De +20 a −20</span>
+            </div>
+            <div id="diceModifiers" class="dice-modifiers" role="radiogroup" aria-label="Modificador de la tirada"></div>
+          </aside>
+
+          <section class="dice-panel dice-result-panel">
+            <label class="dice-expression-field" for="diceExpression">
+              <span>Fórmula de tirada</span>
+              <input id="diceExpression" autocomplete="off" spellcheck="false" placeholder="Ej.: 2d20 + 4" />
+            </label>
+            <button id="rollDiceBtn" class="button dice-roll-button" type="button">⚄ Tirar dados</button>
+            <p id="diceError" class="dice-error" role="alert" hidden></p>
+
+            <div id="diceRollOutput" class="dice-roll-output" aria-live="polite">
+              <div id="diceBreakdown" class="dice-breakdown">Selecciona una combinación y tira los dados.</div>
+              <div id="diceResult" class="dice-result" aria-label="Resultado de la tirada">—</div>
+            </div>
+
+            <section class="dice-history-section">
+              <div class="dice-history-heading">
+                <h2>Últimas tiradas</h2>
+                <button id="diceClearHistory" class="button button--quiet" type="button">Borrar historial</button>
+              </div>
+              <div id="diceHistory" class="dice-history"></div>
+            </section>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <main class="atlas-view" id="atlasView" hidden>
+      <section class="atlas-shell">
+        <header class="atlas-toolbar">
+          <div class="atlas-toolbar__identity">
+            <div class="atlas-navline">
+              <button id="atlasBackBtn" class="icon-button" type="button" aria-label="Volver a la escena anterior">←</button>
+              <nav id="atlasBreadcrumbs" class="atlas-breadcrumbs" aria-label="Ruta de escenas"></nav>
+            </div>
+            <h1 id="atlasSceneTitle">Atlas</h1>
+          </div>
+          <div class="atlas-toolbar__actions">
+            <button id="atlasUploadImage" class="button button--quiet" type="button">▧ Fondo</button>
+            <button id="atlasEditDungeon" class="button button--quiet" type="button" hidden>✎ Editar mapa</button>
+            <button id="atlasNewScene" class="button button--quiet" type="button">+ Escena</button>
+            <button id="atlasShowScene" class="button" type="button">▶ Mostrar esta escena</button>
+            <button id="atlasOpenProjection" class="button button--projection" type="button">▣ Abrir proyección</button>
+            <button id="atlasDmSheetBtn" class="button button--quiet" type="button" title="Abrir la ficha privada del cuaderno">☷ Ficha DM</button>
+            <input id="atlasImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
+          </div>
+        </header>
+
+        <div class="atlas-controlbar">
+          <div id="atlasTools" class="atlas-tools" role="toolbar" aria-label="Herramientas del Atlas">
+            <button class="is-active" data-atlas-tool="select" type="button" title="Seleccionar y mover">↖</button>
+            <button data-atlas-tool="marker" type="button" title="Añadir marcador">⌖</button>
+            <button data-atlas-tool="text" type="button" title="Añadir texto">T</button>
+            <button data-atlas-tool="line" type="button" title="Dibujar línea">╱</button>
+            <button data-atlas-tool="arrow" type="button" title="Dibujar flecha">➜</button>
+            <button data-atlas-tool="rect" type="button" title="Dibujar rectángulo">□</button>
+            <button data-atlas-tool="circle" type="button" title="Dibujar círculo">○</button>
+            <span class="atlas-tools__separator"></span>
+            <button data-atlas-tool="reveal" type="button" title="Revelar niebla">◉</button>
+            <button data-atlas-tool="hide" type="button" title="Volver a ocultar">●</button>
+            <button data-atlas-tool="zone" type="button" title="Preparar zona revelable">▱</button>
+          </div>
+          <div class="atlas-zoom-controls" role="group" aria-label="Zoom del Atlas">
+            <button id="atlasZoomOut" class="button button--quiet" type="button" title="Alejar">−</button>
+            <button id="atlasZoomReset" class="button button--quiet" type="button" title="Restablecer zoom">100%</button>
+            <button id="atlasZoomIn" class="button button--quiet" type="button" title="Acercar">+</button>
+          </div>
+          <label class="atlas-brush-control">Radio <input id="atlasBrushSize" type="range" min="1" max="30" value="8" /><output id="atlasBrushValue">8%</output></label>
+          <button id="atlasResetFog" class="button button--quiet atlas-reset-fog" type="button" title="Volver a cubrir por completo esta escena">⬛ Tapar todo</button>
+          <button id="atlasRevealAllFog" class="button button--quiet atlas-reset-fog" type="button" title="Revelar por completo esta escena">◻ Revelar todo</button>
+          <label class="atlas-mode-control">Vista de jugadores<select id="atlasPlayerMode"><option value="follow">Seguir al DM</option><option value="free">Exploración libre</option></select></label>
+          <button id="atlasCloseMerchant" class="button button--quiet" type="button" hidden>Cerrar tienda proyectada</button>
+        </div>
+
+        <div class="atlas-layout">
+          <aside class="atlas-sidebar atlas-scenes-sidebar">
+            <div class="atlas-sidebar__heading"><h2>Escenas</h2><button id="atlasSceneMenu" class="mini-button" type="button" title="Editar escena">⋮</button></div>
+            <div id="atlasSceneTree" class="atlas-scene-tree"></div>
+            <button id="atlasCustomCategory" class="button button--quiet atlas-sidebar__footer" type="button">+ Categoría de marcador</button>
+          </aside>
+
+          <section id="atlasMapViewport" class="atlas-map-viewport">
+            <div id="atlasEmptyMap" class="atlas-empty-map">
+              <span>⌖</span><h2>Añade una imagen de fondo</h2><p>Puede ser un mapamundi, una ciudad, una mazmorra o el interior de una tienda.</p>
+              <div class="atlas-empty-map__actions"><button id="atlasEmptyUpload" class="button" type="button">Seleccionar imagen</button><button id="atlasEmptyCreateMap" class="button button--quiet" type="button">Crear mapa</button></div>
+            </div>
+            <div id="atlasMapStage" class="atlas-map-stage" hidden>
+              <img id="atlasBackground" alt="" draggable="false" />
+              <svg id="atlasObjectLayer" class="atlas-object-layer" viewBox="0 0 1000 1000" preserveAspectRatio="none"></svg>
+              <div id="atlasMarkerLayer" class="atlas-marker-layer"></div>
+              <canvas id="atlasFogCanvas" class="atlas-fog-canvas"></canvas>
+              <div id="atlasDmZoneLayer" class="atlas-zone-layer"></div>
+              <div id="atlasDraft" class="atlas-draft" hidden></div>
+            </div>
+          </section>
+
+          <aside class="atlas-sidebar atlas-layers-sidebar">
+            <div class="atlas-sidebar__heading"><h2>Capas y puntos</h2><span id="atlasLayerCount">0</span></div>
+            <div id="atlasLayers" class="atlas-layers"></div>
+          </aside>
+        </div>
+
+        <aside id="atlasDmSheet" class="atlas-dm-sheet" hidden aria-label="Ficha privada del DM">
+          <header class="atlas-dm-sheet__header">
+            <div><h2 id="atlasDmSheetTitle">Ficha del cuaderno</h2><small id="atlasDmSheetSubtitle">Solo visible para el DM</small></div>
+            <button id="atlasDmSheetClose" class="icon-button" type="button" aria-label="Cerrar ficha">×</button>
+          </header>
+          <div class="atlas-dm-sheet__picker">
+            <label id="atlasDmRelatedWrap" class="atlas-dm-related" hidden>Fichas relacionadas
+              <select id="atlasDmRelatedSelect"></select>
+            </label>
+            <details id="atlasDmEntryPicker" class="atlas-dm-entry-picker">
+              <summary><span>Entrada vinculada</span><strong id="atlasDmEntrySummary">Sin ficha vinculada</strong></summary>
+              <div id="atlasDmEntryTree" class="atlas-tree-picker atlas-tree-picker--entries"></div>
+            </details>
+          </div>
+          <div id="atlasDmDetailHost" class="atlas-dm-sheet__detail"></div>
+        </aside>
+      </section>
+    </main>
+
+    <main class="dungeon-view" id="dungeonView" hidden>
+      <section class="dungeon-shell">
+        <header class="dungeon-topbar">
+          <div class="dungeon-topbar__identity">
+            <button id="dungeonBack" class="icon-button" type="button" title="Volver al Atlas">←</button>
+            <div><h1 id="dungeonTitle">Editor de mazmorras</h1><small id="dungeonSubtitle">Cada casilla representa 1 m²</small></div>
+          </div>
+          <div class="dungeon-topbar__actions">
+            <button id="dungeonUndo" class="button button--quiet" type="button" title="Deshacer">↶</button>
+            <button id="dungeonRedo" class="button button--quiet" type="button" title="Rehacer">↷</button>
+            <button id="dungeonZoomOut" class="button button--quiet" type="button" title="Alejar">−</button>
+            <button id="dungeonFit" class="button button--quiet" type="button" title="Encajar mapa">Encajar</button>
+            <button id="dungeonZoomIn" class="button button--quiet" type="button" title="Acercar">+</button>
+            <button id="dungeonExportPng" class="button button--quiet" type="button">PNG</button>
+            <button id="dungeonExportProject" class="button button--quiet" type="button">Proyecto</button>
+            <button id="dungeonSave" class="button" type="button">Guardar</button>
+            <button id="dungeonSaveBack" class="button" type="button">Guardar y volver</button>
+          </div>
+        </header>
+
+        <div class="dungeon-layout">
+          <aside class="dungeon-sidebar dungeon-toolbox">
+            <section class="dungeon-sidebar__section">
+              <div class="dungeon-sidebar__heading"><h2>Herramientas</h2></div>
+              <div id="dungeonTools" class="dungeon-tool-grid">
+                <button class="is-active" data-dungeon-tool="select" type="button" title="Seleccionar, mover y redimensionar"><span>↖</span><small>Seleccionar</small></button>
+                <button data-dungeon-tool="pan" type="button" title="Mover el lienzo"><span>✋</span><small>Mover vista</small></button>
+                <button data-dungeon-tool="room" type="button" title="Dibujar habitación"><span>▣</span><small>Habitación</small></button>
+                <button data-dungeon-tool="corridor" type="button" title="Dibujar pasillo"><span>▬</span><small>Pasillo</small></button>
+                <button data-dungeon-tool="wall" type="button" title="Dibujar pared"><span>╱</span><small>Pared</small></button>
+                <button data-dungeon-tool="text" type="button" title="Añadir etiqueta"><span>T</span><small>Texto</small></button>
+                <button data-dungeon-tool="eraser" type="button" title="Borrar elementos"><span>⌫</span><small>Borrar</small></button>
+              </div>
+            </section>
+
+            <section class="dungeon-sidebar__section">
+              <div class="dungeon-sidebar__heading"><h2>Arquitectura</h2></div>
+              <div id="dungeonArchitecturePalette" class="dungeon-palette">
+                <button data-dungeon-prop="door" type="button"><span>▯</span>Puerta</button>
+                <button data-dungeon-prop="double-door" type="button"><span>▯▯</span>Doble</button>
+                <button data-dungeon-prop="secret-door" type="button"><span>?</span>Secreta</button>
+                <button data-dungeon-prop="stairs-up" type="button"><span>⇧</span>Subida</button>
+                <button data-dungeon-prop="stairs-down" type="button"><span>⇩</span>Bajada</button>
+                <button data-dungeon-prop="grate" type="button"><span>|||</span>Reja</button>
+                <button data-dungeon-prop="window" type="button"><span>▱</span>Ventana</button>
+                <button data-dungeon-prop="column" type="button"><span>●</span>Columna</button>
+                <button data-dungeon-prop="pit" type="button"><span>◉</span>Foso</button>
+                <button data-dungeon-prop="bridge" type="button"><span>═</span>Puente</button>
+                <button data-dungeon-prop="portal-rect" type="button"><span>▥</span>Portal</button>
+                <button data-dungeon-prop="portal-arch" type="button"><span>⌒</span>Arco portal</button>
+                <button data-dungeon-prop="platform" type="button"><span>▱</span>Tarima</button>
+                <button data-dungeon-prop="round-platform" type="button"><span>◉</span>Tarima circular</button>
+                <button data-dungeon-prop="pedestal" type="button"><span>▣</span>Pedestal</button>
+              </div>
+            </section>
+
+            <section class="dungeon-sidebar__section">
+              <div class="dungeon-sidebar__heading"><h2>Mobiliario</h2></div>
+              <div id="dungeonFurniturePalette" class="dungeon-palette">
+                <button data-dungeon-prop="table" type="button"><span>▰</span>Mesa</button>
+                <button data-dungeon-prop="chair" type="button"><span>⌑</span>Silla</button>
+                <button data-dungeon-prop="bed" type="button"><span>▥</span>Cama</button>
+                <button data-dungeon-prop="shelf" type="button"><span>▤</span>Estantería</button>
+                <button data-dungeon-prop="wardrobe" type="button"><span>▦</span>Armario</button>
+                <button data-dungeon-prop="chest" type="button"><span>▣</span>Cofre</button>
+                <button data-dungeon-prop="barrel" type="button"><span>◍</span>Barril</button>
+                <button data-dungeon-prop="crate" type="button"><span>□</span>Caja</button>
+                <button data-dungeon-prop="altar" type="button"><span>♢</span>Altar</button>
+                <button data-dungeon-prop="statue" type="button"><span>♟</span>Estatua</button>
+                <button data-dungeon-prop="torch" type="button"><span>♨</span>Antorcha</button>
+                <button data-dungeon-prop="brazier" type="button"><span>♨</span>Brasero</button>
+              </div>
+            </section>
+
+          </aside>
+
+          <section id="dungeonViewport" class="dungeon-viewport" aria-label="Lienzo del mapa">
+            <div id="dungeonStage" class="dungeon-stage">
+              <canvas id="dungeonCanvas"></canvas>
+              <canvas id="dungeonOverlayCanvas"></canvas>
+            </div>
+            <div class="dungeon-viewport__hint">Rueda: zoom · Espacio o Mano: desplazar · Vértices: tamaño · ✥ mover · ↻ girar 45° · Shift: giro libre</div>
+          </section>
+
+          <aside class="dungeon-sidebar dungeon-inspector">
+            <section class="dungeon-sidebar__section">
+              <div class="dungeon-sidebar__heading"><h2>Mapa</h2></div>
+              <div class="dungeon-form-grid">
+                <label>Ancho (m)<input id="dungeonMapWidth" type="number" min="10" max="120" step="1" /></label>
+                <label>Alto (m)<input id="dungeonMapHeight" type="number" min="10" max="120" step="1" /></label>
+              </div>
+              <button id="dungeonResizeMap" class="button button--quiet dungeon-full-button" type="button">Aplicar tamaño</button>
+              <label>Estilo preestablecido<select id="dungeonPreset"><option value="stone">Mazmorra de piedra</option><option value="ruin">Ruina antigua</option><option value="cave">Cueva</option><option value="fortress">Fortaleza</option><option value="timber">Madera / taberna</option><option value="temple">Templo</option></select></label>
+              <div class="dungeon-switches">
+                <label class="check-row"><input id="dungeonGridVisible" type="checkbox" checked /> Mostrar cuadrícula</label>
+                <label class="check-row"><input id="dungeonSnap" type="checkbox" checked /> Ajustar a cuadrícula</label>
+              </div>
+            </section>
+
+            <details class="dungeon-sidebar__section dungeon-advanced" open>
+              <summary>Materiales y estilo</summary>
+
+              <section class="dungeon-material-editor">
+                <div class="dungeon-material-editor__heading"><strong>Suelo</strong><small>Cada habitación o pasillo inicia su propio patrón de textura.</small></div>
+                <label>Aplicar a<select id="dungeonFloorMaterialTarget"><option value="selection">Habitación o pasillo seleccionado</option><option value="global">Todo el suelo del mapa</option></select></label>
+                <label>Material<select id="dungeonFloorTexture"><option value="stone-light">Piedra clara</option><option value="stone-dark">Piedra oscura</option><option value="ancient-stone">Piedra antigua agrietada</option><option value="mossy-stone">Piedra antigua con musgo</option><option value="cobble">Adoquines</option><option value="wood">Tablas de madera</option><option value="old-wood">Madera vieja</option><option value="dirt">Tierra</option><option value="sand">Arena</option><option value="tile">Baldosas</option><option value="marble">Mármol</option><option value="water">Agua</option><option value="grass">Hierba</option><option value="dry-grass">Hierba seca</option><option value="cave-floor">Suelo de cueva</option><option value="custom">Textura importada</option></select></label>
+                <div class="dungeon-form-grid">
+                  <label>Modo<select id="dungeonFloorTextureMode"><option value="continuous">Continua, bordes mezclados</option><option value="cover">Cubrir todo el mapa</option><option value="repeat">Repetir original</option></select></label>
+                  <label>Color / tinte<input id="dungeonFloorColor" type="color" /></label>
+                </div>
+                <label class="dungeon-range-label"><span>Escala <output id="dungeonFloorScaleValue">4 m</output></span><input id="dungeonFloorTextureScale" type="range" min="0.1" max="12" step="0.1" /></label>
+                <label class="dungeon-range-label"><span>Rotación <output id="dungeonFloorRotationValue">0°</output></span><input id="dungeonFloorTextureRotation" type="range" min="0" max="360" step="5" /></label>
+                <label class="dungeon-range-label"><span>Intensidad <output id="dungeonFloorIntensityValue">100%</output></span><input id="dungeonFloorTextureIntensity" type="range" min="0.2" max="1.4" step="0.05" /></label>
+                <canvas id="dungeonFloorMaterialPreview" class="dungeon-material-preview" width="420" height="170" aria-label="Previsualización del material del suelo"></canvas>
+                <small id="dungeonFloorTextureName" class="dungeon-material-file"></small>
+                <div class="dungeon-material-actions"><button id="dungeonImportFloorTexture" class="button button--quiet" type="button">Importar textura</button><button id="dungeonRemoveFloorTexture" class="button button--danger" type="button" hidden>Quitar importada</button></div>
+                <input id="dungeonFloorTextureInput" type="file" accept="image/png,image/svg+xml,image/webp,image/jpeg,.png,.svg,.webp,.jpg,.jpeg" hidden />
+              </section>
+
+              <section class="dungeon-material-editor">
+                <div class="dungeon-material-editor__heading"><strong>Pared</strong><small>Textura continua en todo el contorno.</small></div>
+                <label>Material<select id="dungeonWallTexture"><option value="stone">Piedra</option><option value="ancient-stone">Piedra antigua</option><option value="mossy-stone">Piedra con musgo</option><option value="brick">Ladrillo</option><option value="wood">Madera</option><option value="old-wood">Madera vieja</option><option value="ruin">Ruina</option><option value="cave">Cueva</option><option value="custom">Textura importada</option></select></label>
+                <div class="dungeon-form-grid">
+                  <label>Modo<select id="dungeonWallTextureMode"><option value="continuous">Continua, bordes mezclados</option><option value="repeat">Repetir original</option></select></label>
+                  <label>Color / tinte<input id="dungeonWallColor" type="color" /></label>
+                </div>
+                <label class="dungeon-range-label"><span>Escala <output id="dungeonWallScaleValue">2 m</output></span><input id="dungeonWallTextureScale" type="range" min="0.25" max="8" step="0.25" /></label>
+                <label class="dungeon-range-label"><span>Rotación <output id="dungeonWallRotationValue">0°</output></span><input id="dungeonWallTextureRotation" type="range" min="0" max="360" step="5" /></label>
+                <label class="dungeon-range-label"><span>Intensidad <output id="dungeonWallIntensityValue">100%</output></span><input id="dungeonWallTextureIntensity" type="range" min="0.2" max="1.4" step="0.05" /></label>
+                <canvas id="dungeonWallMaterialPreview" class="dungeon-material-preview" width="420" height="120" aria-label="Previsualización del material de pared"></canvas>
+                <small id="dungeonWallTextureName" class="dungeon-material-file"></small>
+                <div class="dungeon-material-actions"><button id="dungeonImportWallTexture" class="button button--quiet" type="button">Importar textura</button><button id="dungeonRemoveWallTexture" class="button button--danger" type="button" hidden>Quitar importada</button></div>
+                <input id="dungeonWallTextureInput" type="file" accept="image/png,image/svg+xml,image/webp,image/jpeg,.png,.svg,.webp,.jpg,.jpeg" hidden />
+              </section>
+
+              <section class="dungeon-style-rest">
+                <div class="dungeon-form-grid">
+                  <label>Trazo<input id="dungeonLineColor" type="color" /></label>
+                  <label>Puertas<input id="dungeonDoorColor" type="color" /></label>
+                  <label>Objetos<input id="dungeonObjectColor" type="color" /></label>
+                  <label>Texto<input id="dungeonTextColor" type="color" /></label>
+                  <label>Cuadrícula<input id="dungeonGridColor" type="color" /></label>
+                  <label>Grosor<input id="dungeonLineWidth" type="range" min="1" max="10" step="1" /></label>
+                  <label>Sombra<input id="dungeonShadowOpacity" type="range" min="0" max="0.8" step="0.05" /></label>
+                  <label>Relieve<input id="dungeonRelief" type="range" min="0" max="1" step="0.05" /></label>
+                </div>
+              </section>
+            </details>
+
+            <section id="dungeonSelectionPanel" class="dungeon-sidebar__section" hidden>
+              <div class="dungeon-sidebar__heading"><h2>Selección</h2><span id="dungeonSelectionType"></span></div>
+              <label>Nombre / etiqueta<input id="dungeonElementLabel" maxlength="100" /></label>
+              <div class="dungeon-form-grid">
+                <label>X<input id="dungeonElementX" type="number" step="0.25" /></label>
+                <label>Y<input id="dungeonElementY" type="number" step="0.25" /></label>
+                <label>Ancho<input id="dungeonElementW" type="number" min="0.25" step="0.25" /></label>
+                <label>Alto<input id="dungeonElementH" type="number" min="0.25" step="0.25" /></label>
+                <label>Rotación<input id="dungeonElementRotation" type="number" min="-180" max="180" step="15" /></label>
+                <label id="dungeonElementVariantWrap" hidden>Estatua<select id="dungeonElementVariant"><option value="gladiator">Guerrero / gladiador</option><option value="poseidon">Dios con tridente</option><option value="aphrodite">Figura clásica</option><option value="dancer">Figura en movimiento</option></select></label>
+              </div>
+              <div id="dungeonElementImageWrap" class="dungeon-object-image" hidden>
+                <div class="dungeon-object-image__heading"><strong>Imagen del objeto</strong><small>PNG, SVG, WebP o JPG</small></div>
+                <div class="dungeon-object-image__preview"><img id="dungeonElementImagePreview" alt="Previsualización del objeto" hidden /><span id="dungeonElementImageEmpty">Dibujo generado por la aplicación</span></div>
+                <small id="dungeonElementImageName" class="dungeon-object-image__name"></small>
+                <div class="dungeon-object-image__actions"><button id="dungeonImportElementImage" class="button button--quiet" type="button">Importar imagen</button><button id="dungeonRemoveElementImage" class="button button--danger" type="button" hidden>Quitar imagen</button></div>
+                <input id="dungeonElementImageInput" type="file" accept="image/png,image/svg+xml,image/webp,image/jpeg,.png,.svg,.webp,.jpg,.jpeg" hidden />
+                <section id="dungeonRecentObjectImagesWrap" class="dungeon-recent-assets" hidden>
+                  <div class="dungeon-recent-assets__heading"><strong>Archivos importados recientemente</strong><small id="dungeonRecentObjectImagesType"></small></div>
+                  <div id="dungeonRecentObjectImages" class="dungeon-recent-assets__grid"></div>
+                  <p id="dungeonRecentObjectImagesEmpty" class="dungeon-recent-assets__empty">Todavía no has importado imágenes para este tipo de objeto.</p>
+                </section>
+              </div>
+              <div class="dungeon-rotate-actions">
+                <button id="dungeonRotateLeft" class="button button--quiet" type="button">↺ Girar -90°</button>
+                <button id="dungeonRotateRight" class="button button--quiet" type="button">↻ Girar +90°</button>
+              </div>
+              <div class="dungeon-selection-actions"><button id="dungeonDuplicate" class="button button--quiet" type="button">Duplicar</button><button id="dungeonDelete" class="button button--danger" type="button">Eliminar</button></div>
+            </section>
+
+            <section class="dungeon-sidebar__section dungeon-layers-section">
+              <div class="dungeon-sidebar__heading"><h2>Elementos</h2><span id="dungeonElementCount">0</span></div>
+              <div id="dungeonLayers" class="dungeon-layers"></div>
+            </section>
+          </aside>
+        </div>
+        <footer class="dungeon-statusbar"><span id="dungeonStatus">Listo</span><span id="dungeonCoordinates">0 m, 0 m</span></footer>
+      </section>
+    </main>
+  </div>
+
+  <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
+  <aside id="settingsDrawer" class="settings-drawer" aria-hidden="true">
+    <header><div><h2>Campaña y archivos</h2><p id="drawerCampaignName"></p></div><button id="closeSettingsDrawer" class="icon-button" type="button">×</button></header>
+    <section><h3>Copias de seguridad</h3><p>El JSON es ligero y no incluye imágenes. El ZIP incluye también todos los fondos del Atlas.</p>
+      <div class="drawer-action-grid"><button id="drawerExportJson" class="button button--quiet" type="button">⇩ Exportar JSON</button><button id="drawerExportZip" class="button" type="button">⇩ Exportar ZIP completo</button><button id="drawerImport" class="button button--quiet" type="button">⇧ Importar JSON o ZIP</button></div>
+      <p id="drawerBackupStatus" class="backup-export-status" hidden aria-live="polite"></p>
+      <input id="drawerImportFile" type="file" accept="*/*" hidden />
+    </section>
+    <section id="folderSyncSection" class="folder-sync-section">
+      <h3>Carpeta de La Forja</h3>
+      <p>Elige una carpeta local para mantener una copia completa actualizada automáticamente. IndexedDB sigue siendo el guardado rápido principal.</p>
+      <div class="folder-sync-card">
+        <div class="folder-sync-card__status"><span id="folderSyncDot" class="folder-sync-dot"></span><div><strong id="folderSyncStatus">Sin carpeta configurada</strong><small id="folderSyncHint">La copia ZIP manual seguirá disponible como respaldo.</small></div></div>
+        <code id="folderSyncPath" class="folder-sync-path" hidden></code>
+        <div class="drawer-action-grid"><button id="folderSyncChoose" class="button" type="button">⌂ Elegir carpeta</button><button id="folderSyncNow" class="button button--quiet" type="button" hidden>↻ Sincronizar ahora</button><button id="folderSyncRestore" class="button button--quiet" type="button" hidden>⇧ Restaurar desde carpeta</button><button id="folderSyncDisconnect" class="button button--danger" type="button" hidden>Desvincular</button></div>
+      </div>
+    </section>
+    <section id="accessSecuritySection"><h3>Código de acceso de la aplicación</h3><p>El código inicial es <strong>2917</strong>. Este bloqueo es local al dispositivo y no sustituye a un sistema de cuentas.</p>
+      <form id="changeAccessCodeForm" class="access-code-settings"><label>Nuevo código<input id="newAccessCode" type="password" inputmode="numeric" minlength="4" maxlength="12" required /></label><label>Repite el código<input id="newAccessCodeConfirm" type="password" inputmode="numeric" minlength="4" maxlength="12" required /></label><p id="accessCodeChangeError" class="form-error" hidden></p><button class="button button--quiet" type="submit">Cambiar código</button></form>
+    </section>
+    <section id="lanHostSection" class="lan-host-section"><h3>Proyección por Wi‑Fi</h3><p>Comparte únicamente la vista de jugadores del Atlas. La tablet actúa como host dentro de la misma red Wi‑Fi; las fichas DM y los datos privados no se publican.</p>
+      <div class="lan-host-card">
+        <div class="lan-host-card__status"><span id="lanHostDot" class="lan-host-dot"></span><div><strong id="lanHostStatus">Disponible al ejecutar la APK</strong><small id="lanHostHint">En navegador normal esta función permanece desactivada.</small></div></div>
+        <div id="lanHostUrlWrap" class="lan-host-url" hidden><span>Dirección para jugadores</span><code id="lanHostUrl"></code></div>
+        <div class="drawer-action-grid"><button id="lanHostStart" class="button" type="button">◉ Iniciar host</button><button id="lanHostStop" class="button button--quiet" type="button" hidden>■ Detener</button><button id="lanHostCopy" class="button button--quiet" type="button" hidden>⧉ Copiar dirección</button></div>
+      </div>
+    </section>
+    <section><h3>Seguridad del DM</h3><form id="changePasswordForm"><label>Contraseña actual<input id="currentDmPassword" type="password" autocomplete="current-password" /></label><label>Nueva contraseña<input id="newDmPassword" type="password" minlength="8" autocomplete="new-password" required /></label><label>Repite la nueva contraseña<input id="newDmPasswordConfirm" type="password" minlength="8" autocomplete="new-password" required /></label><p id="passwordChangeError" class="form-error" hidden></p><button class="button" type="submit">Cambiar contraseña</button></form></section>
+    <section><h3>Sesión</h3><button id="logoutDm" class="button button--danger" type="button">Salir del modo DM</button></section>
+  </aside>
+
+  <dialog id="atlasSceneDialog">
+    <form id="atlasSceneForm" class="dialog-card atlas-dialog-card">
+      <div class="dialog-card__header"><h2 id="atlasSceneDialogTitle">Nueva escena</h2><button type="button" class="icon-button atlas-scene-dialog-close">×</button></div>
+      <label>Nombre<input id="atlasSceneName" maxlength="100" required /></label>
+      <label>Dentro de<select id="atlasSceneParent"></select></label>
+      <fieldset id="atlasSceneSourceFieldset" class="atlas-scene-source"><legend>Contenido inicial</legend><label><input type="radio" name="atlasSceneSource" value="image" checked /><span><strong>Imagen subida</strong><small>Guarda la escena y selecciona después un PNG, JPG o WebP.</small></span></label><label><input type="radio" name="atlasSceneSource" value="dungeon" /><span><strong>Mapa creado</strong><small>Abre el editor con cuadrícula, arquitectura y mobiliario.</small></span></label></fieldset>
+      <button id="atlasSceneEditDungeon" type="button" class="button button--quiet" hidden>✎ Abrir editor de mazmorras</button>
+      <label class="check-row"><input id="atlasSceneDiscovered" type="checkbox" /> Descubierta por los jugadores</label>
+      <div class="dialog-actions dialog-actions--split"><button id="atlasDeleteScene" type="button" class="button button--danger" hidden>Eliminar</button><span></span><button type="button" class="button button--quiet atlas-scene-dialog-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="atlasMarkerDialog">
+    <form id="atlasMarkerForm" class="dialog-card atlas-dialog-card atlas-marker-dialog-card">
+      <div class="dialog-card__header"><h2 id="atlasMarkerDialogTitle">Nuevo marcador</h2><button type="button" class="icon-button atlas-marker-dialog-close">×</button></div>
+      <div class="form-grid"><label>Nombre DM <small>(opcional en NPC)</small><input id="atlasMarkerName" maxlength="100" /></label><label>Categoría<select id="atlasMarkerCategory"></select></label></div>
+      <div id="atlasNpcFields" class="atlas-npc-fields" hidden>
+        <div class="form-grid"><label>Pseudónimo visible <small>(opcional)</small><input id="atlasMarkerAlias" maxlength="60" placeholder="Ej.: Guardia, mercader, figura encapuchada…" /></label><label>Actitud hacia los PJ<select id="atlasMarkerDisposition"><option value="neutral">Neutral / desconocido</option><option value="enemy">Enemigo</option><option value="ally">Aliado</option></select></label></div>
+      </div>
+      <div class="form-grid"><label>Visibilidad<select id="atlasMarkerVisibility"><option value="dm">Solo DM</option><option value="visible">Visible, no descubierto</option><option value="discovered">Descubierto y visible</option></select></label><label>Tamaño en el mapa<div class="atlas-marker-size-control"><input id="atlasMarkerSize" type="range" min="0.25" max="8" step="0.25" value="1" /><output id="atlasMarkerSizeValue">1</output><span id="atlasMarkerSizeUnit">u</span></div></label></div>
+      <div class="atlas-picker-field">
+        <span>Escena que abre</span>
+        <input id="atlasMarkerTargetScene" type="hidden" />
+        <div id="atlasMarkerTargetTree" class="atlas-tree-picker atlas-tree-picker--scenes"></div>
+      </div>
+      <fieldset id="atlasMarkerSheetModeWrap" class="atlas-related-fieldset atlas-marker-sheet-mode" hidden>
+        <legend>Ficha del marcador</legend>
+        <label class="atlas-sheet-mode-choice"><input type="radio" name="atlasMarkerSheetMode" value="internal" checked /><span><strong>Sin ficha del cuaderno asociada</strong><small>La Forja creará una ficha interna privada del Atlas para este marcador.</small></span></label>
+        <label class="atlas-sheet-mode-choice"><input type="radio" name="atlasMarkerSheetMode" value="notebook" /><span><strong>Con ficha del cuaderno asociada</strong><small>La ficha principal será una entrada ya existente del Cuaderno.</small></span></label>
+      </fieldset>
+      <fieldset id="atlasRelatedFieldset" class="atlas-related-fieldset"><legend>Relacionar con el cuaderno <small>(opcional)</small></legend><div id="atlasRelatedEntries" class="atlas-related-entries"></div></fieldset>
+      <details id="atlasOrphanSheets" class="atlas-orphan-sheets">
+        <summary>Antiguas fichas creadas no relacionadas con ningún marcador</summary>
+        <p class="dialog-intro">Puedes volver a asociar una ficha conservada a este marcador.</p>
+        <div id="atlasOrphanSheetList" class="atlas-orphan-sheet-list"></div>
+      </details>
+      <label class="check-row atlas-marker-auto-sheet"><input id="atlasMarkerAutoDmSheet" type="checkbox" /> Abrir automáticamente la ficha DM al entrar desde este marcador</label>
+      <div class="dialog-actions dialog-actions--split"><div class="atlas-marker-dialog-left-actions"><button id="atlasDeleteMarker" type="button" class="button button--danger" hidden>Eliminar</button><button id="atlasMarkerOpenSheet" type="button" class="button button--quiet" hidden>▤ Abrir ficha</button></div><span></span><button type="button" class="button button--quiet atlas-marker-dialog-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="atlasInternalSheetDialog" class="atlas-internal-sheet-dialog">
+    <form id="atlasInternalSheetForm" class="dialog-card atlas-internal-sheet-card">
+      <div class="dialog-card__header">
+        <div><h2 id="atlasInternalSheetTitle">Ficha del Atlas</h2><p id="atlasInternalSheetKind" class="atlas-sheet-kind"></p></div>
+        <button type="button" class="icon-button atlas-internal-sheet-close" aria-label="Cerrar">×</button>
+      </div>
+      <div class="atlas-sheet-top-grid">
+        <label>Nombre DM <small>(opcional para NPC)</small><input id="atlasSheetName" maxlength="100" /></label>
+        <label id="atlasSheetStatusWrap" hidden>Estado<select id="atlasSheetStatus"><option value="notStarted">No iniciada</option><option value="active">Activa</option><option value="completed">Completada</option><option value="failed">Fallida</option></select></label>
+      </div>
+      <section id="atlasSheetCreaturePhotoWrap" class="atlas-sheet-photo-wrap" hidden>
+        <div class="atlas-sheet-photo"><img id="atlasSheetPhotoPreview" alt="Retrato de la criatura" hidden /><span id="atlasSheetPhotoEmpty">Sin imagen</span></div>
+        <div class="atlas-sheet-photo-actions"><button id="atlasSheetPhotoChoose" type="button" class="button button--quiet">Añadir / cambiar foto</button><button id="atlasSheetPhotoRemove" type="button" class="button button--danger" hidden>Quitar foto</button></div>
+        <input id="atlasSheetPhotoInput" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" hidden />
+      </section>
+      <label>Descripción<textarea id="atlasSheetDescription" rows="5" maxlength="8000" placeholder="Aspecto, personalidad, contexto, notas para el DM…"></textarea></label>
+
+      <section id="atlasCreatureSheetSection" class="atlas-sheet-section" hidden>
+        <div class="panel__titlebar"><h3>Estadísticas · D&amp;D 5e</h3><span class="panel__hint">Los modificadores se calculan solos · campos opcionales.</span></div>
+        <div class="atlas-sheet-stats-primary">
+          <label>PG actuales<input data-sheet-stat="hp" type="number" /></label><label>PG máximos<input data-sheet-stat="maxhp" type="number" /></label><label>CA<input data-sheet-stat="ac" type="number" /></label><label>Velocidad<input data-sheet-stat="speed" type="number" /></label><label>Iniciativa<input data-sheet-stat="initiative" type="number" /></label><label>Bonif. competencia<input data-sheet-stat="proficiency" type="number" /></label>
+        </div>
+        <div class="atlas-sheet-abilities">
+          <label class="ability">FUE<input data-sheet-stat="str" type="number" min="1" max="30" /><output data-sheet-mod="str">—</output></label>
+          <label class="ability">DES<input data-sheet-stat="dex" type="number" min="1" max="30" /><output data-sheet-mod="dex">—</output></label>
+          <label class="ability">CON<input data-sheet-stat="con" type="number" min="1" max="30" /><output data-sheet-mod="con">—</output></label>
+          <label class="ability">INT<input data-sheet-stat="int" type="number" min="1" max="30" /><output data-sheet-mod="int">—</output></label>
+          <label class="ability">SAB<input data-sheet-stat="wis" type="number" min="1" max="30" /><output data-sheet-mod="wis">—</output></label>
+          <label class="ability">CAR<input data-sheet-stat="cha" type="number" min="1" max="30" /><output data-sheet-mod="cha">—</output></label>
+        </div>
+        <div class="atlas-sheet-text-grid">
+          <label>Modificadores<textarea id="atlasCreatureModifiers" rows="4" maxlength="5000" placeholder="Salvaciones, competencias, resistencias, inmunidades, sentidos, idiomas…"></textarea></label>
+          <label>Habilidades<textarea id="atlasCreatureAbilities" rows="4" maxlength="5000" placeholder="Rasgos, habilidades especiales, conjuros…"></textarea></label>
+          <label>Estilo de combate<textarea id="atlasCreatureCombatStyle" rows="4" maxlength="5000" placeholder="Cómo pelea, prioridades, tácticas, comportamiento…"></textarea></label>
+          <label>Si los PJ no atacan<textarea id="atlasCreatureNonAggression" rows="4" maxlength="5000" placeholder="Cómo reacciona si los personajes no inician el combate: habla, negocia, huye, amenaza, ignora, pide ayuda…"></textarea></label>
+          <label>Acciones<textarea id="atlasCreatureActions" rows="5" maxlength="7000" placeholder="Ataques, acciones, acciones legendarias…"></textarea></label>
+          <label>Reacciones<textarea id="atlasCreatureReactions" rows="4" maxlength="5000" placeholder="Reacciones y condiciones para usarlas…"></textarea></label>
+        </div>
+      </section>
+
+      <section id="atlasSecretSheetSection" class="atlas-sheet-section" hidden>
+        <div class="panel__titlebar"><h3>Secreto</h3><span class="panel__hint">Privado del DM.</span></div>
+        <label>Qué descubren los jugadores<textarea id="atlasSecretReveal" rows="4" maxlength="5000"></textarea></label>
+        <label>Pistas<textarea id="atlasSecretClues" rows="4" maxlength="5000" placeholder="Señales, rumores, detalles que pueden conducir al secreto…"></textarea></label>
+        <div class="atlas-sheet-check-grid"><label>Prueba<select id="atlasSecretCheckType"></select></label><label>CD<input id="atlasSecretCheckDc" type="number" min="0" max="40" /></label></div>
+        <div class="atlas-sheet-text-grid"><label>Si tiene éxito<textarea id="atlasSecretSuccess" rows="4" maxlength="5000"></textarea></label><label>Si falla<textarea id="atlasSecretFailure" rows="4" maxlength="5000"></textarea></label></div>
+        <label class="check-row"><input id="atlasSecretDiscovered" type="checkbox" /> Marcar como descubierto en mis notas</label>
+      </section>
+
+      <section id="atlasMissionSheetSection" class="atlas-sheet-section" hidden>
+        <div class="panel__titlebar"><h3>Misión</h3><span class="panel__hint">Objetivos y evolución.</span></div>
+        <div class="atlas-sheet-top-grid"><label>Quién la entrega<input id="atlasMissionGiver" maxlength="200" /></label><label>Objetivo principal<input id="atlasMissionObjective" maxlength="500" /></label></div>
+        <label>Objetivos secundarios<textarea id="atlasMissionSecondary" rows="4" maxlength="5000"></textarea></label>
+        <label>Recompensa<textarea id="atlasMissionReward" rows="4" maxlength="5000"></textarea></label>
+        <label>Notas DM<textarea id="atlasMissionNotes" rows="4" maxlength="5000"></textarea></label>
+        <div class="atlas-sheet-subcollection">
+          <div class="panel__titlebar"><h4>Etapas</h4><span class="panel__hint">Ordénalas según avance la misión.</span></div>
+          <div id="atlasMissionStages" class="atlas-sheet-stage-list"></div>
+          <div class="atlas-sheet-inline-add"><input id="atlasMissionStageInput" maxlength="500" placeholder="Ej.: Encontrar la entrada de las ruinas" /><button id="atlasMissionStageAdd" type="button" class="button">Añadir etapa</button></div>
+        </div>
+      </section>
+
+      <section id="atlasContainerSheetSection" class="atlas-sheet-section" hidden>
+        <div class="panel__titlebar"><h3 id="atlasContainerTitle">Tesoro / Cofre</h3><span class="panel__hint">Cerraduras, trampas y contenido.</span></div>
+        <div class="atlas-sheet-coins"><label>PC<input id="atlasContainerCp" type="number" min="0" /></label><label>PP<input id="atlasContainerSp" type="number" min="0" /></label><label>PO<input id="atlasContainerGp" type="number" min="0" /></label><label>Platino<input id="atlasContainerPp" type="number" min="0" /></label></div>
+        <div class="atlas-sheet-switch-grid">
+          <section><label class="check-row"><input id="atlasContainerLocked" type="checkbox" /> Cerrado con llave</label><label>CD para abrir<input id="atlasContainerLockDc" type="number" min="0" max="40" /></label><label>Llave / forma de abrir<input id="atlasContainerKey" maxlength="500" /></label></section>
+          <section><label class="check-row"><input id="atlasContainerTrapped" type="checkbox" /> Tiene trampa</label><div class="atlas-sheet-check-grid"><label>Encontrar con<select id="atlasContainerTrapCheck"></select></label><label>CD<input id="atlasContainerTrapDc" type="number" min="0" max="40" /></label></div><label>Efecto de la trampa<textarea id="atlasContainerTrapEffect" rows="3" maxlength="3000"></textarea></label><label>CD para desactivar<input id="atlasContainerDisarmDc" type="number" min="0" max="40" /></label></section>
+        </div>
+      </section>
+
+      <section id="atlasLootSheetSection" class="atlas-sheet-section" hidden>
+        <div class="panel__titlebar"><h3>Items / recompensas</h3><span class="panel__hint">Los objetos sin prueba siempre aparecen. El resto se agrupa por prueba y CD.</span></div>
+        <div id="atlasSheetLootGroups" class="atlas-loot-groups"></div>
+        <div class="atlas-loot-add-grid">
+          <input id="atlasLootName" maxlength="160" placeholder="Objeto o recompensa" />
+          <input id="atlasLootQuantity" type="number" min="1" value="1" aria-label="Cantidad" />
+          <select id="atlasLootCheckType" aria-label="Prueba necesaria"></select>
+          <input id="atlasLootCheckDc" type="number" min="0" max="40" placeholder="CD" aria-label="CD" />
+          <input id="atlasLootNotes" maxlength="500" placeholder="Notas, ubicación, estado…" />
+          <button id="atlasLootAdd" type="button" class="button">Añadir</button>
+        </div>
+        <section class="atlas-loot-search">
+          <div class="panel__titlebar"><h4>Registrar / buscar</h4><span class="panel__hint">Esta zona solo muestra lo encontrado. Los jugadores nunca ven esta ficha.</span></div>
+          <div class="atlas-loot-search-controls"><label>Prueba<select id="atlasLootSearchCheck"></select></label><label>Mod.<input id="atlasLootSearchModifier" type="number" min="-20" max="20" value="0" /></label><label>Resultado<input id="atlasLootSearchResult" type="number" min="0" max="99" /></label><button id="atlasLootSearchRoll" type="button" class="button button--quiet">⚄ Tirar 1d20</button></div>
+          <div id="atlasLootSearchResultList" class="atlas-loot-search-results"></div>
+        </section>
+      </section>
+
+      <div class="dialog-actions"><button type="button" class="button button--quiet atlas-internal-sheet-cancel">Cancelar</button><button class="button" type="submit">Guardar ficha</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="atlasTextDialog"><form id="atlasTextForm" class="dialog-card"><div class="dialog-card__header"><h2>Texto del mapa</h2><button type="button" class="icon-button atlas-text-dialog-close">×</button></div><label>Texto<textarea id="atlasTextValue" rows="4" maxlength="300" required></textarea></label><label class="check-row"><input id="atlasTextVisible" type="checkbox" /> Visible para los jugadores</label><div class="dialog-actions"><button type="button" class="button button--quiet atlas-text-dialog-cancel">Cancelar</button><button class="button" type="submit">Añadir</button></div></form></dialog>
+
+  <dialog id="atlasCategoryDialog"><form id="atlasCategoryForm" class="dialog-card"><div class="dialog-card__header"><h2>Nueva categoría</h2><button type="button" class="icon-button atlas-category-dialog-close">×</button></div><div class="form-grid"><label>Nombre<input id="atlasCategoryName" maxlength="50" required /></label><label>Símbolo<input id="atlasCategoryIcon" maxlength="8" value="✦" required /></label></div><div class="dialog-actions"><button type="button" class="button button--quiet atlas-category-dialog-cancel">Cancelar</button><button class="button" type="submit">Crear categoría</button></div></form></dialog>
+
+  <dialog id="itemDialog">
+    <form id="itemDialogForm" class="dialog-card">
+      <div class="dialog-card__header">
+        <h2 id="dialogTitle">Nueva entrada</h2>
+        <button type="button" class="icon-button dialog-close" aria-label="Cerrar">×</button>
+      </div>
+      <label>
+        Nombre
+        <input id="newItemName" required maxlength="100" autocomplete="off" />
+      </label>
+      <label>
+        Clase
+        <select id="newItemSubtype"></select>
+      </label>
+      <label id="parentField">
+        Dentro de
+        <select id="newItemParent"></select>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="button button--quiet dialog-cancel">Cancelar</button>
+        <button class="button" type="submit">Crear</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="actionsDialog">
+    <div class="dialog-card action-dialog-card">
+      <div class="dialog-card__header">
+        <h2 id="actionsTitle">Acciones</h2>
+        <button type="button" class="icon-button actions-close" aria-label="Cerrar">×</button>
+      </div>
+      <button type="button" class="action-choice" data-action="child">↳ Añadir dentro</button>
+      <button type="button" class="action-choice" data-action="up">↑ Subir posición</button>
+      <button type="button" class="action-choice" data-action="down">↓ Bajar posición</button>
+      <button type="button" class="action-choice" data-action="rename">✎ Renombrar</button>
+      <button type="button" class="action-choice" data-action="duplicate">⧉ Duplicar</button>
+      <button type="button" class="action-choice action-choice--danger" data-action="delete">⌫ Eliminar</button>
+    </div>
+  </dialog>
+
+  <dialog id="connectionDialog">
+    <form id="connectionDialogForm" class="dialog-card">
+      <div class="dialog-card__header">
+        <h2>Nueva conexión</h2>
+        <button type="button" class="icon-button connection-dialog-close" aria-label="Cerrar">×</button>
+      </div>
+      <p class="dialog-intro">Escribe la relación que une ambas entradas.</p>
+      <div class="connection-sentence-editor">
+        <strong id="connectionSourceName"></strong>
+        <label>
+          <span>Relación</span>
+          <input id="connectionRelation" required maxlength="80" placeholder="está en, pertenece a, protege…" autocomplete="off" />
+        </label>
+        <strong id="connectionTargetName"></strong>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="button button--quiet connection-dialog-cancel">Cancelar</button>
+        <button class="button" type="submit">Crear conexión</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="campaignDialog">
+    <div class="dialog-card campaign-dialog-card">
+      <div class="dialog-card__header">
+        <div>
+          <h2>Campañas del perfil</h2>
+          <p>Se guardan de forma independiente en este navegador.</p>
+        </div>
+        <button type="button" class="icon-button campaign-dialog-close" aria-label="Cerrar">×</button>
+      </div>
+      <form id="newCampaignForm" class="campaign-create-form">
+        <input id="newCampaignName" maxlength="60" placeholder="Nombre de la nueva campaña" required autocomplete="off" />
+        <button class="button" type="submit">+ Crear campaña</button>
+      </form>
+      <div id="campaignList" class="campaign-list"></div>
+    </div>
+  </dialog>
+
+  <dialog id="calendarEventDialog">
+    <form id="calendarEventForm" class="dialog-card">
+      <div class="dialog-card__header">
+        <h2 id="calendarEventDialogTitle">Nuevo evento</h2>
+        <button type="button" class="icon-button calendar-event-close" aria-label="Cerrar">×</button>
+      </div>
+      <div class="form-grid form-grid--date">
+        <label>Día de campaña<input id="eventDay" type="number" min="1" step="1" required /></label>
+        <label>Momento / hora<input id="eventTime" type="time" /></label>
+      </div>
+      <p id="eventDayPreview" class="event-day-preview"></p>
+      <label>Título<input id="eventTitle" required maxlength="100" autocomplete="off" /></label>
+      <label>Entrada relacionada<select id="eventEntry"></select></label>
+      <label>Notas<textarea id="eventDescription" rows="5" maxlength="1000"></textarea></label>
+      <div class="dialog-actions dialog-actions--split">
+        <button id="deleteCalendarEvent" type="button" class="button button--danger" hidden>Eliminar</button>
+        <span></span>
+        <button type="button" class="button button--quiet calendar-event-cancel">Cancelar</button>
+        <button class="button" type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="calendarSettingsDialog">
+    <form id="calendarSettingsForm" class="dialog-card">
+      <div class="dialog-card__header">
+        <div>
+          <h2>Calendario de campaña</h2>
+          <p>El día 1 es el inicio de la aventura y solo avanza cuando tú lo decides.</p>
+        </div>
+        <button type="button" class="icon-button calendar-settings-close" aria-label="Cerrar">×</button>
+      </div>
+      <label>Mes en el que empieza la campaña<select id="calendarStartMonth"></select></label>
+      <label>Días por mes<input id="calendarDaysPerMonth" type="number" min="20" max="35" step="1" required /></label>
+      <label>Día actual de la campaña<input id="calendarCurrentDay" type="number" min="1" step="1" required /></label>
+      <p class="dialog-intro">Cambiar el mes inicial no mueve los eventos: todos se guardan por su número de día de campaña.</p>
+      <div class="dialog-actions">
+        <button type="button" class="button button--quiet calendar-settings-cancel">Cancelar</button>
+        <button class="button" type="submit">Guardar calendario</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="helpDialog">
+    <div class="dialog-card help-card">
+      <div class="dialog-card__header">
+        <h2>Cómo usar La Forja</h2>
+        <button id="closeHelp" class="icon-button" type="button" aria-label="Cerrar">×</button>
+      </div>
+      <p>El perfil local puede contener varias campañas. Usa el selector superior para cambiar de una a otra y el botón ⚜ para crearlas, renombrarlas, duplicarlas o eliminarlas.</p>
+      <p>Las cinco columnas funcionan como árboles. Crea una entrada en la raíz o dentro de otra de la misma columna. Arrastra una fila para reordenarla entre sus hermanas o usa las acciones ↑ y ↓.</p>
+      <p>La clase define si una localización es un mundo, región o pueblo; si una criatura es amistosa, vendedora, neutral u hostil; y equivalentes para las demás columnas.</p>
+      <p>Las criaturas de clase <strong>PNJ vendedor / Comerciante</strong> y las localizaciones de tipo <strong>Tienda / Comercio</strong> incluyen una tabla para guardar el nombre, la cantidad, la moneda y la descripción de cada artículo.</p>
+      <p>La descripción admite títulos, listas, negrita, cursiva, tachado, enlaces y bloques resaltados. La barra de formato está bajo el pergamino de escritura.</p>
+      <p>Para conectar dos entradas, abre una de ellas, pulsa <strong>Crear conexión</strong> y después pulsa el destino directamente en cualquiera de las cinco columnas.</p>
+      <p>En <strong>Calendario</strong> el día 1 es el inicio de la campaña. El tiempo solo avanza al pulsar <strong>Dormir · +1 día</strong>; puedes escoger el mes inicial y los días que tiene cada mes.</p>
+      <p>El <strong>Mapa</strong> reúne todas las conexiones y permite filtrarlas por una localización. Los items obtenibles de una localización también aparecen enlazados con su entrada relacionada.</p>
+      <p>En <strong>Dados</strong> puedes sumar varios d4, d6, d8, d10, d12, d20 o d100, elegir un modificador entre +20 y −20 y tirar fórmulas editables como <strong>2d20 + 4</strong>. Cada campaña conserva su propio historial.</p>
+      <p>En <strong>Atlas</strong> puedes crear escenas anidadas con imágenes propias, marcadores, formas y niebla de guerra. Las escenas de tipo <strong>Mapa creado</strong> abren un editor cenital con cuadrícula de 1 m², habitaciones, pasillos, paredes, puertas, escaleras, mobiliario, texturas y exportación PNG.</p>
+      <p>El panel ☰ reúne la contraseña del DM y las copias de seguridad: JSON ligero o ZIP completo con las imágenes del Atlas.</p>
+      <p>En ventanas estrechas las cinco colecciones pasan a pestañas: solo se muestra un árbol a la vez para evitar columnas comprimidas y desplazamiento horizontal.</p>
+      <p>Usa ⇩ y ⇧ para exportar o restaurar el perfil completo. Atajos: <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>K</kbd> busca y <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>S</kbd> exporta.</p>
+    </div>
+  </dialog>
+
+  <template id="collectionTemplate">
+    <section class="collection-column">
+      <header class="collection-column__header">
+        <div>
+          <span class="collection-icon"></span>
+          <h2 class="collection-title"></h2>
+          <span class="collection-count"></span>
+        </div>
+        <button class="add-item" type="button" title="Añadir" aria-label="Añadir">+</button>
+      </header>
+      <div class="collection-items"></div>
+    </section>
+  </template>
+
+  <script src="app.js?v=2.8.0" defer></script>
+  <script src="atlas.js?v=2.8.0" defer></script>
+  <script src="dungeon.js?v=2.8.0" defer></script>
+</body>
+</html>
