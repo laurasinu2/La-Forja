@@ -97,7 +97,7 @@
     view: $("#dungeonView"), back: $("#dungeonBack"), title: $("#dungeonTitle"), subtitle: $("#dungeonSubtitle"),
     undo: $("#dungeonUndo"), redo: $("#dungeonRedo"), zoomOut: $("#dungeonZoomOut"), zoomIn: $("#dungeonZoomIn"), fit: $("#dungeonFit"),
     exportPng: $("#dungeonExportPng"), exportProject: $("#dungeonExportProject"), save: $("#dungeonSave"), saveBack: $("#dungeonSaveBack"),
-    tools: $("#dungeonTools"), architecture: $("#dungeonArchitecturePalette"), furniture: $("#dungeonFurniturePalette"),
+    tools: $("#dungeonTools"), multiSelect: $("#dungeonMultiSelect"), architecture: $("#dungeonArchitecturePalette"), furniture: $("#dungeonFurniturePalette"),
     viewport: $("#dungeonViewport"), stage: $("#dungeonStage"), canvas: $("#dungeonCanvas"), overlay: $("#dungeonOverlayCanvas"),
     mapWidth: $("#dungeonMapWidth"), mapHeight: $("#dungeonMapHeight"), resizeMap: $("#dungeonResizeMap"), preset: $("#dungeonPreset"),
     gridVisible: $("#dungeonGridVisible"), snap: $("#dungeonSnap"), floorTexture: $("#dungeonFloorTexture"), wallTexture: $("#dungeonWallTexture"),
@@ -116,6 +116,8 @@
   let sceneId = "";
   let project = null;
   let selectedId = "";
+  const extraSelectedIds = new Set();
+  let multiSelectMode = false;
   let tool = "select";
   let propTool = "";
   let transform = { x: 0, y: 0, scale: 1 };
@@ -143,6 +145,55 @@
   function snapForType(type, value, step = 1) { return project?.snap && isStructureType(type) ? roundTo(value, step) : value; }
   function snapValue(value, step = 1) { return project?.snap ? roundTo(value, step) : value; }
   function selected() { return project?.elements.find(element => element.id === selectedId) || null; }
+  function selectionIds() {
+    const ids = new Set(extraSelectedIds);
+    if (selectedId) ids.add(selectedId);
+    return ids;
+  }
+  function selectedElements() {
+    const ids = selectionIds();
+    return project?.elements.filter(element => ids.has(element.id)) || [];
+  }
+  function isElementSelected(id) { return Boolean(id && (id === selectedId || extraSelectedIds.has(id))); }
+  function clearSelection() { selectedId = ""; extraSelectedIds.clear(); }
+  function selectOnly(id) { selectedId = id || ""; extraSelectedIds.clear(); }
+  function makePrimaryPreservingSelection(id) {
+    if (!id || id === selectedId) return;
+    if (selectedId) extraSelectedIds.add(selectedId);
+    extraSelectedIds.delete(id);
+    selectedId = id;
+  }
+  function toggleSelection(id) {
+    if (!id) return;
+    if (id === selectedId) {
+      if (extraSelectedIds.size) {
+        const next = extraSelectedIds.values().next().value;
+        extraSelectedIds.delete(next);
+        selectedId = next;
+      } else selectedId = "";
+      return;
+    }
+    if (extraSelectedIds.has(id)) extraSelectedIds.delete(id);
+    else extraSelectedIds.add(id);
+  }
+  function purgeSelection() {
+    if (!project) { clearSelection(); return; }
+    const valid = new Set(project.elements.map(element => element.id));
+    if (selectedId && !valid.has(selectedId)) selectedId = "";
+    [...extraSelectedIds].forEach(id => { if (!valid.has(id)) extraSelectedIds.delete(id); });
+    if (!selectedId && extraSelectedIds.size) {
+      const next = extraSelectedIds.values().next().value;
+      extraSelectedIds.delete(next);
+      selectedId = next;
+    }
+  }
+  function syncMultiSelectButton() {
+    if (!els.multiSelect) return;
+    els.multiSelect.classList.toggle("is-active", multiSelectMode);
+    els.multiSelect.setAttribute("aria-pressed", multiSelectMode ? "true" : "false");
+    els.multiSelect.title = multiSelectMode ? "Selección múltiple activa · toca para desactivar" : "Selección múltiple: toca varios elementos y muévelos juntos";
+  }
+
   function normaliseStatueVariant(value) {
     if (STATUE_ASSETS[value]) return value;
     if (value === "person") return "aphrodite";
@@ -392,7 +443,7 @@
     migrateProjectObjectImagesToLibrary(project).catch(error => console.warn("No se pudieron migrar todas las imágenes a la biblioteca local.", error));
     target.sourceType = "dungeon";
     target.mapProject = clone(project);
-    selectedId = "";
+    clearSelection();
     tool = "select";
     propTool = "";
     dirty = false;
@@ -617,7 +668,7 @@
     if (index < 0 || index >= history.length) return;
     historyIndex = index;
     project = normaliseProject(JSON.parse(history[index]));
-    if (!selected()) selectedId = "";
+    purgeSelection();
     dirty = true;
     persistProject();
     syncForm();
@@ -795,7 +846,7 @@
     }
     const control = selectionControlAt(point, chosen);
     if (control === "move-control") {
-      pointerState = { id: event.pointerId, mode: "control-move", start: point, before: clone(chosen) };
+      pointerState = { id: event.pointerId, mode: "control-move", start: point, before: clone(chosen), groupBefore: selectedElements().map(element => clone(element)) };
       return true;
     }
     if (control === "rotate-control") {
@@ -813,12 +864,22 @@
   function selectHitForMove(point, event) {
     const hit = hitTest(point);
     if (!hit) return false;
-    selectedId = hit.id;
+    const additive = multiSelectMode || event.shiftKey || event.ctrlKey || event.metaKey;
+    if (additive) {
+      toggleSelection(hit.id);
+      if (!isElementSelected(hit.id)) {
+        renderSelectionPanel(); renderOverlay(); renderLayers();
+        return true;
+      }
+      makePrimaryPreservingSelection(hit.id);
+    } else if (isElementSelected(hit.id) && selectionIds().size > 1) {
+      makePrimaryPreservingSelection(hit.id);
+    } else selectOnly(hit.id);
     if (["room", "corridor"].includes(hit.type) && els.floorMaterialTarget) els.floorMaterialTarget.value = "selection";
     renderSelectionPanel();
     renderOverlay();
     renderLayers();
-    pointerState = { id: event.pointerId, mode: "move", start: point, before: clone(hit) };
+    pointerState = { id: event.pointerId, mode: "move", start: point, before: clone(hit), groupBefore: selectedElements().map(element => clone(element)) };
     return true;
   }
 
@@ -835,7 +896,7 @@
 
     if (activeTool === "select") {
       if (!beginSelectedHandleInteraction(point, event) && !selectHitForMove(point, event)) {
-        selectedId = "";
+        clearSelection();
         renderSelectionPanel();
         renderOverlay();
         renderLayers();
@@ -849,6 +910,8 @@
       if (hit) {
         project.elements = project.elements.filter(element => element.id !== hit.id);
         if (selectedId === hit.id) selectedId = "";
+        extraSelectedIds.delete(hit.id);
+        purgeSelection();
         commit(`${TYPE_LABELS[hit.type]} eliminado`);
       }
       return;
@@ -875,7 +938,7 @@
       const x = point.x, y = point.y;
       const element = { id: app.uid(), type: "text", x, y, w: 4, h: 1, x2: x + 4, y2: y + 1, rotation: 0, label: "Etiqueta", hidden: false, floorTexture: "" };
       project.elements.push(element);
-      selectedId = element.id;
+      selectOnly(element.id);
       setTool("select");
       commit("Etiqueta añadida");
       setTimeout(() => { els.elementLabel.focus(); els.elementLabel.select(); }, 0);
@@ -920,8 +983,12 @@
     if (pointerState.mode === "control-move") {
       const dx = point.x - pointerState.start.x;
       const dy = point.y - pointerState.start.y;
-      element.x = pointerState.before.x + dx;
-      element.y = pointerState.before.y + dy;
+      const beforeGroup = Array.isArray(pointerState.groupBefore) && pointerState.groupBefore.length ? pointerState.groupBefore : [pointerState.before];
+      beforeGroup.forEach(before => {
+        const target = project.elements.find(item => item.id === before.id); if (!target) return;
+        target.x = before.x + dx; target.y = before.y + dy;
+        if (target.type === "wall") { target.x2 = before.x2 + dx; target.y2 = before.y2 + dy; }
+      });
       renderAll(false);
       return;
     }
@@ -935,8 +1002,16 @@
     }
 
     if (pointerState.mode === "move") {
-      const dx = point.x - pointerState.start.x, dy = point.y - pointerState.start.y;
-      if (element.type === "wall") {
+      let dx = point.x - pointerState.start.x, dy = point.y - pointerState.start.y;
+      const beforeGroup = Array.isArray(pointerState.groupBefore) && pointerState.groupBefore.length ? pointerState.groupBefore : [pointerState.before];
+      if (beforeGroup.length > 1) {
+        if (project.snap && beforeGroup.some(item => isStructureType(item.type))) { dx = roundTo(dx); dy = roundTo(dy); }
+        beforeGroup.forEach(before => {
+          const target = project.elements.find(item => item.id === before.id); if (!target) return;
+          target.x = before.x + dx; target.y = before.y + dy;
+          if (target.type === "wall") { target.x2 = before.x2 + dx; target.y2 = before.y2 + dy; }
+        });
+      } else if (element.type === "wall") {
         const snappedDx = project.snap ? roundTo(dx) : dx;
         const snappedDy = project.snap ? roundTo(dy) : dy;
         element.x = pointerState.before.x + snappedDx; element.y = pointerState.before.y + snappedDy;
@@ -966,7 +1041,7 @@
       if (action.drawTool === "wall") {
         if (Math.hypot(end.x - action.start.x, end.y - action.start.y) >= .5) {
           const element = { id: app.uid(), type: "wall", x: action.start.x, y: action.start.y, x2: end.x, y2: end.y, w: 0, h: 0, rotation: 0, label: "", hidden: false, floorTexture: "" };
-          project.elements.push(element); selectedId = element.id; commit("Pared añadida");
+          project.elements.push(element); selectOnly(element.id); commit("Pared añadida");
         } else renderOverlay();
       } else if (action.drawTool === "prop-line") {
         const dx = end.x - action.start.x, dy = end.y - action.start.y;
@@ -974,14 +1049,14 @@
         if (length >= .5) {
           const thickness = { door: .34, "double-door": .42, "secret-door": .34 }[action.propType] || .34;
           const element = { id: app.uid(), type: action.propType, x: (action.start.x + end.x) / 2 - length / 2, y: (action.start.y + end.y) / 2 - thickness / 2, w: length, h: thickness, x2: 0, y2: 0, rotation: Math.atan2(dy, dx) * 180 / Math.PI, label: "", hidden: false, floorTexture: "" };
-          project.elements.push(element); selectedId = element.id; commit(`${TYPE_LABELS[action.propType]} añadida`);
+          project.elements.push(element); selectOnly(element.id); commit(`${TYPE_LABELS[action.propType]} añadida`);
         } else renderOverlay();
       } else {
         const x = Math.min(action.start.x, end.x), y = Math.min(action.start.y, end.y);
         const w = Math.abs(end.x - action.start.x), h = Math.abs(end.y - action.start.y);
         if (w >= 1 && h >= 1) {
           const element = { id: app.uid(), type: action.drawTool, x, y, w, h, x2: x + w, y2: y + h, rotation: 0, label: "", hidden: false, floorTexture: "" };
-          project.elements.push(element); selectedId = element.id; commit(`${TYPE_LABELS[action.drawTool]} añadida`);
+          project.elements.push(element); selectOnly(element.id); commit(`${TYPE_LABELS[action.drawTool]} añadida`);
         } else renderOverlay();
       }
       return;
@@ -995,7 +1070,7 @@
     const x = point.x - w / 2, y = point.y - h / 2;
     const element = { id: app.uid(), type, x, y, w, h, x2: x + w, y2: y + h, rotation: 0, label: "", hidden: false, floorTexture: "", variant: type === "statue" ? "gladiator" : "", customImageData: "", customImageName: "", customImageType: "", customImageAspect: 1 };
     project.elements.push(element);
-    selectedId = element.id;
+    selectOnly(element.id);
     commit(`${TYPE_LABELS[type]} añadido`);
   }
 
@@ -1033,6 +1108,20 @@
         context.fillRect(x, y, w, h); context.strokeRect(x, y, w, h);
       }
     }
+
+    const selectedSet = selectionIds();
+    project.elements.filter(item => item.id !== selectedId && selectedSet.has(item.id) && !item.hidden).forEach(item => {
+      context.save();
+      context.setLineDash([.14 / transform.scale, .11 / transform.scale]);
+      context.strokeStyle = "#63b4c4";
+      if (item.type === "wall") { context.beginPath(); context.moveTo(item.x, item.y); context.lineTo(item.x2, item.y2); context.stroke(); }
+      else {
+        const centerX = item.x + item.w / 2, centerY = item.y + item.h / 2;
+        context.translate(centerX, centerY); context.rotate((item.rotation || 0) * Math.PI / 180); context.translate(-centerX, -centerY);
+        context.strokeRect(item.x, item.y, item.w, item.h);
+      }
+      context.restore();
+    });
 
     const element = selected();
     if (element && !element.hidden) {
@@ -1774,7 +1863,8 @@
     const element = selected();
     els.selectionPanel.hidden = !element;
     if (!element) { syncMaterialControls(); return; }
-    els.selectionType.textContent = TYPE_LABELS[element.type];
+    const selectionCount = selectionIds().size;
+    els.selectionType.textContent = selectionCount > 1 ? `${TYPE_LABELS[element.type]} · ${selectionCount} seleccionados` : TYPE_LABELS[element.type];
     els.elementLabel.value = element.label || "";
     els.elementX.value = trimNumber(element.x);
     els.elementY.value = trimNumber(element.y);
@@ -1844,10 +1934,15 @@
     els.elementCount.textContent = project.elements.length;
     [...project.elements].reverse().forEach(element => {
       const row = document.createElement("article");
-      row.className = `dungeon-layer${element.id === selectedId ? " is-active" : ""}`;
+      row.className = `dungeon-layer${isElementSelected(element.id) ? " is-active" : ""}`;
       const open = document.createElement("button"); open.type = "button"; open.className = "dungeon-layer__open";
       open.innerHTML = `<span>${elementIcon(element.type)}</span><strong>${escapeHtml(element.label || TYPE_LABELS[element.type])}</strong>`;
-      open.addEventListener("click", () => { selectedId = element.id; if (["room", "corridor"].includes(element.type) && els.floorMaterialTarget) els.floorMaterialTarget.value = "selection"; setTool("select"); renderAll(); });
+      open.addEventListener("click", event => {
+        if (multiSelectMode || event.shiftKey || event.ctrlKey || event.metaKey) { toggleSelection(element.id); if (isElementSelected(element.id)) makePrimaryPreservingSelection(element.id); }
+        else selectOnly(element.id);
+        if (["room", "corridor"].includes(element.type) && els.floorMaterialTarget) els.floorMaterialTarget.value = "selection";
+        setTool("select"); renderAll();
+      });
       const eye = document.createElement("button"); eye.type = "button"; eye.className = "dungeon-layer__action"; eye.textContent = element.hidden ? "⊘" : "◉"; eye.title = element.hidden ? "Mostrar" : "Ocultar";
       eye.addEventListener("click", () => { element.hidden = !element.hidden; commit(element.hidden ? "Elemento ocultado" : "Elemento mostrado"); });
       const up = document.createElement("button"); up.type = "button"; up.className = "dungeon-layer__action"; up.textContent = "↑"; up.title = "Subir capa";
@@ -2067,7 +2162,7 @@
     clipboardPasteCount += 1;
     const copy = offsetElementCopy(elementClipboard, clipboardPasteCount);
     project.elements.push(copy);
-    selectedId = copy.id;
+    selectOnly(copy.id);
     if (["room", "corridor"].includes(copy.type) && els.floorMaterialTarget) els.floorMaterialTarget.value = "selection";
     commit(`${TYPE_LABELS[copy.type] || "Elemento"} pegado con sus medidas`);
   }
@@ -2075,12 +2170,18 @@
   function duplicateSelected() {
     const element = selected(); if (!element) return;
     const copy = offsetElementCopy(element, 1);
-    project.elements.push(copy); selectedId = copy.id; commit("Elemento duplicado");
+    project.elements.push(copy); selectOnly(copy.id); commit("Elemento duplicado");
   }
 
   function deleteSelected() {
-    const element = selected(); if (!element) return;
-    project.elements = project.elements.filter(item => item.id !== element.id); selectedId = ""; commit(`${TYPE_LABELS[element.type]} eliminado`);
+    const elements = selectedElements();
+    if (!elements.length) return;
+    if (elements.length > 1 && !confirm(`¿Eliminar los ${elements.length} elementos seleccionados?`)) return;
+    const ids = new Set(elements.map(item => item.id));
+    project.elements = project.elements.filter(item => !ids.has(item.id));
+    const label = elements.length > 1 ? `${elements.length} elementos eliminados` : `${TYPE_LABELS[elements[0].type]} eliminado`;
+    clearSelection();
+    commit(label);
   }
 
   function applyPreset(value) {
@@ -2135,13 +2236,21 @@
   }
 
   function resizeMap() {
-    const width = Math.round(clamp(els.mapWidth.value, 10, 120));
-    const height = Math.round(clamp(els.mapHeight.value, 10, 120));
-    const outside = project.elements.some(element => {
-      const bounds = elementBounds(element); return bounds.x + bounds.w > width || bounds.y + bounds.h > height;
+    const requestedWidth = Math.round(clamp(els.mapWidth.value, 10, 120));
+    const requestedHeight = Math.round(clamp(els.mapHeight.value, 10, 120));
+    let requiredWidth = 10, requiredHeight = 10;
+    project.elements.forEach(element => {
+      const bounds = elementBounds(element);
+      requiredWidth = Math.max(requiredWidth, Math.ceil(bounds.x + bounds.w));
+      requiredHeight = Math.max(requiredHeight, Math.ceil(bounds.y + bounds.h));
     });
-    if (outside && !confirm("Algunos elementos quedarán fuera del mapa. ¿Aplicar igualmente el nuevo tamaño?")) return;
-    project.widthCells = width; project.heightCells = height; commit("Tamaño del mapa actualizado"); resizeCanvases(); fitMap();
+    const width = Math.min(120, Math.max(requestedWidth, requiredWidth));
+    const height = Math.min(120, Math.max(requestedHeight, requiredHeight));
+    project.widthCells = width; project.heightCells = height;
+    els.mapWidth.value = width; els.mapHeight.value = height;
+    const protectedContent = width !== requestedWidth || height !== requestedHeight;
+    commit(protectedContent ? "Tamaño ajustado sin ocultar elementos existentes" : "Tamaño del mapa actualizado");
+    resizeCanvases(); fitMap();
   }
 
   async function renderToCanvas() {
@@ -2217,8 +2326,24 @@
     els.zoomOut.addEventListener("click", () => zoomBy(.82)); els.zoomIn.addEventListener("click", () => zoomBy(1.22)); els.fit.addEventListener("click", fitMap);
     els.exportPng.addEventListener("click", exportPng); els.exportProject.addEventListener("click", exportProject);
     els.save.addEventListener("click", () => saveMap(false)); els.saveBack.addEventListener("click", () => saveMap(true));
-    els.tools.addEventListener("click", event => { const button = event.target.closest("[data-dungeon-tool]"); if (button) setTool(button.dataset.dungeonTool); });
-    [els.architecture, els.furniture].filter(Boolean).forEach(palette => palette.addEventListener("click", event => { const button = event.target.closest("[data-dungeon-prop]"); if (button) setTool("prop", button.dataset.dungeonProp); }));
+    els.tools.addEventListener("click", event => {
+      const button = event.target.closest("[data-dungeon-tool]");
+      if (!button) return;
+      multiSelectMode = false; syncMultiSelectButton();
+      setTool(button.dataset.dungeonTool);
+    });
+    els.multiSelect?.addEventListener("click", () => {
+      multiSelectMode = !multiSelectMode;
+      setTool("select");
+      syncMultiSelectButton();
+      setStatus(multiSelectMode ? "Selección múltiple activa · toca varios elementos y arrastra cualquiera para mover el grupo" : "Selección múltiple desactivada");
+    });
+    [els.architecture, els.furniture].filter(Boolean).forEach(palette => palette.addEventListener("click", event => {
+      const button = event.target.closest("[data-dungeon-prop]");
+      if (!button) return;
+      multiSelectMode = false; syncMultiSelectButton();
+      setTool("prop", button.dataset.dungeonProp);
+    }));
 
     els.overlay.addEventListener("pointerdown", startPointer); els.overlay.addEventListener("pointermove", movePointer); els.overlay.addEventListener("pointerup", stopPointer); els.overlay.addEventListener("pointercancel", stopPointer);
     els.viewport.addEventListener("wheel", event => { event.preventDefault(); const rect = els.viewport.getBoundingClientRect(); zoomBy(event.deltaY < 0 ? 1.12 : .89, { x: event.clientX - rect.left, y: event.clientY - rect.top }); }, { passive: false });
@@ -2267,10 +2392,12 @@
       else if (ctrl && event.key.toLowerCase() === "d") { event.preventDefault(); duplicateSelected(); }
       else if (event.key.toLowerCase() === "r") { event.preventDefault(); rotateSelected(event.shiftKey ? -90 : 90); }
       else if (event.key === "Delete" || event.key === "Backspace") { event.preventDefault(); deleteSelected(); }
-      else if (event.key === "Escape") { selectedId = ""; setTool("select"); renderAll(); }
+      else if (event.key === "Escape") { clearSelection(); setTool("select"); renderAll(); }
     });
     document.addEventListener("keyup", event => { if (event.code === "Space") spaceDown = false; });
   }
+
+  syncMultiSelectButton();
 
   window.ForjaDungeon = { open, render, save: saveMap };
   bind();

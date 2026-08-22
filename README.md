@@ -204,3 +204,12 @@ También se pueden importar texturas PNG, SVG, WebP o JPG. La aplicación las co
 ## v2.8.0
 
 Esta versión añade marcadores proporcionales al mapa, NPC con actitud (enemigo/aliado/neutral), pseudónimo público opcional, zoom táctil en la proyección, código de acceso local y una carpeta de autoguardado/restauración local. La web sigue funcionando sin backend y puede publicarse como sitio estático en GitHub Pages.
+
+
+## v2.8.1
+
+- La niebla del Atlas conserva correctamente `fogBase`: si una escena se revela por completo, seguirá revelada al cerrar y volver a abrir la aplicación. Los cambios de revelar/ocultar se persisten inmediatamente.
+- La ficha DM lateral muestra **Actitud hacia los PJ** cuando se abre desde un marcador NPC, incluso si la ficha procede del Cuaderno: Neutral/desconocido, Aliado o Enemigo. Cambiarla actualiza el color del marcador.
+- La ficha lateral del Atlas se puede ensanchar o estrechar arrastrando su borde izquierdo en escritorio/tablet amplia; el ancho se recuerda en el dispositivo.
+- Cambiar el tamaño de un mapa del diseñador ya no puede ocultar accidentalmente el trabajo existente: si se intenta reducir por debajo del contenido, La Forja conserva automáticamente el tamaño mínimo necesario.
+- El diseñador incorpora **Selección múltiple** apta para táctil. También funciona con Shift/Ctrl/Cmd. Los elementos seleccionados se pueden mover juntos conservando sus distancias.

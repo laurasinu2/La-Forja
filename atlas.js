@@ -46,7 +46,7 @@
     atlasSceneDialog: $("#atlasSceneDialog"), atlasSceneForm: $("#atlasSceneForm"), atlasSceneDialogTitle: $("#atlasSceneDialogTitle"), atlasSceneName: $("#atlasSceneName"), atlasSceneParent: $("#atlasSceneParent"), atlasSceneDiscovered: $("#atlasSceneDiscovered"), atlasDeleteScene: $("#atlasDeleteScene"), atlasSceneSourceFieldset: $("#atlasSceneSourceFieldset"), atlasSceneEditDungeon: $("#atlasSceneEditDungeon"),
     atlasMarkerDialog: $("#atlasMarkerDialog"), atlasMarkerForm: $("#atlasMarkerForm"), atlasMarkerDialogTitle: $("#atlasMarkerDialogTitle"), atlasMarkerName: $("#atlasMarkerName"), atlasMarkerCategory: $("#atlasMarkerCategory"), atlasMarkerAlias: $("#atlasMarkerAlias"), atlasMarkerDisposition: $("#atlasMarkerDisposition"), atlasNpcFields: $("#atlasNpcFields"), atlasMarkerVisibility: $("#atlasMarkerVisibility"), atlasMarkerSize: $("#atlasMarkerSize"), atlasMarkerSizeValue: $("#atlasMarkerSizeValue"), atlasMarkerSizeUnit: $("#atlasMarkerSizeUnit"), atlasMarkerTargetScene: $("#atlasMarkerTargetScene"), atlasMarkerTargetTree: $("#atlasMarkerTargetTree"), atlasRelatedEntries: $("#atlasRelatedEntries"), atlasRelatedFieldset: $("#atlasRelatedFieldset"), atlasMarkerSheetModeWrap: $("#atlasMarkerSheetModeWrap"), atlasOrphanSheets: $("#atlasOrphanSheets"), atlasOrphanSheetList: $("#atlasOrphanSheetList"), atlasMarkerAutoDmSheet: $("#atlasMarkerAutoDmSheet"), atlasMarkerOpenSheet: $("#atlasMarkerOpenSheet"), atlasDeleteMarker: $("#atlasDeleteMarker"),
     atlasInternalSheetDialog: $("#atlasInternalSheetDialog"), atlasInternalSheetForm: $("#atlasInternalSheetForm"), atlasInternalSheetTitle: $("#atlasInternalSheetTitle"), atlasInternalSheetKind: $("#atlasInternalSheetKind"), atlasSheetName: $("#atlasSheetName"), atlasSheetStatusWrap: $("#atlasSheetStatusWrap"), atlasSheetStatus: $("#atlasSheetStatus"), atlasSheetCreaturePhotoWrap: $("#atlasSheetCreaturePhotoWrap"), atlasSheetPhotoPreview: $("#atlasSheetPhotoPreview"), atlasSheetPhotoEmpty: $("#atlasSheetPhotoEmpty"), atlasSheetPhotoChoose: $("#atlasSheetPhotoChoose"), atlasSheetPhotoRemove: $("#atlasSheetPhotoRemove"), atlasSheetPhotoInput: $("#atlasSheetPhotoInput"), atlasSheetDescription: $("#atlasSheetDescription"), atlasCreatureSheetSection: $("#atlasCreatureSheetSection"), atlasCreatureModifiers: $("#atlasCreatureModifiers"), atlasCreatureAbilities: $("#atlasCreatureAbilities"), atlasCreatureCombatStyle: $("#atlasCreatureCombatStyle"), atlasCreatureNonAggression: $("#atlasCreatureNonAggression"), atlasCreatureActions: $("#atlasCreatureActions"), atlasCreatureReactions: $("#atlasCreatureReactions"), atlasSecretSheetSection: $("#atlasSecretSheetSection"), atlasSecretReveal: $("#atlasSecretReveal"), atlasSecretClues: $("#atlasSecretClues"), atlasSecretCheckType: $("#atlasSecretCheckType"), atlasSecretCheckDc: $("#atlasSecretCheckDc"), atlasSecretSuccess: $("#atlasSecretSuccess"), atlasSecretFailure: $("#atlasSecretFailure"), atlasSecretDiscovered: $("#atlasSecretDiscovered"), atlasMissionSheetSection: $("#atlasMissionSheetSection"), atlasMissionGiver: $("#atlasMissionGiver"), atlasMissionObjective: $("#atlasMissionObjective"), atlasMissionSecondary: $("#atlasMissionSecondary"), atlasMissionReward: $("#atlasMissionReward"), atlasMissionNotes: $("#atlasMissionNotes"), atlasMissionStages: $("#atlasMissionStages"), atlasMissionStageInput: $("#atlasMissionStageInput"), atlasMissionStageAdd: $("#atlasMissionStageAdd"), atlasContainerSheetSection: $("#atlasContainerSheetSection"), atlasContainerTitle: $("#atlasContainerTitle"), atlasContainerCp: $("#atlasContainerCp"), atlasContainerSp: $("#atlasContainerSp"), atlasContainerGp: $("#atlasContainerGp"), atlasContainerPp: $("#atlasContainerPp"), atlasContainerLocked: $("#atlasContainerLocked"), atlasContainerLockDc: $("#atlasContainerLockDc"), atlasContainerKey: $("#atlasContainerKey"), atlasContainerTrapped: $("#atlasContainerTrapped"), atlasContainerTrapCheck: $("#atlasContainerTrapCheck"), atlasContainerTrapDc: $("#atlasContainerTrapDc"), atlasContainerTrapEffect: $("#atlasContainerTrapEffect"), atlasContainerDisarmDc: $("#atlasContainerDisarmDc"), atlasLootSheetSection: $("#atlasLootSheetSection"), atlasSheetLootGroups: $("#atlasSheetLootGroups"), atlasLootName: $("#atlasLootName"), atlasLootQuantity: $("#atlasLootQuantity"), atlasLootCheckType: $("#atlasLootCheckType"), atlasLootCheckDc: $("#atlasLootCheckDc"), atlasLootNotes: $("#atlasLootNotes"), atlasLootAdd: $("#atlasLootAdd"), atlasLootSearchCheck: $("#atlasLootSearchCheck"), atlasLootSearchModifier: $("#atlasLootSearchModifier"), atlasLootSearchResult: $("#atlasLootSearchResult"), atlasLootSearchRoll: $("#atlasLootSearchRoll"), atlasLootSearchResultList: $("#atlasLootSearchResultList"),
-    atlasDmSheet: $("#atlasDmSheet"), atlasDmSheetTitle: $("#atlasDmSheetTitle"), atlasDmSheetSubtitle: $("#atlasDmSheetSubtitle"), atlasDmSheetClose: $("#atlasDmSheetClose"), atlasDmEntryPicker: $("#atlasDmEntryPicker"), atlasDmEntrySummary: $("#atlasDmEntrySummary"), atlasDmEntryTree: $("#atlasDmEntryTree"), atlasDmRelatedWrap: $("#atlasDmRelatedWrap"), atlasDmRelatedSelect: $("#atlasDmRelatedSelect"), atlasDmDetailHost: $("#atlasDmDetailHost"), detailPanel: $("#detailPanel"), detailPanelPlaceholder: $("#detailPanelPlaceholder"),
+    atlasDmSheet: $("#atlasDmSheet"), atlasDmSheetResize: $("#atlasDmSheetResize"), atlasDmSheetTitle: $("#atlasDmSheetTitle"), atlasDmSheetSubtitle: $("#atlasDmSheetSubtitle"), atlasDmSheetClose: $("#atlasDmSheetClose"), atlasDmNpcDispositionBar: $("#atlasDmNpcDispositionBar"), atlasDmNpcDisposition: $("#atlasDmNpcDisposition"), atlasDmEntryPicker: $("#atlasDmEntryPicker"), atlasDmEntrySummary: $("#atlasDmEntrySummary"), atlasDmEntryTree: $("#atlasDmEntryTree"), atlasDmRelatedWrap: $("#atlasDmRelatedWrap"), atlasDmRelatedSelect: $("#atlasDmRelatedSelect"), atlasDmDetailHost: $("#atlasDmDetailHost"), detailPanel: $("#detailPanel"), detailPanelPlaceholder: $("#detailPanelPlaceholder"),
     atlasTextDialog: $("#atlasTextDialog"), atlasTextForm: $("#atlasTextForm"), atlasTextValue: $("#atlasTextValue"), atlasTextVisible: $("#atlasTextVisible"),
     atlasCategoryDialog: $("#atlasCategoryDialog"), atlasCategoryForm: $("#atlasCategoryForm"), atlasCategoryName: $("#atlasCategoryName"), atlasCategoryIcon: $("#atlasCategoryIcon"),
     playerWaiting: $("#playerWaiting"), playerAtlas: $("#playerAtlas"), playerModeBadge: $("#playerModeBadge"), playerBreadcrumbs: $("#playerBreadcrumbs"), playerMapViewport: $("#playerMapViewport"), playerMapStage: $("#playerMapStage"), playerMerchantPanel: $("#playerMerchantPanel"), leavePlayerMode: $("#leavePlayerMode"), playerZoomOut: $("#playerZoomOut"), playerZoomReset: $("#playerZoomReset"), playerZoomIn: $("#playerZoomIn")
@@ -87,6 +87,9 @@
   const relatedPickerCollapsed = new Map();
   let dmEntryCollapsed = new Set();
   let dmSheetOpen = false;
+  let activeDmNpcMarkerId = "";
+  const DM_SHEET_WIDTH_KEY = "forja-atlas-dm-sheet-width-v1";
+  let dmSheetResizeState = null;
   let dmSheetMode = "notebook";
   let editingInternalSheetId = "";
   let internalSheetDraft = null;
@@ -352,8 +355,8 @@
     return url;
   }
 
-  function save({ publish = true, render = false } = {}) {
-    app.saveState();
+  function save({ publish = true, render = false, immediate = false } = {}) {
+    app.saveState(immediate);
     if (publish) publishProjection();
     if (render) renderAtlas();
   }
@@ -1097,7 +1100,7 @@
         node.append(grip);
       });
       node.addEventListener("pointerdown", event => startZoneDrag(event, zone, node));
-      node.addEventListener("dblclick", event => { event.stopPropagation(); zone.revealed = !zone.revealed; save({ render: true }); });
+      node.addEventListener("dblclick", event => { event.stopPropagation(); zone.revealed = !zone.revealed; save({ render: true, immediate: true }); });
       els.atlasDmZoneLayer.append(node);
     });
   }
@@ -1207,7 +1210,7 @@
     });
     scene.fogZones.forEach(zone => {
       const row = layerRow(`▱ ${zone.name}`, zone.revealed ? "◉" : "⊘");
-      row.querySelector(".atlas-layer__eye").addEventListener("click", () => { zone.revealed = !zone.revealed; save({ render: true }); });
+      row.querySelector(".atlas-layer__eye").addEventListener("click", () => { zone.revealed = !zone.revealed; save({ render: true, immediate: true }); });
       row.append(actionButton("↔", "Mover o redimensionar zona", () => { selectTool("select"); selectZone(zone.id); }));
       row.append(actionButton("×", "Eliminar", () => { scene.fogZones = scene.fogZones.filter(item => item.id !== zone.id); if (selectedZoneId === zone.id) selectedZoneId = ""; save({ render: true }); }, true));
       els.atlasLayers.append(row);
@@ -1443,6 +1446,22 @@
     updateDmEntrySummary(scene);
   }
 
+  function markerById(id) {
+    if (!id) return null;
+    for (const scene of atlas().scenes) {
+      const marker = scene.markers.find(item => item.id === id);
+      if (marker) return marker;
+    }
+    return null;
+  }
+
+  function setDmNpcMarkerContext(marker = null) {
+    const npc = marker?.category === "npc" ? marker : null;
+    activeDmNpcMarkerId = npc?.id || "";
+    if (els.atlasDmNpcDispositionBar) els.atlasDmNpcDispositionBar.hidden = !npc;
+    if (npc && els.atlasDmNpcDisposition) els.atlasDmNpcDisposition.value = ["enemy", "ally", "neutral"].includes(npc.disposition) ? npc.disposition : "neutral";
+  }
+
   function restoreDmSheetChrome() {
     if (els.atlasDmSheetTitle) els.atlasDmSheetTitle.textContent = "Ficha del cuaderno";
     if (els.atlasDmSheetSubtitle) els.atlasDmSheetSubtitle.textContent = "Solo visible para el DM";
@@ -1458,12 +1477,55 @@
     if (discard) { editingInternalSheetId = ""; internalSheetDraft = null; }
   }
 
-  function openDmSheet(entryIds = null) {
+
+  function clampDmSheetWidth(value) {
+    const viewport = Math.max(320, window.innerWidth || 1024);
+    const minimum = viewport <= 900 ? viewport : 360;
+    const maximum = viewport <= 900 ? viewport : Math.max(minimum, Math.min(viewport - 260, viewport * .82));
+    return Math.round(clamp(Number(value) || Math.min(620, viewport * .52), minimum, maximum));
+  }
+
+  function applyStoredDmSheetWidth() {
+    if (!els.atlasDmSheet) return;
+    if ((window.innerWidth || 0) <= 900) {
+      els.atlasDmSheet.style.removeProperty('--atlas-dm-sheet-width');
+      return;
+    }
+    const stored = Number(localStorage.getItem(DM_SHEET_WIDTH_KEY));
+    const width = clampDmSheetWidth(stored || Math.min(620, window.innerWidth * .52));
+    els.atlasDmSheet.style.setProperty('--atlas-dm-sheet-width', `${width}px`);
+  }
+
+  function startDmSheetResize(event) {
+    if (!els.atlasDmSheet || (window.innerWidth || 0) <= 900 || event.button !== 0) return;
+    event.preventDefault();
+    dmSheetResizeState = { pointerId: event.pointerId, startX: event.clientX, startWidth: els.atlasDmSheet.getBoundingClientRect().width };
+    els.atlasDmSheetResize?.setPointerCapture?.(event.pointerId);
+    els.atlasDmSheet.classList.add('is-resizing');
+  }
+
+  function moveDmSheetResize(event) {
+    if (!dmSheetResizeState || dmSheetResizeState.pointerId !== event.pointerId || !els.atlasDmSheet) return;
+    const width = clampDmSheetWidth(dmSheetResizeState.startWidth + (dmSheetResizeState.startX - event.clientX));
+    els.atlasDmSheet.style.setProperty('--atlas-dm-sheet-width', `${width}px`);
+  }
+
+  function stopDmSheetResize(event) {
+    if (!dmSheetResizeState || dmSheetResizeState.pointerId !== event.pointerId || !els.atlasDmSheet) return;
+    const width = Math.round(els.atlasDmSheet.getBoundingClientRect().width);
+    dmSheetResizeState = null;
+    els.atlasDmSheet.classList.remove('is-resizing');
+    try { localStorage.setItem(DM_SHEET_WIDTH_KEY, String(width)); } catch (_) {}
+    if (els.atlasDmSheetResize?.hasPointerCapture?.(event.pointerId)) els.atlasDmSheetResize.releasePointerCapture(event.pointerId);
+  }
+
+  function openDmSheet(entryIds = null, sourceMarker = null) {
     const scene = currentScene();
     if (!scene || !els.atlasDmSheet || !els.detailPanel) return;
     parkInternalSheetForm();
     dmSheetMode = "notebook";
     restoreDmSheetChrome();
+    setDmNpcMarkerContext(sourceMarker);
     if (Array.isArray(entryIds) && entryIds.length) {
       scene.dmEntryIds = orderedEntryIds(entryIds);
       scene.dmEntryId = scene.dmEntryIds[0] || "";
@@ -1487,8 +1549,10 @@
     renderDmEntryTree();
   }
 
-  function openInternalSheetPanel(sheetId) {
+  function openInternalSheetPanel(sheetId, sourceMarker = null) {
     const sheet = markerSheetById(sheetId); if (!sheet || !els.atlasDmSheet || !els.atlasInternalSheetForm) return;
+    const linkedMarkerInfo = markerForInternalSheet(sheetId);
+    setDmNpcMarkerContext(sourceMarker || linkedMarkerInfo?.marker || null);
     if (dmSheetMode === "notebook" && els.detailPanel?.classList.contains("detail--atlas-dm")) {
       els.detailPanel.classList.remove("detail--atlas-dm");
       els.detailPanelPlaceholder?.after(els.detailPanel);
@@ -1518,6 +1582,7 @@
     if (dmSheetMode === "internal") parkInternalSheetForm();
     dmSheetMode = "notebook";
     dmSheetOpen = false;
+    setDmNpcMarkerContext(null);
     els.atlasDmSheet.hidden = true;
     restoreDmSheetChrome();
     if (els.detailPanel.classList.contains("detail--atlas-dm")) {
@@ -1641,13 +1706,13 @@
     if (!marker) return;
     if (marker.sheetMode === "internal") {
       const sheet = markerSheetById(marker.internalSheetId);
-      if (sheet) { openInternalSheetPanel(sheet.id); return; }
+      if (sheet) { openInternalSheetPanel(sheet.id, marker); return; }
     }
     if (marker.sheetMode === "notebook") {
       const ids = orderedEntryIds([marker.primaryEntryId, ...(marker.relatedEntryIds || [])].filter(Boolean));
-      if (ids.length) { els.atlasMarkerDialog?.close?.(); openDmSheet(ids); return; }
+      if (ids.length) { els.atlasMarkerDialog?.close?.(); openDmSheet(ids, marker); return; }
     }
-    if (marker.relatedEntryIds?.length) { els.atlasMarkerDialog?.close?.(); openDmSheet(marker.relatedEntryIds); }
+    if (marker.relatedEntryIds?.length) { els.atlasMarkerDialog?.close?.(); openDmSheet(marker.relatedEntryIds, marker); }
   }
 
   function fillInternalSheetCheckOptions() {
@@ -1818,7 +1883,11 @@
     if (index < 0) return;
     atlas().markerSheets[index] = normaliseMarkerSheet(draft);
     const linked = markerForInternalSheet(editingInternalSheetId);
-    if (linked?.marker) { linked.marker.name = draft.name; linked.marker.category = draft.category; linked.marker.icon = categoryMeta(draft.category).icon; }
+    if (linked?.marker) {
+      linked.marker.name = draft.name;
+      linked.marker.category = draft.category;
+      linked.marker.icon = categoryMeta(draft.category).icon;
+    }
     save({ render: true });
     if (dmSheetMode === "internal") {
       internalSheetDraft = app.clone(atlas().markerSheets[index]);
@@ -2057,7 +2126,7 @@
     els.atlasMapViewport.classList.remove("is-panning");
     if (els.atlasMapStage.hasPointerCapture(event.pointerId)) els.atlasMapStage.releasePointerCapture(event.pointerId);
     if (action.tool === "pan") return;
-    if (["reveal", "hide"].includes(action.tool)) { save({ publish: true }); renderLayers(currentScene()); return; }
+    if (["reveal", "hide"].includes(action.tool)) { save({ publish: true, immediate: true }); renderLayers(currentScene()); return; }
     const end = action.current || action.start;
     if (Math.hypot(end.x - action.start.x, end.y - action.start.y) < 0.008) return;
     const scene = currentScene();
@@ -2107,7 +2176,7 @@
     scene.fogBase = "covered";
     scene.fogStrokes = [];
     scene.fogZones.forEach(zone => { zone.revealed = false; });
-    save({ publish: true, render: true });
+    save({ publish: true, render: true, immediate: true });
   }
 
   function revealCurrentSceneFog() {
@@ -2118,7 +2187,7 @@
     scene.fogBase = "revealed";
     scene.fogStrokes = [];
     scene.fogZones.forEach(zone => { zone.revealed = true; });
-    save({ publish: true, render: true });
+    save({ publish: true, render: true, immediate: true });
   }
 
   function showDraft(action) {
@@ -2903,6 +2972,16 @@
     els.atlasShowScene.addEventListener("click", showCurrentSceneToPlayers); els.atlasOpenProjection.addEventListener("click", openProjection);
     els.atlasDmSheetBtn?.addEventListener("click", () => dmSheetOpen ? closeDmSheet() : openDmSheet());
     els.atlasDmSheetClose?.addEventListener("click", closeDmSheet);
+    els.atlasDmNpcDisposition?.addEventListener("change", () => {
+      const marker = markerById(activeDmNpcMarkerId);
+      if (!marker || marker.category !== "npc") return;
+      marker.disposition = ["enemy", "ally", "neutral"].includes(els.atlasDmNpcDisposition.value) ? els.atlasDmNpcDisposition.value : "neutral";
+      save({ render: true, immediate: true });
+    });
+    els.atlasDmSheetResize?.addEventListener("pointerdown", startDmSheetResize);
+    els.atlasDmSheetResize?.addEventListener("pointermove", moveDmSheetResize);
+    els.atlasDmSheetResize?.addEventListener("pointerup", stopDmSheetResize);
+    els.atlasDmSheetResize?.addEventListener("pointercancel", stopDmSheetResize);
     els.atlasDmRelatedSelect?.addEventListener("change", () => {
       const scene = currentScene();
       if (!scene || !entryById(els.atlasDmRelatedSelect.value)) return;
@@ -3006,6 +3085,7 @@
     window.addEventListener("resize", () => {
       if (state().view === "atlas" && currentScene()?.imageId) { fitAtlasStage(currentScene()); resizeFogCanvas(currentScene()); }
       if (currentRole === "player") { const scene = playerSceneById(playerSceneId); if (scene) fitPlayerStage(scene); }
+      applyStoredDmSheetWidth();
     });
     document.addEventListener("forja:campaignchange", () => {
       renderRoleCampaigns();
@@ -3013,6 +3093,8 @@
       renderAtlas();
     });
   }
+
+  applyStoredDmSheetWidth();
 
   window.ForjaAtlas = { render: renderAtlas, publish: publishProjection, getScene: sceneById, currentScene, setSceneImageFromBlob, imageUrl, openDmSheet, closeDmSheet };
   renderLanHostState({ running: false });

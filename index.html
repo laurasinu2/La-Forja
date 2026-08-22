@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.8.0" />
+  <link rel="stylesheet" href="styles.css?v=2.8.1" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -533,10 +533,19 @@
         </div>
 
         <aside id="atlasDmSheet" class="atlas-dm-sheet" hidden aria-label="Ficha privada del DM">
+          <div id="atlasDmSheetResize" class="atlas-dm-sheet__resize" role="separator" aria-orientation="vertical" aria-label="Cambiar ancho de la ficha" title="Arrastra para cambiar el ancho"></div>
           <header class="atlas-dm-sheet__header">
             <div><h2 id="atlasDmSheetTitle">Ficha del cuaderno</h2><small id="atlasDmSheetSubtitle">Solo visible para el DM</small></div>
             <button id="atlasDmSheetClose" class="icon-button" type="button" aria-label="Cerrar ficha">×</button>
           </header>
+          <div id="atlasDmNpcDispositionBar" class="atlas-dm-npc-disposition" hidden>
+            <span>Actitud hacia los PJ</span>
+            <select id="atlasDmNpcDisposition" aria-label="Actitud del NPC">
+              <option value="neutral">Neutral / desconocido · gris</option>
+              <option value="ally">Aliado · verde</option>
+              <option value="enemy">Enemigo · rojo</option>
+            </select>
+          </div>
           <div class="atlas-dm-sheet__picker">
             <label id="atlasDmRelatedWrap" class="atlas-dm-related" hidden>Fichas relacionadas
               <select id="atlasDmRelatedSelect"></select>
@@ -577,6 +586,7 @@
               <div class="dungeon-sidebar__heading"><h2>Herramientas</h2></div>
               <div id="dungeonTools" class="dungeon-tool-grid">
                 <button class="is-active" data-dungeon-tool="select" type="button" title="Seleccionar, mover y redimensionar"><span>↖</span><small>Seleccionar</small></button>
+                <button id="dungeonMultiSelect" type="button" title="Selección múltiple: toca varios elementos y muévelos juntos"><span>⊕</span><small>Selección múltiple</small></button>
                 <button data-dungeon-tool="pan" type="button" title="Mover el lienzo"><span>✋</span><small>Mover vista</small></button>
                 <button data-dungeon-tool="room" type="button" title="Dibujar habitación"><span>▣</span><small>Habitación</small></button>
                 <button data-dungeon-tool="corridor" type="button" title="Dibujar pasillo"><span>▬</span><small>Pasillo</small></button>
@@ -1069,8 +1079,8 @@
     </section>
   </template>
 
-  <script src="app.js?v=2.8.0" defer></script>
-  <script src="atlas.js?v=2.8.0" defer></script>
-  <script src="dungeon.js?v=2.8.0" defer></script>
+  <script src="app.js?v=2.8.1" defer></script>
+  <script src="atlas.js?v=2.8.1" defer></script>
+  <script src="dungeon.js?v=2.8.1" defer></script>
 </body>
 </html>

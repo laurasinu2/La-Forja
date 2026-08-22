@@ -553,6 +553,7 @@
           sourceType: scene?.sourceType === "dungeon" || scene?.mapProject ? "dungeon" : "image",
           mapProject: normaliseDungeonProject(scene?.mapProject),
           discovered: Boolean(scene?.discovered),
+          fogBase: scene?.fogBase === "revealed" ? "revealed" : "covered",
           markers: Array.isArray(scene?.markers) ? scene.markers.map(marker => ({
             id: String(marker?.id || uid()),
             x: Math.max(0, Math.min(1, atlasNumber(marker?.x, 0.5))),

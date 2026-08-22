@@ -613,7 +613,7 @@ kbd, code { border: 1px solid var(--line); background: var(--surface-2); border-
     min-width: 0;
     min-height: 0;
     height: 100%;
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: auto auto auto minmax(0, 1fr);
   }
   .calendar-grid { grid-template-rows: repeat(6, minmax(78px, 1fr)); }
 }
@@ -2352,8 +2352,8 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(620px, 52vw);
-  min-width: 380px;
+  width: var(--atlas-dm-sheet-width, min(620px, 52vw));
+  min-width: 360px;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
   border-left: 1px solid var(--line);
@@ -2361,6 +2361,44 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
   box-shadow: -18px 0 46px rgba(0,0,0,.42);
 }
 .atlas-dm-sheet[hidden] { display: none; }
+
+.atlas-dm-sheet__resize {
+  position: absolute;
+  z-index: 4;
+  left: -7px;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  cursor: ew-resize;
+  touch-action: none;
+}
+.atlas-dm-sheet__resize::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 44%;
+  width: 3px;
+  height: 54px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-2) 58%, transparent);
+  opacity: .5;
+}
+.atlas-dm-sheet__resize:hover::after,
+.atlas-dm-sheet.is-resizing .atlas-dm-sheet__resize::after { opacity: 1; }
+.atlas-dm-sheet.is-resizing { user-select: none; }
+.atlas-dm-npc-disposition {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+}
+.atlas-dm-npc-disposition[hidden] { display: none; }
+.atlas-dm-npc-disposition span { color: var(--muted); font-size: 12px; font-weight: 750; }
+.atlas-dm-npc-disposition select { min-width: 0; }
+
 .atlas-dm-sheet__header {
   min-width: 0;
   display: flex;
@@ -2387,6 +2425,7 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
 
 @media (max-width: 900px) {
   .atlas-dm-sheet { width: 100%; min-width: 0; }
+  .atlas-dm-sheet__resize { display: none; }
 }
 
 /* Atlas · fichas vinculadas a marcadores */
