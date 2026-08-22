@@ -1,3 +1,8 @@
+# Versión 2.9.2 · Categoría Comerciante en marcadores
+
+- Recuperada la categoría **⚖ Comerciante** en el selector de categorías al crear o editar un marcador del Atlas.
+- No se han incorporado otros cambios de versiones anteriores.
+
 # Versión 2.9.1 · Marcadores desbloqueables por Historia
 
 - Los **marcadores individuales del Atlas** pueden vincularse a un suceso desde el propio editor del marcador.

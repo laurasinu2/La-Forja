@@ -22,7 +22,7 @@
     ["ruins", "⚿", "Ruinas"], ["dungeon", "⌘", "Mazmorra"], ["road", "⤳", "Camino"],
     ["port", "⚓", "Puerto"], ["temple", "☩", "Templo"], ["camp", "⌂", "Campamento"],
     ["treasure", "▣", "Tesoro"], ["danger", "⚠", "Peligro"], ["combat", "⚔", "Combate"],
-    ["npc", "●", "Personaje / NPC"], ["secret", "✦", "Secreto"],
+    ["npc", "●", "Personaje / NPC"], ["merchant", "⚖", "Comerciante"], ["secret", "✦", "Secreto"],
     ["mission", "⚑", "Misión"], ["chest", "▤", "Cofre"], ["portal", "◈", "Portal"], ["poi", "✦", "Punto de interés"], ["place", "⌖", "Lugar"]
   ];
 
