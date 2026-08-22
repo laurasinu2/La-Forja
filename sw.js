@@ -1,11 +1,12 @@
-const CACHE = "forja-narrador-v281-persistence-npc-multiselect";
+const CACHE = "forja-narrador-v290-history-latent-archive";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.8.1",
-  "./app.js?v=2.8.1",
-  "./atlas.js?v=2.8.1",
-  "./dungeon.js?v=2.8.1",
+  "./styles.css?v=2.9.0",
+  "./app.js?v=2.9.0",
+  "./history.js?v=2.9.0",
+  "./atlas.js?v=2.9.0",
+  "./dungeon.js?v=2.9.0",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

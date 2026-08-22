@@ -357,6 +357,31 @@
     return { startMonth: 0, daysPerMonth: 30, currentDay: 1, cursorMonthOffset: 0 };
   }
 
+  function defaultHistoryState() {
+    return { selectedEventId: "", events: [] };
+  }
+
+  function normaliseHistoryState(raw = {}) {
+    const source = Array.isArray(raw?.events) ? raw.events : [];
+    const allowedStatuses = new Set(["locked", "available", "inProgress", "occurred", "discarded"]);
+    const events = source.map((event, index) => ({
+      id: String(event?.id || uid()),
+      title: String(event?.title || `Suceso ${index + 1}`).slice(0, 140),
+      description: String(event?.description || "").slice(0, 6000),
+      status: allowedStatuses.has(event?.status) ? event.status : "available",
+      requirementMode: event?.requirementMode === "any" ? "any" : "all",
+      requirementIds: Array.isArray(event?.requirementIds) ? [...new Set(event.requirementIds.map(String))] : [],
+      createdAt: event?.createdAt || now(),
+      updatedAt: event?.updatedAt || now()
+    }));
+    const ids = new Set(events.map(event => event.id));
+    events.forEach(event => { event.requirementIds = event.requirementIds.filter(id => ids.has(id) && id !== event.id); });
+    return {
+      selectedEventId: ids.has(String(raw?.selectedEventId || "")) ? String(raw.selectedEventId) : events[0]?.id || "",
+      events
+    };
+  }
+
   function defaultDiceState() {
     const counts = Object.fromEntries(DICE_SIDES.map(sides => [String(sides), sides === 20 ? 1 : 0]));
     return { counts, modifier: 0, expression: "1d20", history: [], lastRoll: null };
@@ -510,6 +535,7 @@
         sourceType: "image",
         mapProject: null,
         discovered: true,
+        unlockEventId: "",
         markers: [],
         objects: [],
         fogStrokes: [],
@@ -538,7 +564,7 @@
     };
   }
 
-  function normaliseAtlasState(raw = {}, entryIds = new Set()) {
+  function normaliseAtlasState(raw = {}, entryIds = new Set(), historyEventIds = new Set()) {
     const fallback = defaultAtlasState();
     const scenes = Array.isArray(raw.scenes) && raw.scenes.length
       ? raw.scenes.map((scene, index) => ({
@@ -553,6 +579,7 @@
           sourceType: scene?.sourceType === "dungeon" || scene?.mapProject ? "dungeon" : "image",
           mapProject: normaliseDungeonProject(scene?.mapProject),
           discovered: Boolean(scene?.discovered),
+          unlockEventId: historyEventIds.has(String(scene?.unlockEventId || "")) ? String(scene.unlockEventId) : "",
           fogBase: scene?.fogBase === "revealed" ? "revealed" : "covered",
           markers: Array.isArray(scene?.markers) ? scene.markers.map(marker => ({
             id: String(marker?.id || uid()),
@@ -706,9 +733,9 @@
 
   function blankCampaign(name = "Nueva campaña") {
     return {
-      id: uid(), version: 6, campaignName: name,
+      id: uid(), version: 7, campaignName: name,
       view: "notebook", selectedId: null, search: "",
-      gameCalendar: defaultGameCalendar(), calendarEvents: [], entries: [],
+      gameCalendar: defaultGameCalendar(), calendarEvents: [], entries: [], history: defaultHistoryState(),
       mindmapLocationFilter: "", mindmapLayoutVersion: MINDMAP_LAYOUT_VERSION, mindmapLayouts: {}, dice: defaultDiceState(),
       atlas: defaultAtlasState(), auth: { passwordHash: "", passwordSalt: "", updatedAt: "" }, entriesCreated: 0,
       createdAt: now(), updatedAt: now()
@@ -913,12 +940,14 @@
       cursorMonthOffset: 0,
       daysPerMonth: 30
     });
+    const history = normaliseHistoryState(raw.history);
+    const historyEventIds = new Set(history.events.map(event => event.id));
 
     return {
       id: raw.id || uid(),
-      version: 6,
+      version: 7,
       campaignName: String(raw.campaignName || fallbackName),
-      view: ["notebook", "calendar", "mindmap", "dice", "atlas"].includes(raw.view) ? raw.view : (raw.view === "dungeon" ? "atlas" : "notebook"),
+      view: ["notebook", "history", "calendar", "mindmap", "dice", "atlas"].includes(raw.view) ? raw.view : (raw.view === "dungeon" ? "atlas" : "notebook"),
       selectedId: ids.has(raw.selectedId) ? raw.selectedId : entries[0]?.id || null,
       search: String(raw.search || ""),
       gameCalendar,
@@ -930,7 +959,8 @@
         ? normaliseMindmapLayouts(raw.mindmapLayouts, ids)
         : {},
       dice: normaliseDiceState(raw.dice),
-      atlas: normaliseAtlasState(raw.atlas, ids),
+      history,
+      atlas: normaliseAtlasState(raw.atlas, ids, historyEventIds),
       auth: {
         passwordHash: String(raw.auth?.passwordHash || ""),
         passwordSalt: String(raw.auth?.passwordSalt || ""),
@@ -1072,7 +1102,7 @@
   let activeCollectionType = state.entries.find(entry => entry.id === state.selectedId)?.type || "locations";
 
   const els = {
-    notebookView: $("#notebookView"), calendarView: $("#calendarView"), mindmapView: $("#mindmapView"), diceView: $("#diceView"), atlasView: $("#atlasView"), dungeonView: $("#dungeonView"), viewTabs: $$(".view-tab"),
+    notebookView: $("#notebookView"), historyView: $("#historyView"), calendarView: $("#calendarView"), mindmapView: $("#mindmapView"), diceView: $("#diceView"), atlasView: $("#atlasView"), dungeonView: $("#dungeonView"), viewTabs: $$(".view-tab"),
     campaignSelect: $("#campaignSelect"), campaignManagerBtn: $("#campaignManagerBtn"),
     campaignDialog: $("#campaignDialog"), newCampaignForm: $("#newCampaignForm"), newCampaignName: $("#newCampaignName"), campaignList: $("#campaignList"),
     columns: $("#columns"), collectionTabs: $("#collectionTabs"), collectionsPanel: $("#collectionsPanel"), connectionModeBanner: $("#connectionModeBanner"), selectionModeText: $("#selectionModeText"), cancelConnectionBanner: $("#cancelConnectionBanner"),
@@ -1231,6 +1261,7 @@
     renderView();
     renderColumns();
     renderEditor();
+    window.ForjaHistory?.render?.();
     renderCalendar();
     renderMindMap();
     renderDice();
@@ -1354,6 +1385,7 @@
   function renderView() {
     if (state.view !== "atlas") window.ForjaAtlas?.closeDmSheet?.();
     els.notebookView.hidden = state.view !== "notebook";
+    if (els.historyView) els.historyView.hidden = state.view !== "history";
     els.calendarView.hidden = state.view !== "calendar";
     els.mindmapView.hidden = state.view !== "mindmap";
     els.diceView.hidden = state.view !== "dice";
@@ -1381,6 +1413,17 @@
     });
   }
 
+  function isArchivedEntry(entry) {
+    const terminal = {
+      locations: new Set(["destroyed", "irrelevant"]),
+      organisations: new Set(["dissolved", "irrelevant"]),
+      creatures: new Set(["dead", "irrelevant"]),
+      quests: new Set(["completed", "failed", "irrelevant"]),
+      things: new Set(["destroyed", "irrelevant"])
+    };
+    return Boolean(entry && terminal[entry.type]?.has(entry.status));
+  }
+
   function renderColumns() {
     renderCollectionTabs();
     els.columns.replaceChildren();
@@ -1392,14 +1435,35 @@
       const items = $(".collection-items", fragment);
       $(".collection-icon", fragment).textContent = meta.icon;
       $(".collection-title", fragment).textContent = meta.label;
-      $(".collection-count", fragment).textContent = entriesOf(type).length;
+      const allEntries = entriesOf(type);
+      const activeEntries = allEntries.filter(entry => !isArchivedEntry(entry));
+      const archivedEntries = allEntries.filter(isArchivedEntry);
+      $(".collection-count", fragment).textContent = activeEntries.length;
       $(".add-item", fragment).addEventListener("click", () => openCreateDialog(type));
 
-      const matches = filterEntries(entriesOf(type));
-      if (!matches.length) {
-        items.innerHTML = `<div class="no-results">${state.search ? "Sin coincidencias" : "Todavía no hay entradas"}</div>`;
+      const activeMatches = filterEntries(activeEntries);
+      if (!activeMatches.length) {
+        const empty = document.createElement("div");
+        empty.className = "no-results";
+        empty.textContent = state.search ? "Sin coincidencias activas" : "Todavía no hay entradas activas";
+        items.append(empty);
       } else {
-        renderTree(items, type, matches);
+        renderTree(items, type, activeMatches, activeEntries);
+      }
+
+      if (archivedEntries.length) {
+        const archive = document.createElement("details");
+        archive.className = "collection-archive";
+        const archiveMatches = filterEntries(archivedEntries);
+        archive.open = archivedEntries.some(entry => entry.id === state.selectedId) || Boolean(state.search && archiveMatches.length);
+        const summary = document.createElement("summary");
+        summary.innerHTML = `<span>▰ Archivo</span><small>${archivedEntries.length}</small>`;
+        const archiveBody = document.createElement("div");
+        archiveBody.className = "collection-archive__body";
+        if (archiveMatches.length) renderTree(archiveBody, type, archiveMatches, archivedEntries);
+        else { const empty = document.createElement("div"); empty.className = "no-results"; empty.textContent = "Sin coincidencias en el archivo"; archiveBody.append(empty); }
+        archive.append(summary, archiveBody);
+        items.append(archive);
       }
       els.columns.append(fragment);
     });
@@ -1424,12 +1488,13 @@
     return entries.filter(entry => direct.has(entry.id));
   }
 
-  function renderTree(container, type, visibleEntries) {
-    const all = entriesOf(type);
+  function renderTree(container, type, visibleEntries, sourceEntries = entriesOf(type)) {
+    const all = sourceEntries;
+    const sourceIds = new Set(all.map(entry => entry.id));
     const visibleIds = new Set(visibleEntries.map(entry => entry.id));
     const byParent = new Map();
     all.forEach(entry => {
-      const key = entry.parentId || "root";
+      const key = entry.parentId && sourceIds.has(entry.parentId) ? entry.parentId : "root";
       if (!byParent.has(key)) byParent.set(key, []);
       byParent.get(key).push(entry);
     });
@@ -1447,7 +1512,7 @@
   }
 
   function isCrossedOut(entry) {
-    return ["destroyed", "dead", "dissolved", "irrelevant"].includes(entry.status);
+    return ["destroyed", "dead", "dissolved", "completed", "failed", "irrelevant"].includes(entry.status);
   }
 
   function makeRow(entry, depth, hasChildren) {
@@ -3339,6 +3404,7 @@
       state.view = tab.dataset.view;
       saveState();
       renderView();
+      if (state.view === "history") window.ForjaHistory?.render?.();
       if (state.view === "calendar") renderCalendar();
       if (state.view === "mindmap") {
         resetMindmapTransform();
@@ -3387,6 +3453,7 @@
       updateSelected({ status: els.entryStatus.value });
       renderColumns();
       renderMindMap();
+      document.dispatchEvent(new CustomEvent("forja:entrystatuschange", { detail: { entryId: selectedEntry()?.id || "" } }));
     });
     els.entrySubtype.addEventListener("change", () => {
       updateSelected({ subtype: els.entrySubtype.value });
@@ -3962,10 +4029,11 @@
       document.dispatchEvent(new CustomEvent("forja:campaignchange", { detail: { campaignId: state.id } }));
     },
     setView(view) {
-      if (!["notebook", "calendar", "mindmap", "dice", "atlas", "dungeon"].includes(view)) return;
+      if (!["notebook", "history", "calendar", "mindmap", "dice", "atlas", "dungeon"].includes(view)) return;
       state.view = view;
       saveState();
       renderView();
+      if (view === "history") window.ForjaHistory?.render?.();
       if (view === "atlas") window.ForjaAtlas?.render?.();
       if (view === "dungeon") window.ForjaDungeon?.render?.();
     },

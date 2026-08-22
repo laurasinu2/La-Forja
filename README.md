@@ -1,3 +1,14 @@
+# Versión 2.9.0 · Historia, desbloqueos y archivo
+
+- Nueva vista **Historia** al mismo nivel que Cuaderno, Calendario y Atlas.
+- Los sucesos pueden depender de otros sucesos mediante condiciones **todos** / **cualquiera**.
+- Al marcar un suceso como **Ha ocurrido**, La Forja recalcula y desbloquea automáticamente los siguientes sucesos.
+- Estados de trama: bloqueado, disponible, en curso, ocurrido y descartado.
+- Las escenas del Atlas pueden vincularse a un suceso mediante **Disponibilidad en el Atlas**. Hasta que ese suceso ocurra, la escena queda **latente** y no aparece en el árbol normal del Atlas ni en la proyección de jugadores.
+- El contenido latente sigue siendo editable desde la ficha del suceso en Historia, evitando que la preparación quede inaccesible.
+- El Cuaderno incorpora un **Archivo** plegable al pie de cada colección. Entradas muertas, destruidas, disueltas, completadas, fallidas o marcadas como irrelevantes se apartan automáticamente de la lista activa sin borrarse.
+- Si un estado terminal se revierte, la entrada vuelve automáticamente a la zona activa del Cuaderno.
+
 # La Forja del Narrador
 
 Aplicación web local y sin dependencias para organizar campañas de rol. Está preparada para abrirse y editarse en Visual Studio Code.

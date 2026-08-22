@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.8.1" />
+  <link rel="stylesheet" href="styles.css?v=2.9.0" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -92,6 +92,7 @@
 
       <nav class="view-tabs" aria-label="Vistas">
         <button class="view-tab is-active" data-view="notebook" type="button" title="Cuaderno"><span aria-hidden="true">☷</span><span class="view-tab__label">Cuaderno</span></button>
+        <button class="view-tab" data-view="history" type="button" title="Historia y sucesos"><span aria-hidden="true">⌁</span><span class="view-tab__label">Historia</span></button>
         <button class="view-tab" data-view="calendar" type="button" title="Calendario"><span aria-hidden="true">▦</span><span class="view-tab__label">Calendario</span></button>
         <button class="view-tab" data-view="atlas" type="button" title="Atlas interactivo"><span aria-hidden="true">⌖</span><span class="view-tab__label">Atlas</span></button>
         <button class="view-tab" data-view="mindmap" type="button" title="Mapa de conexiones"><span aria-hidden="true">✦</span><span class="view-tab__label">Mapa</span></button>
@@ -344,6 +345,68 @@
         </div>
       </main>
     </div>
+
+    <main class="history-view" id="historyView" hidden>
+      <section class="history-shell">
+        <header class="history-toolbar">
+          <div>
+            <h1>Historia</h1>
+            <p>Prepara sucesos, conecta requisitos y deja que La Forja abra nuevas posibilidades al ocurrir.</p>
+          </div>
+          <button id="historyNewEvent" class="button" type="button">+ Nuevo suceso</button>
+        </header>
+        <div class="history-workspace">
+          <section class="history-board" aria-label="Línea de sucesos">
+            <div class="history-lane">
+              <header><span>○</span><strong>Disponibles</strong><small id="historyAvailableCount">0</small></header>
+              <div id="historyAvailableList" class="history-event-list"></div>
+            </div>
+            <div class="history-lane">
+              <header><span>🔒</span><strong>Bloqueados</strong><small id="historyLockedCount">0</small></header>
+              <div id="historyLockedList" class="history-event-list"></div>
+            </div>
+            <div class="history-lane">
+              <header><span>✓</span><strong>Ocurridos / cerrados</strong><small id="historyResolvedCount">0</small></header>
+              <div id="historyResolvedList" class="history-event-list"></div>
+            </div>
+          </section>
+          <aside class="history-detail">
+            <div id="historyEmpty" class="history-empty">
+              <span>⌁</span><h2>Selecciona un suceso</h2><p>Los requisitos pueden desbloquear otros sucesos y contenido latente del Atlas.</p>
+            </div>
+            <div id="historyEditor" hidden>
+              <div class="history-detail__top">
+                <div><span id="historyStatusBadge" class="history-status-badge"></span><h2>Editar suceso</h2></div>
+                <button id="historyDeleteEvent" class="button button--danger" type="button">Eliminar</button>
+              </div>
+              <label class="history-field">Nombre<input id="historyEventTitle" maxlength="140" /></label>
+              <label class="history-field">Descripción<textarea id="historyEventDescription" rows="5" maxlength="6000" placeholder="Qué puede ocurrir, pistas, consecuencias, notas para el DM…"></textarea></label>
+              <section class="history-panel">
+                <div class="history-panel__heading"><div><h3>Requisitos</h3><p>Este suceso se desbloquea cuando los sucesos seleccionados han ocurrido.</p></div><label>Condición<select id="historyRequirementMode"><option value="all">Deben ocurrir todos</option><option value="any">Puede ocurrir cualquiera</option></select></label></div>
+                <div id="historyRequirements" class="history-requirements"></div>
+              </section>
+              <section class="history-panel">
+                <h3>Acciones durante la partida</h3>
+                <div class="history-actions">
+                  <button id="historyMarkProgress" class="button button--quiet" type="button">▶ En curso</button>
+                  <button id="historyMarkOccurred" class="button" type="button">✓ Ha ocurrido</button>
+                  <button id="historyDiscard" class="button button--quiet" type="button">× Descartar</button>
+                  <button id="historyResetStatus" class="button button--quiet" type="button">↺ Reabrir</button>
+                </div>
+              </section>
+              <section class="history-panel">
+                <h3>Desbloquea</h3>
+                <div id="historyUnlocks" class="history-effects"></div>
+              </section>
+              <section class="history-panel">
+                <div class="history-panel__heading"><div><h3>Contenido latente del Atlas</h3><p>Estas escenas no aparecen en el Atlas normal hasta que este suceso ocurra.</p></div></div>
+                <div id="historyLatentAtlas" class="history-effects"></div>
+              </section>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
 
     <main class="calendar-view" id="calendarView" hidden>
       <section class="calendar-shell">
@@ -789,6 +852,7 @@
       <label>Dentro de<select id="atlasSceneParent"></select></label>
       <fieldset id="atlasSceneSourceFieldset" class="atlas-scene-source"><legend>Contenido inicial</legend><label><input type="radio" name="atlasSceneSource" value="image" checked /><span><strong>Imagen subida</strong><small>Guarda la escena y selecciona después un PNG, JPG o WebP.</small></span></label><label><input type="radio" name="atlasSceneSource" value="dungeon" /><span><strong>Mapa creado</strong><small>Abre el editor con cuadrícula, arquitectura y mobiliario.</small></span></label></fieldset>
       <button id="atlasSceneEditDungeon" type="button" class="button button--quiet" hidden>✎ Abrir editor de mazmorras</button>
+      <label>Disponibilidad en el Atlas<select id="atlasSceneUnlockEvent"><option value="">Visible para el DM desde el principio</option></select><small class="field-help">Si eliges un suceso, la escena quedará latente y no aparecerá en el Atlas normal hasta que ese suceso haya ocurrido.</small></label>
       <label class="check-row"><input id="atlasSceneDiscovered" type="checkbox" /> Descubierta por los jugadores</label>
       <div class="dialog-actions dialog-actions--split"><button id="atlasDeleteScene" type="button" class="button button--danger" hidden>Eliminar</button><span></span><button type="button" class="button button--quiet atlas-scene-dialog-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
     </form>
@@ -1058,7 +1122,9 @@
       <p>En <strong>Calendario</strong> el día 1 es el inicio de la campaña. El tiempo solo avanza al pulsar <strong>Dormir · +1 día</strong>; puedes escoger el mes inicial y los días que tiene cada mes.</p>
       <p>El <strong>Mapa</strong> reúne todas las conexiones y permite filtrarlas por una localización. Los items obtenibles de una localización también aparecen enlazados con su entrada relacionada.</p>
       <p>En <strong>Dados</strong> puedes sumar varios d4, d6, d8, d10, d12, d20 o d100, elegir un modificador entre +20 y −20 y tirar fórmulas editables como <strong>2d20 + 4</strong>. Cada campaña conserva su propio historial.</p>
+      <p>En <strong>Historia</strong> puedes preparar sucesos con requisitos. Cuando un suceso ocurre, desbloquea automáticamente los siguientes y puede hacer aparecer escenas latentes del Atlas.</p>
       <p>En <strong>Atlas</strong> puedes crear escenas anidadas con imágenes propias, marcadores, formas y niebla de guerra. Las escenas de tipo <strong>Mapa creado</strong> abren un editor cenital con cuadrícula de 1 m², habitaciones, pasillos, paredes, puertas, escaleras, mobiliario, texturas y exportación PNG.</p>
+      <p>En <strong>Cuaderno</strong>, las entradas muertas, completadas, destruidas, fallidas o irrelevantes pasan al Archivo plegable de su columna sin borrarse.</p>
       <p>El panel ☰ reúne la contraseña del DM y las copias de seguridad: JSON ligero o ZIP completo con las imágenes del Atlas.</p>
       <p>En ventanas estrechas las cinco colecciones pasan a pestañas: solo se muestra un árbol a la vez para evitar columnas comprimidas y desplazamiento horizontal.</p>
       <p>Usa ⇩ y ⇧ para exportar o restaurar el perfil completo. Atajos: <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>K</kbd> busca y <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>S</kbd> exporta.</p>
@@ -1079,8 +1145,9 @@
     </section>
   </template>
 
-  <script src="app.js?v=2.8.1" defer></script>
-  <script src="atlas.js?v=2.8.1" defer></script>
-  <script src="dungeon.js?v=2.8.1" defer></script>
+  <script src="app.js?v=2.9.0" defer></script>
+  <script src="history.js?v=2.9.0" defer></script>
+  <script src="atlas.js?v=2.9.0" defer></script>
+  <script src="dungeon.js?v=2.9.0" defer></script>
 </body>
 </html>
