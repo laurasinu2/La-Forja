@@ -1,6 +1,20 @@
-# Versión 2.10.0 · Historia por capítulos y mapa mental
+# Versión 2.11.0 · Capítulos compartidos, enlaces entre capítulos y fichas del Atlas
 
-Partiendo de la v2.9.3.
+Esta versión parte de La Forja v2.10.0 y añade:
+
+- Capítulos compartidos entre Historia y Cuaderno.
+- Filtro del Cuaderno por capítulo y selector de capítulo en cada ficha.
+- Cambio de capítulo de nodos de Historia, con opción de mover también sus descendientes.
+- Padres e hijos de Historia entre capítulos diferentes.
+- Referencias de campaña jerárquicas y plegadas por defecto.
+- Creación opcional de fichas del Cuaderno desde escenas y marcadores del Atlas (excepto NPC, que conserva su tratamiento privado).
+- Fichas internas del Atlas reutilizables por varios NPC/marcadores.
+- Vista limpia de fichas internas: los campos vacíos no se muestran y el botón ✎ activa la edición.
+- Árboles jerárquicos del Atlas plegados inicialmente.
+- Nuevas ramas del Cuaderno nacen plegadas; se respeta el estado abierto/cerrado ya guardado en campañas anteriores.
+
+
+## Base heredada: v2.10.0
 
 ## Cambio de esta versión
 - **Historia** pasa de tres columnas a un mapa mental editable organizado por capítulos.

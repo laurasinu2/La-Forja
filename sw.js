@@ -1,12 +1,12 @@
-const CACHE = "forja-narrador-v2100-history-mindmap";
+const CACHE = "forja-narrador-v2110-chapters-shared-sheets";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.10.0",
-  "./app.js?v=2.10.0",
-  "./history.js?v=2.10.0",
-  "./atlas.js?v=2.10.0",
-  "./dungeon.js?v=2.10.0",
+  "./styles.css?v=2.11.0",
+  "./app.js?v=2.11.0",
+  "./history.js?v=2.11.0",
+  "./atlas.js?v=2.11.0",
+  "./dungeon.js?v=2.11.0",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

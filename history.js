@@ -17,6 +17,7 @@
     empty: $("#historyEmpty"), editor: $("#historyEditor"), statusBadge: $("#historyStatusBadge"), title: $("#historyEventTitle"), nodeType: $("#historyNodeType"), description: $("#historyEventDescription"), requirementMode: $("#historyRequirementMode"), requirements: $("#historyRequirements"), addChild: $("#historyAddChild"),
     markProgress: $("#historyMarkProgress"), markOccurred: $("#historyMarkOccurred"), discard: $("#historyDiscard"), resetStatus: $("#historyResetStatus"), deleteEvent: $("#historyDeleteEvent"), unlocks: $("#historyUnlocks"), latentAtlas: $("#historyLatentAtlas"),
     entrySelect: $("#historyLinkEntrySelect"), sceneSelect: $("#historyLinkSceneSelect"), markerSelect: $("#historyLinkMarkerSelect"), addEntry: $("#historyAddEntryLink"), addScene: $("#historyAddSceneLink"), addMarker: $("#historyAddMarkerLink"), campaignLinks: $("#historyCampaignLinks"),
+    entryTree: $("#historyEntryReferenceTree"), sceneTree: $("#historySceneReferenceTree"), markerTree: $("#historyMarkerReferenceTree"), moveChapter: $("#historyMoveChapter"), moveNodeChapter: $("#historyMoveNodeChapter"),
     moveLeft: $("#historyMoveLeft"), moveUp: $("#historyMoveUp"), moveDown: $("#historyMoveDown"), moveRight: $("#historyMoveRight")
   };
   if (!els.view) return;
@@ -58,6 +59,14 @@
   }
   function clampPosition(value, max) { return Math.max(24, Math.min(max, Number(value) || 24)); }
   function typeMeta(event) { return NODE_TYPES[event?.nodeType] || NODE_TYPES.story; }
+  function chapterTitle(id) { return chapterById(id)?.title || "Sin capítulo"; }
+  function directChildren(eventId) { return history().events.filter(candidate => (candidate.requirementIds || []).includes(eventId)); }
+  function descendantIds(eventId) {
+    const result = new Set(), queue = [eventId];
+    while (queue.length) { const current = queue.shift(); directChildren(current).forEach(child => { if (!result.has(child.id)) { result.add(child.id); queue.push(child.id); } }); }
+    result.delete(eventId); return result;
+  }
+  function wouldCreateCycle(eventId, parentId) { return eventId === parentId || descendantIds(eventId).has(parentId); }
 
   function renderChapters() {
     els.chapterTabs.replaceChildren();
@@ -110,7 +119,11 @@
     const button = document.createElement("button"); button.type = "button"; button.className = `history-map-node history-map-node--${event.status}${event.id === history().selectedEventId ? " is-selected" : ""}`;
     button.style.left = `${event.x}px`; button.style.top = `${event.y}px`; button.dataset.eventId = event.id;
     const [statusIcon, statusLabel] = STATUS[event.status] || STATUS.available; const [typeIcon, typeLabel] = typeMeta(event); const effects = nodeEffects(event); const referencePreview = nodeReferencePreview(event);
-    button.innerHTML = `<span class="history-map-node__top"><span class="history-map-node__type">${typeIcon} ${typeLabel}</span><span class="history-map-node__status">${statusIcon}</span></span><strong></strong>${referencePreview ? `<span class="history-map-node__refs">${app.escapeHtml(referencePreview)}</span>` : ""}<span class="history-map-node__meta">${statusLabel}${effects.refs ? ` · 🔗 ${effects.refs}` : ""}${effects.scenes ? ` · ⌖ ${effects.scenes}` : ""}${effects.markers ? ` · 📍 ${effects.markers}` : ""}</span>`;
+    const crossParents = (event.requirementIds || []).map(eventById).filter(parent => parent && parent.chapterId !== event.chapterId);
+    const crossChildren = directChildren(event.id).filter(child => child.chapterId !== event.chapterId);
+    const crossMeta = `${crossParents.length ? ` · ↖ ${crossParents.length}` : ""}${crossChildren.length ? ` · ↗ ${crossChildren.length}` : ""}`;
+    const crossPreview = crossParents[0] ? `↖ ${chapterTitle(crossParents[0].chapterId)}: ${crossParents[0].title}` : "";
+    button.innerHTML = `<span class="history-map-node__top"><span class="history-map-node__type">${typeIcon} ${typeLabel}</span><span class="history-map-node__status">${statusIcon}</span></span><strong></strong>${referencePreview || crossPreview ? `<span class="history-map-node__refs">${app.escapeHtml([crossPreview, referencePreview].filter(Boolean).join(" · "))}</span>` : ""}<span class="history-map-node__meta">${statusLabel}${effects.refs ? ` · 🔗 ${effects.refs}` : ""}${effects.scenes ? ` · ⌖ ${effects.scenes}` : ""}${effects.markers ? ` · 📍 ${effects.markers}` : ""}${crossMeta}</span>`;
     button.querySelector("strong").textContent = event.title || "Nodo sin nombre";
     button.addEventListener("click", e => { if (drag?.moved) return; history().selectedEventId = event.id; app.saveState(); render(); });
     button.addEventListener("dblclick", () => { history().selectedEventId = event.id; app.saveState(); render(); setTimeout(() => { els.title.focus(); els.title.select(); }, 0); });
@@ -150,20 +163,32 @@
   }
   function renderRequirements(event) {
     els.requirements.replaceChildren();
-    const others = chapterEvents(event.chapterId).filter(candidate => candidate.id !== event.id);
-    if (!others.length) { const p = document.createElement("p"); p.className = "history-empty-list"; p.textContent = "Este capítulo todavía no tiene otros nodos."; els.requirements.append(p); return; }
-    others.forEach(candidate => {
-      const label = document.createElement("label"); label.className = "history-requirement";
-      const input = document.createElement("input"); input.type = "checkbox"; input.checked = event.requirementIds.includes(candidate.id);
-      const text = document.createElement("span"); const strong = document.createElement("strong"); strong.textContent = candidate.title; const small = document.createElement("small"); small.textContent = `${STATUS[candidate.status]?.[0] || "○"} ${STATUS[candidate.status]?.[1] || candidate.status}`; text.append(strong, small);
-      input.addEventListener("change", () => { const set = new Set(event.requirementIds); if (input.checked) set.add(candidate.id); else set.delete(candidate.id); event.requirementIds = [...set]; event.updatedAt = app.now(); refreshUnlocks(); notifyStructuralChange(); render(); });
-      label.append(input, text); els.requirements.append(label);
+    const others = history().events.filter(candidate => candidate.id !== event.id);
+    if (!others.length) { const p = document.createElement("p"); p.className = "history-empty-list"; p.textContent = "Todavía no hay otros nodos en la campaña."; els.requirements.append(p); return; }
+    const groups = history().chapters.map(chapter => ({ chapter, items: others.filter(candidate => candidate.chapterId === chapter.id) })).filter(group => group.items.length);
+    groups.forEach(({ chapter, items }) => {
+      const details = document.createElement("details"); details.className = "history-requirement-group"; details.open = false;
+      const summary = document.createElement("summary"); const selectedCount = items.filter(candidate => event.requirementIds.includes(candidate.id)).length; summary.innerHTML = `<span>${app.escapeHtml(chapter.title)}</span><small>${selectedCount ? `${selectedCount} seleccionado${selectedCount === 1 ? "" : "s"}` : `${items.length} nodos`}</small>`; details.append(summary);
+      const body = document.createElement("div"); body.className = "history-requirement-group__body";
+      items.forEach(candidate => {
+        const label = document.createElement("label"); label.className = "history-requirement";
+        const input = document.createElement("input"); input.type = "checkbox"; input.checked = event.requirementIds.includes(candidate.id);
+        const cycle = wouldCreateCycle(event.id, candidate.id); input.disabled = cycle && !input.checked;
+        const text = document.createElement("span"); const strong = document.createElement("strong"); strong.textContent = candidate.title; const small = document.createElement("small"); small.textContent = `${STATUS[candidate.status]?.[0] || "○"} ${STATUS[candidate.status]?.[1] || candidate.status}${candidate.chapterId !== event.chapterId ? ` · ${chapter.title}` : ""}${cycle ? " · crearía un ciclo" : ""}`; text.append(strong, small);
+        input.addEventListener("change", () => {
+          const set = new Set(event.requirementIds); if (input.checked) set.add(candidate.id); else set.delete(candidate.id); event.requirementIds = [...set]; event.updatedAt = app.now(); refreshUnlocks(); app.saveState(true);
+          const count = items.filter(item => event.requirementIds.includes(item.id)).length; const counter = summary.querySelector("small"); if (counter) counter.textContent = count ? `${count} seleccionado${count===1?"":"s"}` : `${items.length} nodos`;
+          renderMap(); renderEffects(event);
+        });
+        label.append(input, text); body.append(label);
+      });
+      details.append(body); els.requirements.append(details);
     });
   }
   function renderEffects(event) {
-    els.unlocks.replaceChildren(); const children = chapterEvents(event.chapterId).filter(candidate => candidate.requirementIds.includes(event.id));
+    els.unlocks.replaceChildren(); const children = directChildren(event.id);
     if (!children.length) { const p = document.createElement("p"); p.className = "history-empty-list"; p.textContent = "Este nodo todavía no tiene hijos directos."; els.unlocks.append(p); }
-    children.forEach(child => els.unlocks.append(effectRow(typeMeta(child)[0], child.title, requirementsMet(child) ? "Puede quedar disponible" : "Todavía tiene padres pendientes", [{ label: "Abrir", run: () => { history().selectedEventId = child.id; app.saveState(); render(); centerOnEvent(child); } }])));
+    children.forEach(child => els.unlocks.append(effectRow(typeMeta(child)[0], child.title, `${child.chapterId !== event.chapterId ? `${chapterTitle(child.chapterId)} · ` : ""}${requirementsMet(child) ? "Puede quedar disponible" : "Todavía tiene padres pendientes"}`, [{ label: "Abrir", run: () => { history().selectedChapterId = child.chapterId; history().selectedEventId = child.id; app.saveState(); render(); centerOnEvent(child); } }])));
     els.latentAtlas.replaceChildren();
     const scenes = campaign().atlas?.scenes?.filter(scene => scene.unlockEventId === event.id) || [];
     const markers = (campaign().atlas?.scenes || []).flatMap(scene => (scene.markers || []).filter(marker => marker.unlockEventId === event.id).map(marker => ({ scene, marker })));
@@ -171,6 +196,45 @@
     scenes.forEach(scene => els.latentAtlas.append(effectRow(event.status === "occurred" ? "⌖" : "🔒", scene.name, event.status === "occurred" ? "Escena visible en el Atlas" : "Escena latente hasta que ocurra este nodo", [{ label: "Editar", run: () => window.ForjaAtlas?.openSceneDialog?.(scene.id) }])));
     markers.forEach(({ scene, marker }) => els.latentAtlas.append(effectRow(event.status === "occurred" ? "📍" : "🔒", marker.name || marker.alias || "Marcador sin nombre", `${scene.name} · ${event.status === "occurred" ? "visible" : "latente"}`, [{ label: "Editar", run: () => window.ForjaAtlas?.openMarkerDialog?.(scene.id, marker.id) }])));
   }
+
+  function referenceTreeRow({ label, subtitle = "", icon = "", hasChildren = false, onAdd, children = [] }) {
+    const wrap = document.createElement("div"); wrap.className = "history-ref-tree-item";
+    const row = document.createElement("div"); row.className = "history-ref-tree-row";
+    const toggle = document.createElement("button"); toggle.type = "button"; toggle.className = hasChildren ? "history-ref-tree-toggle" : "history-ref-tree-spacer"; toggle.textContent = hasChildren ? "›" : "";
+    const add = document.createElement("button"); add.type = "button"; add.className = "history-ref-tree-add"; add.innerHTML = `<span>${app.escapeHtml(icon)}</span><strong>${app.escapeHtml(label)}</strong>${subtitle ? `<small>${app.escapeHtml(subtitle)}</small>` : ""}`; add.addEventListener("click", () => { if (typeof onAdd === "function") onAdd(); else if (hasChildren) toggle.click(); });
+    row.append(toggle, add); wrap.append(row);
+    if (hasChildren) { const childWrap = document.createElement("div"); childWrap.className = "history-ref-tree-children"; childWrap.hidden = true; children.forEach(child => childWrap.append(child)); toggle.addEventListener("click", () => { childWrap.hidden = !childWrap.hidden; toggle.classList.toggle("is-open", !childWrap.hidden); }); wrap.append(childWrap); }
+    return wrap;
+  }
+
+  function renderEntryReferenceTree(event) {
+    if (!els.entryTree) return; els.entryTree.replaceChildren();
+    const entries = campaign().entries || [], types = app.getTypes();
+    Object.entries(types).forEach(([typeId, meta]) => {
+      const list = entries.filter(entry => entry.type === typeId); if (!list.length) return;
+      const byParent = new Map(); list.forEach(entry => { const parent = list.some(item => item.id === entry.parentId) ? entry.parentId : ""; if (!byParent.has(parent)) byParent.set(parent, []); byParent.get(parent).push(entry); });
+      byParent.forEach(items => items.sort((a,b) => (Number(a.order)||0)-(Number(b.order)||0) || a.name.localeCompare(b.name, "es")));
+      const makeEntry = entry => { const kids = (byParent.get(entry.id) || []).map(makeEntry); return referenceTreeRow({ icon: meta.icon, label: entry.name, subtitle: chapterTitle(entry.chapterId), hasChildren: kids.length > 0, children: kids, onAdd: () => { event.linkedEntryIds ||= []; if (!event.linkedEntryIds.includes(entry.id)) event.linkedEntryIds.push(entry.id); event.updatedAt = app.now(); notifyStructuralChange(); render(); } }); };
+      const roots = (byParent.get("") || []).map(makeEntry);
+      els.entryTree.append(referenceTreeRow({ icon: meta.icon, label: meta.label, subtitle: `${list.length} ficha${list.length===1?"":"s"}`, hasChildren: true, children: roots, onAdd: null }));
+    });
+    if (!els.entryTree.children.length) els.entryTree.innerHTML = '<p class="history-empty-list">El Cuaderno está vacío.</p>';
+  }
+
+  function renderSceneReferenceTree(event, markerMode = false) {
+    const root = markerMode ? els.markerTree : els.sceneTree; if (!root) return; root.replaceChildren();
+    const scenes = campaign().atlas?.scenes || []; const byParent = new Map(); scenes.forEach(scene => { const parent = scenes.some(item => item.id === scene.parentSceneId) ? scene.parentSceneId : ""; if (!byParent.has(parent)) byParent.set(parent, []); byParent.get(parent).push(scene); });
+    const makeScene = scene => {
+      const sceneChildren = (byParent.get(scene.id) || []).map(makeScene);
+      const markerChildren = markerMode ? (scene.markers || []).map(marker => referenceTreeRow({ icon: "📍", label: marker.name || marker.alias || "Marcador", subtitle: scene.name, onAdd: () => { const ref = `${scene.id}::${marker.id}`; event.linkedMarkerRefs ||= []; if (!event.linkedMarkerRefs.includes(ref)) event.linkedMarkerRefs.push(ref); event.updatedAt = app.now(); notifyStructuralChange(); render(); } })) : [];
+      const children = markerMode ? [...markerChildren, ...sceneChildren] : sceneChildren;
+      return referenceTreeRow({ icon: "⌖", label: scene.name, subtitle: markerMode ? `${(scene.markers||[]).length} marcadores` : "Escena", hasChildren: children.length > 0, children, onAdd: markerMode ? null : () => { event.linkedSceneIds ||= []; if (!event.linkedSceneIds.includes(scene.id)) event.linkedSceneIds.push(scene.id); event.updatedAt = app.now(); notifyStructuralChange(); render(); } });
+    };
+    (byParent.get("") || []).forEach(scene => root.append(makeScene(scene)));
+    if (!root.children.length) root.innerHTML = `<p class="history-empty-list">${markerMode ? "No hay marcadores en el Atlas." : "El Atlas está vacío."}</p>`;
+  }
+
+  function renderReferenceTrees(event) { renderEntryReferenceTree(event); renderSceneReferenceTree(event, false); renderSceneReferenceTree(event, true); }
 
   function populateLinkSelects(event) {
     const entries = campaign().entries || [], scenes = campaign().atlas?.scenes || [];
@@ -182,7 +246,7 @@
   function openAtlasScene(id) { const scene = campaign().atlas?.scenes?.find(item => item.id === id); if (!scene) return; if (window.ForjaAtlas?.sceneIsUnlocked?.(scene)) { campaign().atlas.currentSceneId = id; app.setView?.("atlas"); app.saveState(); window.ForjaAtlas?.render?.(); } else window.ForjaAtlas?.openSceneDialog?.(id); }
   function openAtlasMarker(ref) { const [sceneId, markerId] = String(ref || "").split("::"); if (sceneId && markerId) window.ForjaAtlas?.openMarkerDialog?.(sceneId, markerId); }
   function renderCampaignLinks(event) {
-    els.campaignLinks.replaceChildren(); populateLinkSelects(event);
+    els.campaignLinks.replaceChildren(); populateLinkSelects(event); renderReferenceTrees(event);
     const rows = [];
     (event.linkedEntryIds || []).forEach(id => { const entry = campaign().entries?.find(item => item.id === id); if (entry) rows.push(effectRow("📖", entry.name, "Cuaderno", [{ label: "Abrir", run: () => openNotebookEntry(id) }, { label: "Quitar", run: () => removeLink(event, "linkedEntryIds", id) }])); });
     (event.linkedSceneIds || []).forEach(id => { const scene = campaign().atlas?.scenes?.find(item => item.id === id); if (scene) rows.push(effectRow("⌖", scene.name, "Escena del Atlas", [{ label: "Abrir", run: () => openAtlasScene(id) }, { label: "Quitar", run: () => removeLink(event, "linkedSceneIds", id) }])); });
@@ -197,6 +261,7 @@
     const [icon, label] = STATUS[event.status] || STATUS.available; els.statusBadge.textContent = `${icon} ${label}`; els.statusBadge.dataset.status = event.status;
     if (document.activeElement !== els.title) els.title.value = event.title; if (document.activeElement !== els.description) els.description.value = event.description;
     els.nodeType.value = event.nodeType || "story"; els.requirementMode.value = event.requirementMode;
+    if (els.moveChapter) { els.moveChapter.innerHTML = history().chapters.map(chapter => `<option value="${chapter.id}">${app.escapeHtml(chapter.title)}</option>`).join(""); els.moveChapter.value = event.chapterId; }
     els.markProgress.disabled = event.status === "locked" || event.status === "inProgress"; els.markOccurred.disabled = event.status === "locked" || event.status === "occurred"; els.discard.disabled = event.status === "discarded"; els.resetStatus.hidden = !["occurred", "discarded", "inProgress"].includes(event.status);
     renderRequirements(event); renderCampaignLinks(event); renderEffects(event);
   }
@@ -218,6 +283,8 @@
     if (!confirm(`¿Eliminar “${chapter.title}” y sus ${events.length} nodo${events.length === 1 ? "" : "s"}?\n\nEl contenido del Atlas que dependía de esos nodos pasará a ser visible para el DM.`)) return;
     history().events = history().events.filter(event => event.chapterId !== chapter.id); history().events.forEach(event => { event.requirementIds = event.requirementIds.filter(id => !linkedIds.has(id)); });
     (campaign().atlas?.scenes || []).forEach(scene => { if (linkedIds.has(scene.unlockEventId)) scene.unlockEventId = ""; (scene.markers || []).forEach(marker => { if (linkedIds.has(marker.unlockEventId)) marker.unlockEventId = ""; }); });
+    (campaign().entries || []).forEach(entry => { if (entry.chapterId === chapter.id) entry.chapterId = ""; });
+    if (campaign().notebookChapterFilter === chapter.id) campaign().notebookChapterFilter = "all";
     history().chapters = history().chapters.filter(item => item.id !== chapter.id); history().chapters.forEach((item, index) => item.order = index); history().selectedChapterId = history().chapters[0]?.id || ""; history().selectedEventId = chapterEvents(history().selectedChapterId)[0]?.id || ""; refreshUnlocks(); notifyStructuralChange(); render();
   }
   function createEvent(parentId = "") {
@@ -226,6 +293,15 @@
     const event = { id: app.uid(), chapterId: chapter.id, title: parent ? "Nuevo paso" : "Nuevo suceso", description: "", nodeType: "story", status: parent && parent.status !== "occurred" ? "locked" : "available", requirementMode: "all", requirementIds: parent ? [parent.id] : [], linkedEntryIds: [], linkedSceneIds: [], linkedMarkerRefs: [], x: parent ? clampPosition(parent.x + 290, STAGE_W - NODE_W - 24) : 80, y: parent ? clampPosition(parent.y + siblings.length * 120, STAGE_H - NODE_H - 24) : 80 + siblings.length * 120, createdAt: app.now(), updatedAt: app.now() };
     history().events.push(event); history().selectedEventId = event.id; notifyStructuralChange(); render(); centerOnEvent(event); setTimeout(() => { els.title.focus(); els.title.select(); }, 0);
   }
+  function moveSelectedToChapter() {
+    const event = selectedEvent(), targetId = els.moveChapter?.value || ""; if (!event || !chapterById(targetId) || targetId === event.chapterId) return;
+    const descendants = [...descendantIds(event.id)].map(eventById).filter(Boolean);
+    const moveChildren = descendants.length ? confirm(`Este nodo tiene ${descendants.length} descendiente${descendants.length===1?"":"s"}.\n\nAceptar: mover también sus hijos/descendientes a “${chapterTitle(targetId)}”.\nCancelar: mover sólo este nodo.`) : false;
+    const moving = moveChildren ? [event, ...descendants] : [event];
+    moving.forEach((node, index) => { node.chapterId = targetId; node.x = clampPosition(80 + (index % 4) * 290, STAGE_W - NODE_W - 24); node.y = clampPosition(80 + Math.floor(index / 4) * 130, STAGE_H - NODE_H - 24); node.updatedAt = app.now(); });
+    history().selectedChapterId = targetId; history().selectedEventId = event.id; refreshUnlocks(); notifyStructuralChange(); render(); centerOnEvent(event);
+  }
+
   function setStatus(status) { const event = selectedEvent(); if (!event) return; if (["inProgress", "occurred"].includes(status) && !requirementsMet(event)) { alert("Este nodo todavía tiene padres pendientes."); return; } event.status = status; event.updatedAt = app.now(); refreshUnlocks(); notifyStructuralChange(); render(); }
   function deleteSelected() {
     const event = selectedEvent(); if (!event) return; const linkedScenes = campaign().atlas?.scenes?.filter(scene => scene.unlockEventId === event.id) || []; const linkedMarkers = (campaign().atlas?.scenes || []).flatMap(scene => (scene.markers || []).filter(marker => marker.unlockEventId === event.id));
@@ -246,6 +322,7 @@
   els.nodeType.addEventListener("change", () => { const event = selectedEvent(); if (!event) return; event.nodeType = NODE_TYPES[els.nodeType.value] ? els.nodeType.value : "story"; event.updatedAt = app.now(); app.saveState(); renderMap(); });
   els.description.addEventListener("input", () => { const event = selectedEvent(); if (!event) return; event.description = els.description.value.slice(0,6000); event.updatedAt = app.now(); app.saveState(); });
   els.requirementMode.addEventListener("change", () => { const event = selectedEvent(); if (!event) return; event.requirementMode = els.requirementMode.value === "any" ? "any" : "all"; event.updatedAt = app.now(); refreshUnlocks(); notifyStructuralChange(); render(); });
+  els.moveNodeChapter?.addEventListener("click", moveSelectedToChapter);
   els.markProgress.addEventListener("click", () => setStatus("inProgress")); els.markOccurred.addEventListener("click", () => setStatus("occurred")); els.discard.addEventListener("click", () => setStatus("discarded")); els.resetStatus.addEventListener("click", () => { const event = selectedEvent(); if (!event) return; event.status = requirementsMet(event) ? "available" : "locked"; event.updatedAt = app.now(); refreshUnlocks(); notifyStructuralChange(); render(); }); els.deleteEvent.addEventListener("click", deleteSelected);
   els.addEntry.addEventListener("click", () => addLink("linkedEntryIds", els.entrySelect)); els.addScene.addEventListener("click", () => addLink("linkedSceneIds", els.sceneSelect)); els.addMarker.addEventListener("click", () => addLink("linkedMarkerRefs", els.markerSelect));
   els.autoLayout.addEventListener("click", autoLayout); els.centerSelection.addEventListener("click", () => centerOnEvent());

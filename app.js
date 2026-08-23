@@ -741,8 +741,8 @@
 
   function makeEntry(type, name, parentId = null, descriptionHtml = "", subtype = null) {
     return {
-      id: uid(), type, name, parentId, subtype: subtype || defaultSubtype(type),
-      descriptionHtml, descriptionMarkdown: htmlToMarkdown(descriptionHtml), status: defaultStatus(type), collapsed: false, order: 0,
+      id: uid(), type, name, parentId, subtype: subtype || defaultSubtype(type), chapterId: "",
+      descriptionHtml, descriptionMarkdown: htmlToMarkdown(descriptionHtml), status: defaultStatus(type), collapsed: true, order: 0,
       consumables: [], journal: [], connections: [], vendorItems: [], obtainableItems: [],
       thingDetails: type === "things" ? defaultThingDetails() : null,
       stats: type === "creatures" ? defaultStats() : null,
@@ -777,7 +777,7 @@
   function blankCampaign(name = "Nueva campaña") {
     return {
       id: uid(), version: 7, campaignName: name,
-      view: "notebook", selectedId: null, search: "",
+      view: "notebook", selectedId: null, search: "", notebookChapterFilter: "all",
       gameCalendar: defaultGameCalendar(), calendarEvents: [], entries: [], history: defaultHistoryState(),
       mindmapLocationFilter: "", mindmapLayoutVersion: MINDMAP_LAYOUT_VERSION, mindmapLayouts: {}, dice: defaultDiceState(),
       atlas: defaultAtlasState(), auth: { passwordHash: "", passwordSalt: "", updatedAt: "" }, entriesCreated: 0,
@@ -917,10 +917,11 @@
         name: String(original.name || "Sin nombre"),
         parentId: original.parentId || null,
         subtype: validSubtype ? original.subtype : defaultSubtype(type),
+        chapterId: String(original.chapterId || ""),
         descriptionHtml: sanitizeHtml(original.descriptionHtml ?? textToHtml(original.description || "")),
         descriptionMarkdown: String(original.descriptionMarkdown ?? htmlToMarkdown(original.descriptionHtml ?? textToHtml(original.description || ""))),
         status: normaliseStatus(original.status, type),
-        collapsed: Boolean(original.collapsed),
+        collapsed: original.collapsed === undefined ? true : Boolean(original.collapsed),
         order: Number.isFinite(Number(original.order)) ? Number(original.order) : index,
         consumables: type === "locations" ? [] : oldConsumables,
         obtainableItems: migratedLocationItems,
@@ -984,6 +985,8 @@
       daysPerMonth: 30
     });
     const history = normaliseHistoryState(raw.history);
+    const historyChapterIds = new Set(history.chapters.map(chapter => chapter.id));
+    entries.forEach(entry => { if (!historyChapterIds.has(entry.chapterId)) entry.chapterId = ""; });
     const historyEventIds = new Set(history.events.map(event => event.id));
 
     return {
@@ -993,6 +996,7 @@
       view: ["notebook", "history", "calendar", "mindmap", "dice", "atlas"].includes(raw.view) ? raw.view : (raw.view === "dungeon" ? "atlas" : "notebook"),
       selectedId: ids.has(raw.selectedId) ? raw.selectedId : entries[0]?.id || null,
       search: String(raw.search || ""),
+      notebookChapterFilter: raw.notebookChapterFilter === "none" || historyChapterIds.has(String(raw.notebookChapterFilter || "")) ? String(raw.notebookChapterFilter) : "all",
       gameCalendar,
       calendarEvents: migratedEvents,
       mindmapLocationFilter: ids.has(raw.mindmapLocationFilter) && entries.find(entry => entry.id === raw.mindmapLocationFilter)?.type === "locations"
@@ -1148,9 +1152,9 @@
     notebookView: $("#notebookView"), historyView: $("#historyView"), calendarView: $("#calendarView"), mindmapView: $("#mindmapView"), diceView: $("#diceView"), atlasView: $("#atlasView"), dungeonView: $("#dungeonView"), viewTabs: $$(".view-tab"),
     campaignSelect: $("#campaignSelect"), campaignManagerBtn: $("#campaignManagerBtn"),
     campaignDialog: $("#campaignDialog"), newCampaignForm: $("#newCampaignForm"), newCampaignName: $("#newCampaignName"), campaignList: $("#campaignList"),
-    columns: $("#columns"), collectionTabs: $("#collectionTabs"), collectionsPanel: $("#collectionsPanel"), connectionModeBanner: $("#connectionModeBanner"), selectionModeText: $("#selectionModeText"), cancelConnectionBanner: $("#cancelConnectionBanner"),
+    columns: $("#columns"), collectionTabs: $("#collectionTabs"), notebookChapterFilter: $("#notebookChapterFilter"), collectionsPanel: $("#collectionsPanel"), connectionModeBanner: $("#connectionModeBanner"), selectionModeText: $("#selectionModeText"), cancelConnectionBanner: $("#cancelConnectionBanner"),
     globalSearch: $("#globalSearch"), clearSearch: $("#clearSearch"),
-    editor: $("#editor"), emptyState: $("#emptyState"), entrySubtype: $("#entrySubtype"), entryStatus: $("#entryStatus"),
+    editor: $("#editor"), emptyState: $("#emptyState"), entrySubtype: $("#entrySubtype"), entryStatus: $("#entryStatus"), entryChapter: $("#entryChapter"),
     entryName: $("#entryName"), entryHeadingIcon: $("#entryHeadingIcon"), entryDescription: $("#entryDescription"), descriptionPreview: $("#descriptionPreview"),
     saveState: $("#saveState"), creaturePanel: $("#creaturePanel"),
     vendorPanel: $("#vendorPanel"), vendorItemsList: $("#vendorItemsList"), vendorItemForm: $("#vendorItemForm"),
@@ -1168,7 +1172,7 @@
     deleteBtn: $("#deleteBtn"), duplicateBtn: $("#duplicateBtn"), exportBtn: $("#exportBtn"), importBtn: $("#importBtn"),
     importFile: $("#importFile"), themeBtn: $("#themeBtn"), helpBtn: $("#helpBtn"), helpDialog: $("#helpDialog"), closeHelp: $("#closeHelp"),
     itemDialog: $("#itemDialog"), itemDialogForm: $("#itemDialogForm"), dialogTitle: $("#dialogTitle"),
-    newItemName: $("#newItemName"), newItemSubtype: $("#newItemSubtype"), newItemParent: $("#newItemParent"),
+    newItemName: $("#newItemName"), newItemSubtype: $("#newItemSubtype"), newItemChapter: $("#newItemChapter"), newItemParent: $("#newItemParent"),
     actionsDialog: $("#actionsDialog"), actionsTitle: $("#actionsTitle"),
     calendarTitle: $("#calendarTitle"), calendarCampaignDay: $("#calendarCampaignDay"), calendarGrid: $("#calendarGrid"), calendarPrev: $("#calendarPrev"),
     calendarNext: $("#calendarNext"), calendarToday: $("#calendarToday"), advanceCampaignDay: $("#advanceCampaignDay"), newCalendarEvent: $("#newCalendarEvent"), calendarSettingsBtn: $("#calendarSettingsBtn"),
@@ -1467,8 +1471,30 @@
     return Boolean(entry && terminal[entry.type]?.has(entry.status));
   }
 
+  function chapterOptionsHtml({ includeAll = false } = {}) {
+    const chapters = state.history?.chapters || [];
+    const all = includeAll ? '<option value="all">Todos los capítulos</option><option value="none">Sin capítulo</option>' : '<option value="">Sin capítulo</option>';
+    return all + chapters.map(chapter => `<option value="${chapter.id}">${escapeHtml(chapter.title)}</option>`).join("");
+  }
+
+  function renderNotebookChapterFilter() {
+    if (!els.notebookChapterFilter) return;
+    const value = state.notebookChapterFilter || "all";
+    els.notebookChapterFilter.innerHTML = chapterOptionsHtml({ includeAll: true });
+    els.notebookChapterFilter.value = [...els.notebookChapterFilter.options].some(option => option.value === value) ? value : "all";
+    state.notebookChapterFilter = els.notebookChapterFilter.value;
+  }
+
+  function entryMatchesNotebookChapter(entry) {
+    const filter = state.notebookChapterFilter || "all";
+    if (filter === "all") return true;
+    if (filter === "none") return !entry.chapterId;
+    return entry.chapterId === filter;
+  }
+
   function renderColumns() {
     renderCollectionTabs();
+    renderNotebookChapterFilter();
     els.columns.replaceChildren();
     Object.entries(TYPES).forEach(([type, meta]) => {
       const fragment = $("#collectionTemplate").content.cloneNode(true);
@@ -1478,7 +1504,7 @@
       const items = $(".collection-items", fragment);
       $(".collection-icon", fragment).textContent = meta.icon;
       $(".collection-title", fragment).textContent = meta.label;
-      const allEntries = entriesOf(type);
+      const allEntries = entriesOf(type).filter(entryMatchesNotebookChapter);
       const activeEntries = allEntries.filter(entry => !isArchivedEntry(entry));
       const archivedEntries = allEntries.filter(isArchivedEntry);
       $(".collection-count", fragment).textContent = activeEntries.length;
@@ -1498,7 +1524,7 @@
         const archive = document.createElement("details");
         archive.className = "collection-archive";
         const archiveMatches = filterEntries(archivedEntries);
-        archive.open = archivedEntries.some(entry => entry.id === state.selectedId) || Boolean(state.search && archiveMatches.length);
+        archive.open = false;
         const summary = document.createElement("summary");
         summary.innerHTML = `<span>▰ Archivo</span><small>${archivedEntries.length}</small>`;
         const archiveBody = document.createElement("div");
@@ -1690,6 +1716,7 @@
 
     els.entryStatus.innerHTML = STATUS_OPTIONS[entry.type].map(([value, label]) => `<option value="${value}">${escapeHtml(label)}</option>`).join("");
     els.entryStatus.value = entry.status;
+    if (els.entryChapter) { els.entryChapter.innerHTML = chapterOptionsHtml(); els.entryChapter.value = entry.chapterId || ""; }
 
     els.entryName.value = entry.name;
     setSubtypeIcon(els.entryHeadingIcon, entry.type, entry.subtype);
@@ -2221,6 +2248,11 @@
     els.newItemSubtype.value = defaultSubtype(type);
 
     const current = selectedEntry();
+    if (els.newItemChapter) {
+      els.newItemChapter.innerHTML = chapterOptionsHtml();
+      const preferredChapter = current?.chapterId || (state.notebookChapterFilter && !["all", "none"].includes(state.notebookChapterFilter) ? state.notebookChapterFilter : state.history?.selectedChapterId || "");
+      els.newItemChapter.value = [...els.newItemChapter.options].some(option => option.value === preferredChapter) ? preferredChapter : "";
+    }
     const defaultParent = presetParent ?? (current?.type === type ? current.id : "");
     const options = treeOrderedEntries(type).map(({ entry, depth }) => `<option value="${entry.id}">${"— ".repeat(depth)}${escapeHtml(entry.name)}</option>`).join("");
     els.newItemParent.innerHTML = `<option value="">Raíz / sin padre</option>${options}`;
@@ -2229,8 +2261,9 @@
     setTimeout(() => els.newItemName.focus(), 0);
   }
 
-  function createEntry(type, name, parentId = null, subtype = null) {
+  function createEntry(type, name, parentId = null, subtype = null, chapterId = "") {
     const entry = makeEntry(type, name.trim(), parentId || null, "", subtype);
+    entry.chapterId = state.history?.chapters?.some(chapter => chapter.id === chapterId) ? chapterId : "";
     entry.order = nextSiblingOrder(type, entry.parentId);
     state.entries.push(entry);
     activeCollectionType = type;
@@ -3481,6 +3514,18 @@
       renderColumns();
     });
 
+    els.notebookChapterFilter?.addEventListener("change", () => {
+      state.notebookChapterFilter = els.notebookChapterFilter.value || "all";
+      saveState();
+      renderColumns();
+    });
+
+    els.entryChapter?.addEventListener("change", () => {
+      updateSelected({ chapterId: els.entryChapter.value || "" });
+      renderColumns();
+      document.dispatchEvent(new CustomEvent("forja:entrychapterchange", { detail: { entryId: selectedEntry()?.id || "" } }));
+    });
+
     els.entryName.addEventListener("input", () => {
       updateSelected({ name: els.entryName.value });
       renderColumns();
@@ -3693,7 +3738,7 @@
       event.preventDefault();
       const name = els.newItemName.value.trim();
       if (!name) return;
-      createEntry(dialogType, name, els.newItemParent.value, els.newItemSubtype.value);
+      createEntry(dialogType, name, els.newItemParent.value, els.newItemSubtype.value, els.newItemChapter?.value || "");
       els.itemDialog.close();
     });
 
@@ -4048,6 +4093,16 @@
     return { native: false, cancelled: false, uri: "", bytes: blob.size };
   }
 
+  function createNotebookEntryFromExternal({ type = "things", name = "Nueva ficha", parentId = "", subtype = "", chapterId = "" } = {}) {
+    if (!TYPES[type]) type = "things";
+    const entry = makeEntry(type, String(name || "Nueva ficha").trim().slice(0, 100) || "Nueva ficha", parentId || null, "", subtype || defaultSubtype(type));
+    entry.chapterId = state.history?.chapters?.some(chapter => chapter.id === chapterId) ? chapterId : "";
+    entry.order = nextSiblingOrder(type, entry.parentId);
+    state.entries.push(entry);
+    saveState(true);
+    return entry;
+  }
+
   window.ForjaApp = {
     getProfile: () => profile,
     getState: () => state,
@@ -4060,6 +4115,8 @@
     selectEntryForPanel,
     clearEntryForPanel,
     renderEditor,
+    createNotebookEntry: createNotebookEntryFromExternal,
+    chapterOptionsHtml,
     exportJson: exportData,
     normaliseProfile,
     normaliseCampaign,

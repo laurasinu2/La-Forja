@@ -43,10 +43,11 @@
     atlasMapViewport: $("#atlasMapViewport"), atlasEmptyMap: $("#atlasEmptyMap"), atlasMapStage: $("#atlasMapStage"), atlasBackground: $("#atlasBackground"),
     atlasObjectLayer: $("#atlasObjectLayer"), atlasMarkerLayer: $("#atlasMarkerLayer"), atlasFogCanvas: $("#atlasFogCanvas"), atlasDmZoneLayer: $("#atlasDmZoneLayer"), atlasDraft: $("#atlasDraft"),
     atlasLayers: $("#atlasLayers"), atlasLayerCount: $("#atlasLayerCount"),
-    atlasSceneDialog: $("#atlasSceneDialog"), atlasSceneForm: $("#atlasSceneForm"), atlasSceneDialogTitle: $("#atlasSceneDialogTitle"), atlasSceneName: $("#atlasSceneName"), atlasSceneParent: $("#atlasSceneParent"), atlasSceneDiscovered: $("#atlasSceneDiscovered"), atlasSceneUnlockEvent: $("#atlasSceneUnlockEvent"), atlasDeleteScene: $("#atlasDeleteScene"), atlasSceneSourceFieldset: $("#atlasSceneSourceFieldset"), atlasSceneEditDungeon: $("#atlasSceneEditDungeon"),
-    atlasMarkerDialog: $("#atlasMarkerDialog"), atlasMarkerForm: $("#atlasMarkerForm"), atlasMarkerDialogTitle: $("#atlasMarkerDialogTitle"), atlasMarkerName: $("#atlasMarkerName"), atlasMarkerCategory: $("#atlasMarkerCategory"), atlasMarkerAlias: $("#atlasMarkerAlias"), atlasMarkerDisposition: $("#atlasMarkerDisposition"), atlasNpcFields: $("#atlasNpcFields"), atlasMarkerVisibility: $("#atlasMarkerVisibility"), atlasMarkerUnlockEvent: $("#atlasMarkerUnlockEvent"), atlasMarkerSize: $("#atlasMarkerSize"), atlasMarkerSizeValue: $("#atlasMarkerSizeValue"), atlasMarkerSizeUnit: $("#atlasMarkerSizeUnit"), atlasMarkerTargetScene: $("#atlasMarkerTargetScene"), atlasMarkerTargetTree: $("#atlasMarkerTargetTree"), atlasRelatedEntries: $("#atlasRelatedEntries"), atlasRelatedFieldset: $("#atlasRelatedFieldset"), atlasMarkerSheetModeWrap: $("#atlasMarkerSheetModeWrap"), atlasOrphanSheets: $("#atlasOrphanSheets"), atlasOrphanSheetList: $("#atlasOrphanSheetList"), atlasMarkerAutoDmSheet: $("#atlasMarkerAutoDmSheet"), atlasMarkerOpenSheet: $("#atlasMarkerOpenSheet"), atlasDeleteMarker: $("#atlasDeleteMarker"),
-    atlasInternalSheetDialog: $("#atlasInternalSheetDialog"), atlasInternalSheetForm: $("#atlasInternalSheetForm"), atlasInternalSheetTitle: $("#atlasInternalSheetTitle"), atlasInternalSheetKind: $("#atlasInternalSheetKind"), atlasSheetName: $("#atlasSheetName"), atlasSheetStatusWrap: $("#atlasSheetStatusWrap"), atlasSheetStatus: $("#atlasSheetStatus"), atlasSheetCreaturePhotoWrap: $("#atlasSheetCreaturePhotoWrap"), atlasSheetPhotoPreview: $("#atlasSheetPhotoPreview"), atlasSheetPhotoEmpty: $("#atlasSheetPhotoEmpty"), atlasSheetPhotoChoose: $("#atlasSheetPhotoChoose"), atlasSheetPhotoRemove: $("#atlasSheetPhotoRemove"), atlasSheetPhotoInput: $("#atlasSheetPhotoInput"), atlasSheetDescription: $("#atlasSheetDescription"), atlasCreatureSheetSection: $("#atlasCreatureSheetSection"), atlasCreatureModifiers: $("#atlasCreatureModifiers"), atlasCreatureAbilities: $("#atlasCreatureAbilities"), atlasCreatureCombatStyle: $("#atlasCreatureCombatStyle"), atlasCreatureNonAggression: $("#atlasCreatureNonAggression"), atlasCreatureActions: $("#atlasCreatureActions"), atlasCreatureReactions: $("#atlasCreatureReactions"), atlasMerchantSheetSection: $("#atlasMerchantSheetSection"), atlasMerchantItemsList: $("#atlasMerchantItemsList"), atlasMerchantItemName: $("#atlasMerchantItemName"), atlasMerchantItemPrice: $("#atlasMerchantItemPrice"), atlasMerchantItemCurrency: $("#atlasMerchantItemCurrency"), atlasMerchantItemDescription: $("#atlasMerchantItemDescription"), atlasMerchantItemAdd: $("#atlasMerchantItemAdd"), atlasSecretSheetSection: $("#atlasSecretSheetSection"), atlasSecretReveal: $("#atlasSecretReveal"), atlasSecretClues: $("#atlasSecretClues"), atlasSecretCheckType: $("#atlasSecretCheckType"), atlasSecretCheckDc: $("#atlasSecretCheckDc"), atlasSecretSuccess: $("#atlasSecretSuccess"), atlasSecretFailure: $("#atlasSecretFailure"), atlasSecretDiscovered: $("#atlasSecretDiscovered"), atlasMissionSheetSection: $("#atlasMissionSheetSection"), atlasMissionGiver: $("#atlasMissionGiver"), atlasMissionObjective: $("#atlasMissionObjective"), atlasMissionSecondary: $("#atlasMissionSecondary"), atlasMissionReward: $("#atlasMissionReward"), atlasMissionNotes: $("#atlasMissionNotes"), atlasMissionStages: $("#atlasMissionStages"), atlasMissionStageInput: $("#atlasMissionStageInput"), atlasMissionStageAdd: $("#atlasMissionStageAdd"), atlasContainerSheetSection: $("#atlasContainerSheetSection"), atlasContainerTitle: $("#atlasContainerTitle"), atlasContainerCp: $("#atlasContainerCp"), atlasContainerSp: $("#atlasContainerSp"), atlasContainerGp: $("#atlasContainerGp"), atlasContainerPp: $("#atlasContainerPp"), atlasContainerLocked: $("#atlasContainerLocked"), atlasContainerLockDc: $("#atlasContainerLockDc"), atlasContainerKey: $("#atlasContainerKey"), atlasContainerTrapped: $("#atlasContainerTrapped"), atlasContainerTrapCheck: $("#atlasContainerTrapCheck"), atlasContainerTrapDc: $("#atlasContainerTrapDc"), atlasContainerTrapEffect: $("#atlasContainerTrapEffect"), atlasContainerDisarmDc: $("#atlasContainerDisarmDc"), atlasLootSheetSection: $("#atlasLootSheetSection"), atlasSheetLootGroups: $("#atlasSheetLootGroups"), atlasLootName: $("#atlasLootName"), atlasLootQuantity: $("#atlasLootQuantity"), atlasLootCheckType: $("#atlasLootCheckType"), atlasLootCheckDc: $("#atlasLootCheckDc"), atlasLootNotes: $("#atlasLootNotes"), atlasLootAdd: $("#atlasLootAdd"), atlasLootSearchCheck: $("#atlasLootSearchCheck"), atlasLootSearchModifier: $("#atlasLootSearchModifier"), atlasLootSearchResult: $("#atlasLootSearchResult"), atlasLootSearchRoll: $("#atlasLootSearchRoll"), atlasLootSearchResultList: $("#atlasLootSearchResultList"),
+    atlasSceneDialog: $("#atlasSceneDialog"), atlasSceneForm: $("#atlasSceneForm"), atlasSceneDialogTitle: $("#atlasSceneDialogTitle"), atlasSceneName: $("#atlasSceneName"), atlasSceneParent: $("#atlasSceneParent"), atlasSceneDiscovered: $("#atlasSceneDiscovered"), atlasSceneUnlockEvent: $("#atlasSceneUnlockEvent"), atlasSceneCreateNotebookWrap: $("#atlasSceneCreateNotebookWrap"), atlasSceneCreateNotebook: $("#atlasSceneCreateNotebook"), atlasDeleteScene: $("#atlasDeleteScene"), atlasSceneSourceFieldset: $("#atlasSceneSourceFieldset"), atlasSceneEditDungeon: $("#atlasSceneEditDungeon"),
+    atlasMarkerDialog: $("#atlasMarkerDialog"), atlasMarkerForm: $("#atlasMarkerForm"), atlasMarkerDialogTitle: $("#atlasMarkerDialogTitle"), atlasMarkerName: $("#atlasMarkerName"), atlasMarkerCategory: $("#atlasMarkerCategory"), atlasMarkerAlias: $("#atlasMarkerAlias"), atlasMarkerDisposition: $("#atlasMarkerDisposition"), atlasNpcFields: $("#atlasNpcFields"), atlasMarkerVisibility: $("#atlasMarkerVisibility"), atlasMarkerUnlockEvent: $("#atlasMarkerUnlockEvent"), atlasMarkerSize: $("#atlasMarkerSize"), atlasMarkerSizeValue: $("#atlasMarkerSizeValue"), atlasMarkerSizeUnit: $("#atlasMarkerSizeUnit"), atlasMarkerTargetScene: $("#atlasMarkerTargetScene"), atlasMarkerTargetTree: $("#atlasMarkerTargetTree"), atlasRelatedEntries: $("#atlasRelatedEntries"), atlasRelatedFieldset: $("#atlasRelatedFieldset"), atlasMarkerCreateNotebookWrap: $("#atlasMarkerCreateNotebookWrap"), atlasMarkerCreateNotebook: $("#atlasMarkerCreateNotebook"), atlasMarkerSheetModeWrap: $("#atlasMarkerSheetModeWrap"), atlasOrphanSheets: $("#atlasOrphanSheets"), atlasOrphanSheetList: $("#atlasOrphanSheetList"), atlasMarkerAutoDmSheet: $("#atlasMarkerAutoDmSheet"), atlasMarkerOpenSheet: $("#atlasMarkerOpenSheet"), atlasDeleteMarker: $("#atlasDeleteMarker"),
+    atlasInternalSheetDialog: $("#atlasInternalSheetDialog"), atlasInternalSheetForm: $("#atlasInternalSheetForm"), atlasInternalSheetEditToggle: $("#atlasInternalSheetEditToggle"), atlasInternalSheetTitle: $("#atlasInternalSheetTitle"), atlasInternalSheetKind: $("#atlasInternalSheetKind"), atlasSheetName: $("#atlasSheetName"), atlasSheetStatusWrap: $("#atlasSheetStatusWrap"), atlasSheetStatus: $("#atlasSheetStatus"), atlasSheetCreaturePhotoWrap: $("#atlasSheetCreaturePhotoWrap"), atlasSheetPhotoPreview: $("#atlasSheetPhotoPreview"), atlasSheetPhotoEmpty: $("#atlasSheetPhotoEmpty"), atlasSheetPhotoChoose: $("#atlasSheetPhotoChoose"), atlasSheetPhotoRemove: $("#atlasSheetPhotoRemove"), atlasSheetPhotoInput: $("#atlasSheetPhotoInput"), atlasSheetDescription: $("#atlasSheetDescription"), atlasCreatureSheetSection: $("#atlasCreatureSheetSection"), atlasCreatureModifiers: $("#atlasCreatureModifiers"), atlasCreatureAbilities: $("#atlasCreatureAbilities"), atlasCreatureCombatStyle: $("#atlasCreatureCombatStyle"), atlasCreatureNonAggression: $("#atlasCreatureNonAggression"), atlasCreatureActions: $("#atlasCreatureActions"), atlasCreatureReactions: $("#atlasCreatureReactions"), atlasMerchantSheetSection: $("#atlasMerchantSheetSection"), atlasMerchantItemsList: $("#atlasMerchantItemsList"), atlasMerchantItemName: $("#atlasMerchantItemName"), atlasMerchantItemPrice: $("#atlasMerchantItemPrice"), atlasMerchantItemCurrency: $("#atlasMerchantItemCurrency"), atlasMerchantItemDescription: $("#atlasMerchantItemDescription"), atlasMerchantItemAdd: $("#atlasMerchantItemAdd"), atlasSecretSheetSection: $("#atlasSecretSheetSection"), atlasSecretReveal: $("#atlasSecretReveal"), atlasSecretClues: $("#atlasSecretClues"), atlasSecretCheckType: $("#atlasSecretCheckType"), atlasSecretCheckDc: $("#atlasSecretCheckDc"), atlasSecretSuccess: $("#atlasSecretSuccess"), atlasSecretFailure: $("#atlasSecretFailure"), atlasSecretDiscovered: $("#atlasSecretDiscovered"), atlasMissionSheetSection: $("#atlasMissionSheetSection"), atlasMissionGiver: $("#atlasMissionGiver"), atlasMissionObjective: $("#atlasMissionObjective"), atlasMissionSecondary: $("#atlasMissionSecondary"), atlasMissionReward: $("#atlasMissionReward"), atlasMissionNotes: $("#atlasMissionNotes"), atlasMissionStages: $("#atlasMissionStages"), atlasMissionStageInput: $("#atlasMissionStageInput"), atlasMissionStageAdd: $("#atlasMissionStageAdd"), atlasContainerSheetSection: $("#atlasContainerSheetSection"), atlasContainerTitle: $("#atlasContainerTitle"), atlasContainerCp: $("#atlasContainerCp"), atlasContainerSp: $("#atlasContainerSp"), atlasContainerGp: $("#atlasContainerGp"), atlasContainerPp: $("#atlasContainerPp"), atlasContainerLocked: $("#atlasContainerLocked"), atlasContainerLockDc: $("#atlasContainerLockDc"), atlasContainerKey: $("#atlasContainerKey"), atlasContainerTrapped: $("#atlasContainerTrapped"), atlasContainerTrapCheck: $("#atlasContainerTrapCheck"), atlasContainerTrapDc: $("#atlasContainerTrapDc"), atlasContainerTrapEffect: $("#atlasContainerTrapEffect"), atlasContainerDisarmDc: $("#atlasContainerDisarmDc"), atlasLootSheetSection: $("#atlasLootSheetSection"), atlasSheetLootGroups: $("#atlasSheetLootGroups"), atlasLootName: $("#atlasLootName"), atlasLootQuantity: $("#atlasLootQuantity"), atlasLootCheckType: $("#atlasLootCheckType"), atlasLootCheckDc: $("#atlasLootCheckDc"), atlasLootNotes: $("#atlasLootNotes"), atlasLootAdd: $("#atlasLootAdd"), atlasLootSearchCheck: $("#atlasLootSearchCheck"), atlasLootSearchModifier: $("#atlasLootSearchModifier"), atlasLootSearchResult: $("#atlasLootSearchResult"), atlasLootSearchRoll: $("#atlasLootSearchRoll"), atlasLootSearchResultList: $("#atlasLootSearchResultList"),
     atlasDmSheet: $("#atlasDmSheet"), atlasDmSheetResize: $("#atlasDmSheetResize"), atlasDmSheetTitle: $("#atlasDmSheetTitle"), atlasDmSheetSubtitle: $("#atlasDmSheetSubtitle"), atlasDmSheetClose: $("#atlasDmSheetClose"), atlasDmNpcDispositionBar: $("#atlasDmNpcDispositionBar"), atlasDmNpcDisposition: $("#atlasDmNpcDisposition"), atlasDmEntryPicker: $("#atlasDmEntryPicker"), atlasDmEntrySummary: $("#atlasDmEntrySummary"), atlasDmEntryTree: $("#atlasDmEntryTree"), atlasDmRelatedWrap: $("#atlasDmRelatedWrap"), atlasDmRelatedSelect: $("#atlasDmRelatedSelect"), atlasDmDetailHost: $("#atlasDmDetailHost"), detailPanel: $("#detailPanel"), detailPanelPlaceholder: $("#detailPanelPlaceholder"),
+    atlasNotebookCreateDialog: $("#atlasNotebookCreateDialog"), atlasNotebookCreateForm: $("#atlasNotebookCreateForm"), atlasNotebookCreateName: $("#atlasNotebookCreateName"), atlasNotebookCreateType: $("#atlasNotebookCreateType"), atlasNotebookCreateSubtype: $("#atlasNotebookCreateSubtype"), atlasNotebookCreateChapter: $("#atlasNotebookCreateChapter"), atlasNotebookCreateParent: $("#atlasNotebookCreateParent"),
     atlasTextDialog: $("#atlasTextDialog"), atlasTextForm: $("#atlasTextForm"), atlasTextValue: $("#atlasTextValue"), atlasTextVisible: $("#atlasTextVisible"),
     atlasCategoryDialog: $("#atlasCategoryDialog"), atlasCategoryForm: $("#atlasCategoryForm"), atlasCategoryName: $("#atlasCategoryName"), atlasCategoryIcon: $("#atlasCategoryIcon"),
     playerWaiting: $("#playerWaiting"), playerAtlas: $("#playerAtlas"), playerModeBadge: $("#playerModeBadge"), playerBreadcrumbs: $("#playerBreadcrumbs"), playerMapViewport: $("#playerMapViewport"), playerMapStage: $("#playerMapStage"), playerMerchantPanel: $("#playerMerchantPanel"), leavePlayerMode: $("#leavePlayerMode"), playerZoomOut: $("#playerZoomOut"), playerZoomReset: $("#playerZoomReset"), playerZoomIn: $("#playerZoomIn")
@@ -95,6 +96,8 @@
   let editingInternalSheetId = "";
   let internalSheetDraft = null;
   let pendingOrphanSheetId = "";
+  let internalSheetEditMode = false;
+  let pendingNotebookLink = null;
   let sheetPhotoRenderToken = 0;
   let lanHostPlugin = null;
   let lanHosting = false;
@@ -149,7 +152,7 @@
         }
         if (marker.sheetMode === "internal") {
           const sheet = campaign.atlas.markerSheets.find(item => item.id === marker.internalSheetId);
-          if (sheet) { sheet.markerId = marker.id; sheet.category = marker.category; sheet.kind = markerSheetKind(marker.category) || sheet.kind; if (!sheet.name && marker.name) sheet.name = marker.name; }
+          if (sheet) { if (!sheet.markerId) sheet.markerId = marker.id; sheet.category = marker.category; sheet.kind = markerSheetKind(marker.category) || sheet.kind; if (!sheet.name && marker.name) sheet.name = marker.name; }
           else { marker.sheetMode = ""; marker.internalSheetId = ""; }
         } else if (marker.sheetMode === "notebook") {
           const primary = entryById(marker.primaryEntryId) || marker.relatedEntryIds.map(entryById).find(Boolean);
@@ -158,7 +161,7 @@
         }
       });
     });
-    if (!Array.isArray(campaign.atlas.collapsedSceneIds)) campaign.atlas.collapsedSceneIds = [];
+    if (!Array.isArray(campaign.atlas.collapsedSceneIds)) campaign.atlas.collapsedSceneIds = campaign.atlas.scenes.filter(scene => campaign.atlas.scenes.some(child => child.parentSceneId === scene.id)).map(scene => scene.id);
     const validSceneIds = new Set(campaign.atlas.scenes.map(scene => scene.id));
     campaign.atlas.collapsedSceneIds = [...new Set(campaign.atlas.collapsedSceneIds.filter(id => validSceneIds.has(id)))];
     return campaign.atlas;
@@ -241,13 +244,12 @@
     };
   }
   function markerSheetById(id) { return atlas().markerSheets.find(sheet => sheet.id === id) || null; }
-  function markerForInternalSheet(sheetId) {
-    for (const scene of atlas().scenes) {
-      const marker = scene.markers.find(item => item.internalSheetId === sheetId);
-      if (marker) return { scene, marker };
-    }
-    return null;
+  function markersForInternalSheet(sheetId) {
+    const matches = [];
+    for (const scene of atlas().scenes) scene.markers.forEach(marker => { if (marker.sheetMode === "internal" && marker.internalSheetId === sheetId) matches.push({ scene, marker }); });
+    return matches;
   }
+  function markerForInternalSheet(sheetId) { return markersForInternalSheet(sheetId)[0] || null; }
   function syncMarkerNameFromSheet(marker) {
     if (!marker) return;
     if (marker.sheetMode === "internal") { const sheet = markerSheetById(marker.internalSheetId); if (sheet?.name) marker.name = sheet.name; }
@@ -264,28 +266,21 @@
   function createInternalSheetForMarker(marker, reuseSheetId = "") {
     if (!marker || !supportsInternalMarkerSheet(marker.category)) return null;
     let sheet = reuseSheetId ? markerSheetById(reuseSheetId) : null;
-    if (!sheet) {
-      sheet = defaultMarkerSheet(marker.category, marker.name, marker.id);
-      atlas().markerSheets.push(sheet);
-    }
-    sheet.markerId = marker.id;
-    sheet.category = marker.category;
-    sheet.kind = markerSheetKind(marker.category);
-    sheet.name = marker.name;
-    sheet.orphanedAt = "";
-    sheet.updatedAt = app.now();
-    marker.sheetMode = "internal";
-    marker.internalSheetId = sheet.id;
-    marker.primaryEntryId = "";
+    if (sheet && sheet.category !== marker.category) sheet = null;
+    if (!sheet) { sheet = defaultMarkerSheet(marker.category, marker.name, marker.id); atlas().markerSheets.push(sheet); }
+    if (!sheet.markerId) sheet.markerId = marker.id;
+    sheet.category = marker.category; sheet.kind = markerSheetKind(marker.category);
+    if (!sheet.name && marker.name) sheet.name = marker.name;
+    sheet.orphanedAt = ""; sheet.updatedAt = app.now();
+    marker.sheetMode = "internal"; marker.internalSheetId = sheet.id; marker.primaryEntryId = "";
+    if (!marker.name && sheet.name) marker.name = sheet.name;
     return sheet;
   }
   function orphanInternalSheet(marker) {
-    const sheet = markerSheetById(marker?.internalSheetId);
-    if (!sheet) return;
-    sheet.markerId = "";
-    sheet.orphanedAt = app.now();
-    sheet.updatedAt = app.now();
-    marker.internalSheetId = "";
+    const sheet = markerSheetById(marker?.internalSheetId); if (!sheet) return;
+    const sheetId = sheet.id; marker.internalSheetId = ""; marker.sheetMode = marker.sheetMode === "internal" ? "" : marker.sheetMode;
+    const remaining = markersForInternalSheet(sheetId);
+    sheet.markerId = remaining[0]?.marker?.id || ""; sheet.orphanedAt = remaining.length ? "" : app.now(); sheet.updatedAt = app.now();
   }
   function internalSheetLabel(sheet) {
     const category = categoryMeta(sheet.category);
@@ -1326,7 +1321,6 @@
     const map = childrenMap(scenes, "parentSceneId");
     if (!scenePickerCollapsed.size) {
       scenes.forEach(scene => { if ((map.get(scene.id) || []).length) scenePickerCollapsed.add(scene.id); });
-      (map.get("") || []).forEach(scene => scenePickerCollapsed.delete(scene.id));
     }
     expandSelectedAncestors(new Set(selectedValue && selectedValue !== "__new__" ? [selectedValue] : []), scenes, "parentSceneId", scenePickerCollapsed);
     els.atlasMarkerTargetTree.replaceChildren();
@@ -1379,7 +1373,6 @@
       if (!collapsed) {
         collapsed = new Set();
         entries.forEach(entry => { if ((map.get(entry.id) || []).length) collapsed.add(entry.id); });
-        (map.get("") || []).forEach(entry => collapsed.delete(entry.id));
         relatedPickerCollapsed.set(type, collapsed);
       }
       expandSelectedAncestors(selectedSet, entries, "parentId", collapsed);
@@ -1430,7 +1423,6 @@
     if (!dmEntryCollapsed.size) {
       const allMap = childrenMap(entries, "parentId");
       entries.forEach(entry => { if ((allMap.get(entry.id) || []).length) dmEntryCollapsed.add(entry.id); });
-      (allMap.get("") || []).forEach(entry => dmEntryCollapsed.delete(entry.id));
     }
     expandSelectedAncestors(selectedSet, entries, "parentId", dmEntryCollapsed);
 
@@ -1514,7 +1506,7 @@
     if (!form) return;
     form.classList.remove("is-panel");
     if (els.atlasInternalSheetDialog && form.parentElement !== els.atlasInternalSheetDialog) els.atlasInternalSheetDialog.append(form);
-    if (discard) { editingInternalSheetId = ""; internalSheetDraft = null; }
+    if (discard) { editingInternalSheetId = ""; internalSheetDraft = null; internalSheetEditMode = false; }
   }
 
 
@@ -1601,6 +1593,7 @@
     internalSheetDraft = app.clone(sheet);
     fillInternalSheetCheckOptions();
     loadInternalSheetForm();
+    setInternalSheetEditMode(false);
     dmSheetMode = "internal";
     dmSheetOpen = true;
     els.atlasDmSheet.hidden = false;
@@ -1608,7 +1601,7 @@
     if (els.atlasInternalSheetDialog?.open) els.atlasInternalSheetDialog.close();
     const meta = categoryMeta(sheet.category);
     if (els.atlasDmSheetTitle) els.atlasDmSheetTitle.textContent = `${meta.icon} ${sheet.name || meta.label}`;
-    if (els.atlasDmSheetSubtitle) els.atlasDmSheetSubtitle.textContent = `${meta.label} · ficha interna privada del Atlas`;
+    if (els.atlasDmSheetSubtitle) { const count = markersForInternalSheet(sheet.id).length; els.atlasDmSheetSubtitle.textContent = `${meta.label} · ficha interna privada del Atlas${count > 1 ? ` · compartida por ${count} marcadores` : ""}`; }
     const picker = els.atlasDmEntryPicker?.closest(".atlas-dm-sheet__picker");
     if (picker) picker.hidden = true;
     els.atlasDmDetailHost.replaceChildren();
@@ -1645,12 +1638,50 @@
     return groups + (legacy.length ? `<optgroup label="Sin capítulo">${legacy.map(event => `<option value="${event.id}">${event.status === "occurred" ? "✓" : "⌁"} ${app.escapeHtml(event.title)}</option>`).join("")}</optgroup>` : "");
   }
 
+  function notebookSuggestion(link = {}) {
+    const markerMap = {
+      merchant: ["creatures", "vendor"], mission: ["quests", "main"], secret: ["things", "information"], treasure: ["things", "treasure"], chest: ["things", "treasure"],
+      shop: ["locations", "shop"], city: ["locations", "settlement"], world: ["locations", "world"], castle: ["locations", "castle"], ruins: ["locations", "dungeon"], dungeon: ["locations", "dungeon"], tavern: ["locations", "building"], temple: ["locations", "building"], camp: ["locations", "landmark"], road: ["locations", "route"], place: ["locations", "other"], poi: ["locations", "landmark"]
+    };
+    if (link.kind === "scene") return ["locations", "scene"];
+    return markerMap[link.categoryId] || ["things", "information"];
+  }
+
+  function renderNotebookCreateSubtype() {
+    if (!els.atlasNotebookCreateType || !els.atlasNotebookCreateSubtype) return;
+    const types = app.getTypes(), meta = types[els.atlasNotebookCreateType.value] || types.things;
+    els.atlasNotebookCreateSubtype.innerHTML = meta.subtypes.map(([id, icon, label]) => `<option value="${id}">${app.escapeHtml(icon)} ${app.escapeHtml(label)}</option>`).join("");
+    const wanted = pendingNotebookLink?.suggestedSubtype || ""; if ([...els.atlasNotebookCreateSubtype.options].some(option => option.value === wanted)) els.atlasNotebookCreateSubtype.value = wanted;
+    renderNotebookCreateParents();
+  }
+  function renderNotebookCreateParents() {
+    if (!els.atlasNotebookCreateParent || !els.atlasNotebookCreateType) return; const type = els.atlasNotebookCreateType.value;
+    const list = (state().entries || []).filter(entry => entry.type === type); const byParent = new Map(); list.forEach(entry => { const parent = list.some(item => item.id === entry.parentId) ? entry.parentId : ""; if (!byParent.has(parent)) byParent.set(parent, []); byParent.get(parent).push(entry); });
+    byParent.forEach(items => items.sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0)||a.name.localeCompare(b.name,"es"))); const options=[]; const walk=(id,depth)=>{ (byParent.get(id)||[]).forEach(entry=>{ options.push(`<option value="${entry.id}">${"— ".repeat(depth)}${app.escapeHtml(entry.name)}</option>`); walk(entry.id,depth+1); }); }; walk("",0);
+    els.atlasNotebookCreateParent.innerHTML = '<option value="">Raíz / sin padre</option>' + options.join("");
+  }
+  function openNotebookCreateDialog(link) {
+    if (!els.atlasNotebookCreateDialog || !els.atlasNotebookCreateForm) return; pendingNotebookLink = { ...link }; const types=app.getTypes(); const [suggestedType,suggestedSubtype]=notebookSuggestion(link); pendingNotebookLink.suggestedSubtype=suggestedSubtype;
+    els.atlasNotebookCreateName.value = String(link.name || "Nueva ficha").slice(0,100); els.atlasNotebookCreateType.innerHTML = Object.entries(types).map(([id,meta])=>`<option value="${id}">${app.escapeHtml(meta.icon)} ${app.escapeHtml(meta.label)}</option>`).join(""); els.atlasNotebookCreateType.value=suggestedType;
+    const chapters=state().history?.chapters||[]; els.atlasNotebookCreateChapter.innerHTML='<option value="">Sin capítulo</option>'+chapters.map(ch=>`<option value="${ch.id}">${app.escapeHtml(ch.title)}</option>`).join(""); els.atlasNotebookCreateChapter.value=state().history?.selectedChapterId||""; renderNotebookCreateSubtype();
+    els.atlasNotebookCreateDialog.showModal(); setTimeout(()=>els.atlasNotebookCreateName.focus(),0);
+  }
+  function closeNotebookCreateDialog() { const link = pendingNotebookLink; els.atlasNotebookCreateDialog?.close?.(); pendingNotebookLink=null; if (link?.openDungeonAfter) setTimeout(() => window.ForjaDungeon?.open?.(link.sceneId), 0); }
+  function saveNotebookCreateDialog(event) {
+    event.preventDefault(); const link=pendingNotebookLink; if (!link) return; const entry=app.createNotebookEntry?.({ type: els.atlasNotebookCreateType.value, name: els.atlasNotebookCreateName.value.trim(), subtype: els.atlasNotebookCreateSubtype.value, parentId: els.atlasNotebookCreateParent.value, chapterId: els.atlasNotebookCreateChapter.value }); if (!entry) return;
+    if (link.kind === "scene") { const scene=sceneById(link.sceneId); if (scene) { scene.dmEntryIds=orderedEntryIds([...(scene.dmEntryIds||[]),entry.id]); scene.dmEntryId ||= entry.id; scene.updatedAt=app.now(); } }
+    if (link.kind === "marker") { const scene=sceneById(link.sceneId), marker=scene?.markers?.find(item=>item.id===link.markerId); if (marker) { marker.relatedEntryIds=orderedEntryIds([...(marker.relatedEntryIds||[]),entry.id]); if (marker.sheetMode !== "internal") { marker.sheetMode="notebook"; marker.primaryEntryId=entry.id; } } }
+    save({render:true}); closeNotebookCreateDialog();
+  }
+
   function openSceneDialog(sceneId = "") {
     editingSceneId = sceneId;
     const editing = sceneById(sceneId);
     els.atlasSceneDialogTitle.textContent = editing ? "Editar escena" : "Nueva escena";
     els.atlasSceneName.value = editing?.name || "";
     els.atlasSceneDiscovered.checked = editing?.discovered ?? false;
+    if (els.atlasSceneCreateNotebook) els.atlasSceneCreateNotebook.checked = false;
+    if (els.atlasSceneCreateNotebookWrap) els.atlasSceneCreateNotebookWrap.hidden = Boolean(editing && linkedEntryIdsForScene(editing).length);
     if (els.atlasSceneUnlockEvent) {
       const isRootScene = Boolean(editing && atlas().scenes[0]?.id === editing.id);
       els.atlasSceneUnlockEvent.innerHTML = '<option value="">Visible para el DM desde el principio</option>' + historyUnlockOptions();
@@ -1678,6 +1709,7 @@
     const isNew = !scene;
     const previousCurrentId = atlas().currentSceneId;
     const source = $("input[name='atlasSceneSource']:checked")?.value || "image";
+    const createNotebook = Boolean(els.atlasSceneCreateNotebook?.checked);
     const rootSceneId = atlas().scenes[0]?.id || "";
     const unlockEventId = editingSceneId && editingSceneId === rootSceneId ? "" : String(els.atlasSceneUnlockEvent?.value || "");
     if (scene) {
@@ -1692,7 +1724,8 @@
     els.atlasSceneDialog.close();
     save({ render: true });
     document.dispatchEvent(new CustomEvent("forja:historychange"));
-    if (isNew && source === "dungeon" && sceneIsUnlocked(scene)) setTimeout(() => window.ForjaDungeon?.open?.(scene.id), 0);
+    if (createNotebook && !linkedEntryIdsForScene(scene).length) setTimeout(() => openNotebookCreateDialog({ kind: "scene", sceneId: scene.id, name: scene.name, openDungeonAfter: isNew && source === "dungeon" && sceneIsUnlocked(scene) }), 0);
+    else if (isNew && source === "dungeon" && sceneIsUnlocked(scene)) setTimeout(() => window.ForjaDungeon?.open?.(scene.id), 0);
   }
 
   function deleteScene() {
@@ -1700,10 +1733,15 @@
     if (!scene || atlas().scenes.length === 1) return;
     const ids = new Set([scene.id, ...descendantsOfScene(scene.id)]);
     if (!confirm(`¿Eliminar “${scene.name}” y ${ids.size - 1} escenas interiores?`)) return;
+    const affectedInternalSheetIds = new Set();
     atlas().scenes.filter(item => ids.has(item.id)).forEach(item => item.markers.forEach(marker => {
-      if (marker.sheetMode === "internal" && marker.internalSheetId) { const sheet = markerSheetById(marker.internalSheetId); if (sheet) { sheet.markerId = ""; sheet.orphanedAt = app.now(); sheet.updatedAt = app.now(); } }
+      if (marker.sheetMode === "internal" && marker.internalSheetId) affectedInternalSheetIds.add(marker.internalSheetId);
     }));
     atlas().scenes = atlas().scenes.filter(item => !ids.has(item.id));
+    affectedInternalSheetIds.forEach(sheetId => {
+      const sheet = markerSheetById(sheetId); if (!sheet) return;
+      const remaining = markersForInternalSheet(sheetId); sheet.markerId = remaining[0]?.marker?.id || ""; sheet.orphanedAt = remaining.length ? "" : app.now(); sheet.updatedAt = app.now();
+    });
     atlas().scenes.forEach(item => item.markers.forEach(marker => { if (ids.has(marker.targetSceneId)) marker.targetSceneId = ""; }));
     atlas().currentSceneId = scene.parentSceneId && !ids.has(scene.parentSceneId) ? scene.parentSceneId : atlas().scenes[0].id;
     if (ids.has(atlas().projectionSceneId)) atlas().projectionSceneId = atlas().currentSceneId;
@@ -1723,28 +1761,18 @@
 
   function renderOrphanSheets(category = els.atlasMarkerCategory?.value || "") {
     if (!els.atlasOrphanSheetList || !els.atlasOrphanSheets) return;
-    const kind = markerSheetKind(category);
-    const sheets = atlas().markerSheets.filter(sheet => !sheet.markerId && (!kind || sheet.kind === kind));
+    const sheets = atlas().markerSheets.filter(sheet => sheet.category === category);
     els.atlasOrphanSheetList.replaceChildren();
-    if (!sheets.length) {
-      const empty = document.createElement("p"); empty.className = "dialog-intro"; empty.textContent = "No hay fichas antiguas disponibles para este tipo de marcador."; els.atlasOrphanSheetList.append(empty); return;
-    }
-    sheets.sort((a, b) => String(b.orphanedAt || b.updatedAt || "").localeCompare(String(a.orphanedAt || a.updatedAt || ""))).forEach(sheet => {
+    if (!sheets.length) { const empty = document.createElement("p"); empty.className = "dialog-intro"; empty.textContent = "No hay fichas internas disponibles para esta categoría."; els.atlasOrphanSheetList.append(empty); return; }
+    sheets.sort((a,b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || ""))).forEach(sheet => {
+      const linked = markersForInternalSheet(sheet.id);
       const row = document.createElement("div"); row.className = `atlas-orphan-sheet${pendingOrphanSheetId === sheet.id ? " is-selected" : ""}`;
-      const info = document.createElement("div");
-      const strong = document.createElement("strong"); strong.textContent = internalSheetLabel(sheet);
-      const small = document.createElement("small"); small.textContent = sheet.orphanedAt ? `Conservada · ${new Date(sheet.orphanedAt).toLocaleDateString("es-ES")}` : "Ficha sin marcador";
-      info.append(strong, small);
+      const info = document.createElement("div"); const strong = document.createElement("strong"); strong.textContent = internalSheetLabel(sheet);
+      const small = document.createElement("small"); small.textContent = linked.length ? `Usada por ${linked.length} marcador${linked.length===1?"":"es"} · se puede compartir` : "Ficha interna sin marcador"; info.append(strong, small);
       const actions = document.createElement("div"); actions.className = "atlas-sheet-photo-actions";
-      const open = document.createElement("button"); open.type = "button"; open.className = "button button--quiet"; open.textContent = "Abrir";
-      open.addEventListener("click", () => openInternalSheetPanel(sheet.id));
+      const open = document.createElement("button"); open.type = "button"; open.className = "button button--quiet"; open.textContent = "Abrir"; open.addEventListener("click", () => openInternalSheetPanel(sheet.id));
       const button = document.createElement("button"); button.type = "button"; button.className = "button button--quiet"; button.textContent = pendingOrphanSheetId === sheet.id ? "Seleccionada" : "Usar esta ficha";
-      button.addEventListener("click", () => {
-        pendingOrphanSheetId = sheet.id;
-        const radio = $("input[name='atlasMarkerSheetMode'][value='internal']", els.atlasMarkerForm); if (radio) radio.checked = true;
-        if (!els.atlasMarkerName.value.trim()) els.atlasMarkerName.value = sheet.name;
-        renderMarkerSheetMode();
-      });
+      button.addEventListener("click", () => { pendingOrphanSheetId = sheet.id; const radio = $("input[name='atlasMarkerSheetMode'][value='internal']", els.atlasMarkerForm); if (radio) radio.checked = true; if (!els.atlasMarkerName.value.trim() && sheet.name) els.atlasMarkerName.value = sheet.name; renderMarkerSheetMode(); });
       actions.append(open, button); row.append(info, actions); els.atlasOrphanSheetList.append(row);
     });
   }
@@ -1931,6 +1959,39 @@
     els.atlasMerchantItemName?.focus();
   }
 
+  function isControlBlank(control) {
+    if (control.type === "checkbox" || control.type === "radio") return !control.checked;
+    if (control.tagName === "SELECT") return !String(control.value || "").trim();
+    return !String(control.value ?? "").trim();
+  }
+  function refreshInternalSheetViewVisibility() {
+    const form = els.atlasInternalSheetForm, sheet = internalSheetDraft; if (!form || !sheet) return;
+    form.querySelectorAll(".view-hide").forEach(node => node.classList.remove("view-hide"));
+    if (internalSheetEditMode) return;
+    form.querySelectorAll("label").forEach(label => {
+      const controls = [...label.querySelectorAll("input,textarea,select")].filter(control => !["atlasSheetPhotoInput"].includes(control.id));
+      if (controls.length && controls.every(isControlBlank)) label.classList.add("view-hide");
+    });
+    if (!sheet.imageId) els.atlasSheetCreaturePhotoWrap?.classList.add("view-hide");
+    if (!(sheet.loot || []).length) els.atlasLootSheetSection?.classList.add("view-hide");
+    if (sheet.category === "merchant" && !(sheet.vendorItems || []).length) els.atlasMerchantSheetSection?.classList.add("view-hide");
+    if (sheet.kind === "creature") { const hasStats = Object.values(sheet.stats || {}).some(value => value !== "" && value !== null && value !== undefined); const hasText = [sheet.modifiers, sheet.abilities, sheet.combatStyle, sheet.nonAggression, sheet.actions, sheet.reactions].some(value => String(value || "").trim()); if (!hasStats && !hasText) els.atlasCreatureSheetSection?.classList.add("view-hide"); }
+    form.querySelectorAll(".atlas-sheet-inline-add,.atlas-sheet-photo-actions").forEach(node => node.classList.add("view-hide"));
+    const statGroups = [form.querySelector(".atlas-sheet-stats-primary"), form.querySelector(".atlas-sheet-abilities"), form.querySelector(".atlas-sheet-text-grid")].filter(Boolean);
+    statGroups.forEach(group => { const labels=[...group.querySelectorAll(":scope > label")]; if (labels.length && labels.every(label=>label.classList.contains("view-hide"))) group.classList.add("view-hide"); });
+    [els.atlasCreatureSheetSection, els.atlasSecretSheetSection, els.atlasMissionSheetSection, els.atlasContainerSheetSection].filter(Boolean).forEach(section => {
+      const visibleContent=[...section.querySelectorAll("label,.atlas-sheet-stats-primary,.atlas-sheet-abilities,.atlas-sheet-text-grid,.atlas-sheet-stage-list,.atlas-sheet-subcollection")].some(node=>!node.classList.contains("view-hide") && !node.hidden);
+      if (!visibleContent && section !== els.atlasCreatureSheetSection) section.classList.add("view-hide");
+    });
+  }
+  function setInternalSheetEditMode(editing) {
+    const form=els.atlasInternalSheetForm; if (!form) return; internalSheetEditMode=Boolean(editing); form.classList.toggle("is-view-mode", !internalSheetEditMode);
+    const exempt = new Set([els.atlasInternalSheetEditToggle, ...$$('.atlas-internal-sheet-close', form)]);
+    form.querySelectorAll("input,textarea,select,button").forEach(control => { if (!exempt.has(control)) control.disabled = !internalSheetEditMode; });
+    if (els.atlasInternalSheetEditToggle) { els.atlasInternalSheetEditToggle.textContent = internalSheetEditMode ? "✓" : "✎"; els.atlasInternalSheetEditToggle.title = internalSheetEditMode ? "Terminar edición" : "Editar ficha"; els.atlasInternalSheetEditToggle.setAttribute("aria-label", els.atlasInternalSheetEditToggle.title); }
+    refreshInternalSheetViewVisibility();
+  }
+
   function loadInternalSheetForm() {
     const sheet = internalSheetDraft; if (!sheet) return;
     const kind = sheet.kind;
@@ -1995,19 +2056,16 @@
     const index = atlas().markerSheets.findIndex(sheet => sheet.id === editingInternalSheetId);
     if (index < 0) return;
     atlas().markerSheets[index] = normaliseMarkerSheet(draft);
-    const linked = markerForInternalSheet(editingInternalSheetId);
-    if (linked?.marker) {
-      linked.marker.name = draft.name;
-      linked.marker.category = draft.category;
-      linked.marker.icon = categoryMeta(draft.category).icon;
-    }
+    const linked = markersForInternalSheet(editingInternalSheetId);
+    linked.forEach(({ marker }) => { marker.name = draft.name; marker.category = draft.category; marker.icon = categoryMeta(draft.category).icon; });
     save({ render: true });
     if (dmSheetMode === "internal") {
       internalSheetDraft = app.clone(atlas().markerSheets[index]);
       loadInternalSheetForm();
+      setInternalSheetEditMode(false);
       const meta = categoryMeta(internalSheetDraft.category);
       if (els.atlasDmSheetTitle) els.atlasDmSheetTitle.textContent = `${meta.icon} ${internalSheetDraft.name || "NPC sin nombre"}`;
-      if (els.atlasDmSheetSubtitle) els.atlasDmSheetSubtitle.textContent = `${meta.label} · ficha guardada · solo DM`;
+      if (els.atlasDmSheetSubtitle) { const count = markersForInternalSheet(editingInternalSheetId).length; els.atlasDmSheetSubtitle.textContent = `${meta.label} · ficha guardada · solo DM${count > 1 ? ` · compartida por ${count} marcadores` : ""}`; }
       const submit = els.atlasInternalSheetForm.querySelector('button[type="submit"]');
       if (submit) { const oldText = submit.textContent; submit.textContent = "Guardada ✓"; setTimeout(() => { if (submit.isConnected) submit.textContent = oldText; }, 1100); }
       return;
@@ -2019,6 +2077,8 @@
     const isNpc = els.atlasMarkerCategory?.value === "npc";
     if (els.atlasNpcFields) els.atlasNpcFields.hidden = !isNpc;
     if (els.atlasMarkerName) els.atlasMarkerName.required = !isNpc;
+    if (els.atlasMarkerCreateNotebookWrap) els.atlasMarkerCreateNotebookWrap.hidden = isNpc || Boolean(markerDialogScene()?.markers.find(item => item.id === editingMarkerId)?.relatedEntryIds?.length);
+    if (isNpc && els.atlasMarkerCreateNotebook) els.atlasMarkerCreateNotebook.checked = false;
     const scene = markerDialogScene();
     if (els.atlasMarkerSizeUnit) els.atlasMarkerSizeUnit.textContent = scene?.mapProject?.widthCells ? "m" : "u";
     if (els.atlasMarkerSizeValue) els.atlasMarkerSizeValue.value = `${Number(els.atlasMarkerSize?.value || 1).toFixed(Number(els.atlasMarkerSize?.value || 1) % 1 ? 2 : 0)}`;
@@ -2032,6 +2092,7 @@
     const marker = markerDialogScene()?.markers.find(item => item.id === markerId);
     renderCategories();
     els.atlasMarkerDialogTitle.textContent = marker ? "Editar marcador" : "Nuevo marcador";
+    if (els.atlasMarkerCreateNotebook) els.atlasMarkerCreateNotebook.checked = false;
     els.atlasMarkerName.value = marker?.name || "";
     els.atlasMarkerCategory.value = marker?.category || "place";
     if (els.atlasMarkerAlias) els.atlasMarkerAlias.value = marker?.alias || "";
@@ -2053,6 +2114,7 @@
     if (els.atlasMarkerAutoDmSheet) els.atlasMarkerAutoDmSheet.checked = Boolean(marker?.autoOpenDmSheet);
     els.atlasDeleteMarker.hidden = !marker;
     renderMarkerSheetMode(marker);
+    if (els.atlasMarkerCreateNotebookWrap) els.atlasMarkerCreateNotebookWrap.hidden = els.atlasMarkerCategory.value === "npc" || Boolean(marker?.relatedEntryIds?.length);
     els.atlasMarkerDialog.showModal();
     setTimeout(() => (els.atlasMarkerCategory.value === "npc" ? els.atlasMarkerAlias : els.atlasMarkerName)?.focus(), 0);
   }
@@ -2064,10 +2126,11 @@
     const previousTargetSceneId = marker?.targetSceneId || "";
     const previousInternalSheetId = marker?.internalSheetId || "";
     const category = categoryMeta(els.atlasMarkerCategory.value);
+    const createNotebook = category.id !== "npc" && Boolean(els.atlasMarkerCreateNotebook?.checked);
     const relatedEntryIds = orderedEntryIds($$('input[type="checkbox"]:checked', els.atlasRelatedEntries).map(input => input.value));
     const supported = supportsInternalMarkerSheet(category.id);
     const requestedMode = supported ? currentMarkerSheetMode() : (relatedEntryIds.length ? "notebook" : "");
-    if (supported && requestedMode === "notebook" && !relatedEntryIds.length) { alert("Elige al menos una ficha del Cuaderno para usarla como ficha principal del marcador."); return; }
+    if (supported && requestedMode === "notebook" && !relatedEntryIds.length && !createNotebook) { alert("Elige al menos una ficha del Cuaderno o marca «Crear además una ficha en el Cuaderno»."); return; }
     let targetSceneId = els.atlasMarkerTargetScene.value;
     if (targetSceneId === "__new__") {
       const child = { id: app.uid(), name: els.atlasMarkerName.value.trim() || els.atlasMarkerAlias?.value.trim() || "Nueva escena", parentSceneId: scene.id, imageId: "", imageName: "", imageType: "", imageWidth: 1600, imageHeight: 900, sourceType: "image", mapProject: null, discovered: els.atlasMarkerVisibility.value === "discovered", unlockEventId: "", markers: [], objects: [], fogBase: "covered", fogStrokes: [], fogZones: [], createdAt: app.now(), updatedAt: app.now() };
@@ -2090,7 +2153,7 @@
       if (pendingOrphanSheetId && previousInternalSheetId && previousInternalSheetId !== pendingOrphanSheetId) { marker.internalSheetId = previousInternalSheetId; orphanInternalSheet(marker); }
       else if (previousInternalSheetId) marker.internalSheetId = previousInternalSheetId;
       createInternalSheetForMarker(marker, pendingOrphanSheetId || marker.internalSheetId);
-      const sheet = markerSheetById(marker.internalSheetId); if (sheet) { sheet.name = marker.name; sheet.category = marker.category; sheet.kind = markerSheetKind(marker.category); sheet.updatedAt = app.now(); }
+      const sheet = markerSheetById(marker.internalSheetId); if (sheet) { if (!pendingOrphanSheetId || markersForInternalSheet(sheet.id).length <= 1) sheet.name = marker.name; sheet.category = marker.category; sheet.kind = markerSheetKind(marker.category); sheet.updatedAt = app.now(); }
     } else {
       if (previousInternalSheetId) { marker.internalSheetId = previousInternalSheetId; orphanInternalSheet(marker); }
       marker.internalSheetId = "";
@@ -2103,6 +2166,7 @@
     if (patch.visibility === "discovered" && targetSceneId) { const target = sceneById(targetSceneId); if (target) target.discovered = true; }
     els.atlasMarkerDialog.close(); selectTool("select"); save({ render: true });
     document.dispatchEvent(new CustomEvent("forja:historychange"));
+    if (createNotebook && !(marker.relatedEntryIds || []).length) setTimeout(() => openNotebookCreateDialog({ kind: "marker", sceneId: scene.id, markerId: marker.id, name: marker.name || marker.alias || category.label, categoryId: marker.category }), 0);
   }
 
   function deleteMarker() {
@@ -2113,9 +2177,14 @@
     if (marker.sheetMode === "internal" && marker.internalSheetId) {
       const sheet = markerSheetById(marker.internalSheetId);
       if (sheet) {
-        const removeSheet = confirm("Este marcador tiene una ficha interna.\n\nAceptar: eliminar también la ficha.\nCancelar: conservarla en «Antiguas fichas creadas no relacionadas con ningún marcador».");
-        if (removeSheet) atlas().markerSheets = atlas().markerSheets.filter(item => item.id !== sheet.id);
-        else { sheet.markerId = ""; sheet.orphanedAt = app.now(); sheet.updatedAt = app.now(); }
+        const linked = markersForInternalSheet(sheet.id);
+        if (linked.length <= 1) {
+          const removeSheet = confirm("Este marcador es el último que usa su ficha interna.\n\nAceptar: eliminar también la ficha.\nCancelar: conservarla como ficha interna disponible.");
+          if (removeSheet) atlas().markerSheets = atlas().markerSheets.filter(item => item.id !== sheet.id);
+          else { sheet.markerId = ""; sheet.orphanedAt = app.now(); sheet.updatedAt = app.now(); }
+        } else {
+          const remaining = linked.filter(item => item.marker.id !== marker.id); sheet.markerId = remaining[0]?.marker?.id || ""; sheet.orphanedAt = ""; sheet.updatedAt = app.now();
+        }
       }
     }
     scene.markers = scene.markers.filter(item => item.id !== marker.id);
@@ -3135,6 +3204,9 @@
     els.atlasMapViewport.addEventListener("dblclick", event => { if (!event.target.closest(".atlas-marker,.atlas-fog-zone")) setAtlasZoom(1, { resetPosition: true }); });
 
     els.atlasSceneForm.addEventListener("submit", saveSceneDialog); els.atlasDeleteScene.addEventListener("click", deleteScene);
+    els.atlasNotebookCreateForm?.addEventListener("submit", saveNotebookCreateDialog);
+    els.atlasNotebookCreateType?.addEventListener("change", () => { if (pendingNotebookLink) pendingNotebookLink.suggestedSubtype = ""; renderNotebookCreateSubtype(); });
+    $$(".atlas-notebook-create-close,.atlas-notebook-create-cancel").forEach(button => button.addEventListener("click", closeNotebookCreateDialog));
     $$(".atlas-scene-dialog-close,.atlas-scene-dialog-cancel").forEach(button => button.addEventListener("click", () => els.atlasSceneDialog.close()));
     els.atlasMarkerForm.addEventListener("submit", saveMarkerDialog); els.atlasDeleteMarker.addEventListener("click", deleteMarker);
     els.atlasMerchantItemAdd?.addEventListener("click", addInternalMerchantItem);
@@ -3145,6 +3217,10 @@
     $$(".atlas-marker-dialog-close,.atlas-marker-dialog-cancel").forEach(button => button.addEventListener("click", () => els.atlasMarkerDialog.close()));
 
     els.atlasInternalSheetForm?.addEventListener("submit", saveInternalSheetDialog);
+    els.atlasInternalSheetEditToggle?.addEventListener("click", () => {
+      if (internalSheetEditMode) { const draft = collectInternalSheetForm(); if (draft) { const index=atlas().markerSheets.findIndex(sheet=>sheet.id===editingInternalSheetId); if (index>=0) { atlas().markerSheets[index]=normaliseMarkerSheet(draft); markersForInternalSheet(editingInternalSheetId).forEach(({marker})=>{ marker.name=draft.name; }); save({render:true}); internalSheetDraft=app.clone(atlas().markerSheets[index]); loadInternalSheetForm(); } } setInternalSheetEditMode(false); }
+      else setInternalSheetEditMode(true);
+    });
     $$('[data-sheet-stat]', els.atlasCreatureSheetSection).forEach(input => input.addEventListener("input", () => {
       if (["str", "dex", "con", "int", "wis", "cha"].includes(input.dataset.sheetStat)) syncInternalCreatureModifiers();
     }));

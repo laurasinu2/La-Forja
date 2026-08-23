@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.10.0" />
+  <link rel="stylesheet" href="styles.css?v=2.11.0" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -121,6 +121,7 @@
           <button id="clearSearch" class="mini-button" type="button" title="Limpiar búsqueda">×</button>
         </div>
         <nav id="collectionTabs" class="collection-tabs" aria-label="Categorías del cuaderno"></nav>
+        <label class="notebook-chapter-filter"><span>Capítulo</span><select id="notebookChapterFilter" aria-label="Filtrar Cuaderno por capítulo"></select></label>
         <div id="connectionModeBanner" class="connection-mode-banner" hidden>
           <span id="selectionModeText"><strong>Modo conexión:</strong> pulsa cualquier entrada de las cinco columnas.</span>
           <button id="cancelConnectionBanner" class="button button--quiet" type="button">Cancelar</button>
@@ -146,6 +147,10 @@
               <label class="select-field select-field--status">
                 <span>Estado</span>
                 <select id="entryStatus" aria-label="Estado de la entrada"></select>
+              </label>
+              <label class="select-field select-field--chapter">
+                <span>Capítulo</span>
+                <select id="entryChapter" aria-label="Capítulo de la ficha"></select>
               </label>
               <button id="duplicateBtn" class="button button--quiet" type="button">Duplicar</button>
               <button id="deleteBtn" class="button button--danger" type="button">Eliminar</button>
@@ -408,6 +413,7 @@
                 <option value="story">📖 Suceso</option><option value="combat">⚔ Combate</option><option value="investigation">🔎 Investigación</option><option value="conversation">💬 Conversación</option><option value="objective">🎯 Objetivo</option><option value="decision">❗ Decisión</option><option value="discovery">🗺 Descubrimiento</option><option value="milestone">👑 Evento importante</option>
               </select></label>
               <label class="history-field">Descripción<textarea id="historyEventDescription" rows="5" maxlength="6000" placeholder="Qué puede ocurrir, pistas, consecuencias, notas para el DM…"></textarea></label>
+              <div class="history-node-chapter-row"><label class="history-field">Capítulo<select id="historyMoveChapter"></select></label><button id="historyMoveNodeChapter" class="button button--quiet" type="button">Mover nodo</button></div>
 
               <section class="history-panel">
                 <div class="history-panel__heading"><div><h3>Padres del nodo</h3><p>Cuando los padres seleccionados hayan ocurrido, este nodo se desbloquea.</p></div><label>Condición<select id="historyRequirementMode"><option value="all">Deben ocurrir todos</option><option value="any">Puede ocurrir cualquiera</option></select></label></div>
@@ -427,13 +433,14 @@
 
               <section class="history-panel">
                 <div class="history-panel__heading"><div><h3>Referencias de campaña</h3><p>Enlaza este nodo con fichas del Cuaderno, escenas o marcadores del Atlas.</p></div></div>
-                <div class="history-link-add">
+                <div class="history-reference-pickers">
+                  <details class="history-reference-picker"><summary>📖 Añadir ficha del Cuaderno</summary><div id="historyEntryReferenceTree" class="history-reference-tree"></div></details>
+                  <details class="history-reference-picker"><summary>⌖ Añadir escena del Atlas</summary><div id="historySceneReferenceTree" class="history-reference-tree"></div></details>
+                  <details class="history-reference-picker"><summary>📍 Añadir marcador del Atlas</summary><div id="historyMarkerReferenceTree" class="history-reference-tree"></div></details>
+                </div>
+                <div class="history-link-add history-link-add--legacy" hidden>
                   <select id="historyLinkEntrySelect" aria-label="Ficha del Cuaderno"></select><button id="historyAddEntryLink" class="button button--quiet" type="button">+ Cuaderno</button>
-                </div>
-                <div class="history-link-add">
                   <select id="historyLinkSceneSelect" aria-label="Escena del Atlas"></select><button id="historyAddSceneLink" class="button button--quiet" type="button">+ Escena</button>
-                </div>
-                <div class="history-link-add">
                   <select id="historyLinkMarkerSelect" aria-label="Marcador del Atlas"></select><button id="historyAddMarkerLink" class="button button--quiet" type="button">+ Marcador</button>
                 </div>
                 <div id="historyCampaignLinks" class="history-effects"></div>
@@ -908,6 +915,7 @@
       <button id="atlasSceneEditDungeon" type="button" class="button button--quiet" hidden>✎ Abrir editor de mazmorras</button>
       <label>Disponibilidad en el Atlas<select id="atlasSceneUnlockEvent"><option value="">Visible para el DM desde el principio</option></select><small class="field-help">Si eliges un suceso, la escena quedará latente y no aparecerá en el Atlas normal hasta que ese suceso haya ocurrido.</small></label>
       <label class="check-row"><input id="atlasSceneDiscovered" type="checkbox" /> Descubierta por los jugadores</label>
+      <label id="atlasSceneCreateNotebookWrap" class="check-row"><input id="atlasSceneCreateNotebook" type="checkbox" /> Crear y asociar una ficha en el Cuaderno al guardar</label>
       <div class="dialog-actions dialog-actions--split"><button id="atlasDeleteScene" type="button" class="button button--danger" hidden>Eliminar</button><span></span><button type="button" class="button button--quiet atlas-scene-dialog-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
     </form>
   </dialog>
@@ -932,9 +940,10 @@
         <label class="atlas-sheet-mode-choice"><input type="radio" name="atlasMarkerSheetMode" value="notebook" /><span><strong>Con ficha del cuaderno asociada</strong><small>La ficha principal será una entrada ya existente del Cuaderno.</small></span></label>
       </fieldset>
       <fieldset id="atlasRelatedFieldset" class="atlas-related-fieldset"><legend>Relacionar con el cuaderno <small>(opcional)</small></legend><div id="atlasRelatedEntries" class="atlas-related-entries"></div></fieldset>
+      <label id="atlasMarkerCreateNotebookWrap" class="check-row"><input id="atlasMarkerCreateNotebook" type="checkbox" /> Crear además una ficha en el Cuaderno al guardar</label>
       <details id="atlasOrphanSheets" class="atlas-orphan-sheets">
-        <summary>Antiguas fichas creadas no relacionadas con ningún marcador</summary>
-        <p class="dialog-intro">Puedes volver a asociar una ficha conservada a este marcador.</p>
+        <summary>Fichas internas disponibles</summary>
+        <p class="dialog-intro">Puedes reutilizar una ficha privada del Atlas y asociarla a varios marcadores sin añadirla al Cuaderno.</p>
         <div id="atlasOrphanSheetList" class="atlas-orphan-sheet-list"></div>
       </details>
       <label class="check-row atlas-marker-auto-sheet"><input id="atlasMarkerAutoDmSheet" type="checkbox" /> Abrir automáticamente la ficha DM al entrar desde este marcador</label>
@@ -946,7 +955,7 @@
     <form id="atlasInternalSheetForm" class="dialog-card atlas-internal-sheet-card">
       <div class="dialog-card__header">
         <div><h2 id="atlasInternalSheetTitle">Ficha del Atlas</h2><p id="atlasInternalSheetKind" class="atlas-sheet-kind"></p></div>
-        <button type="button" class="icon-button atlas-internal-sheet-close" aria-label="Cerrar">×</button>
+        <div class="atlas-sheet-header-actions"><button id="atlasInternalSheetEditToggle" type="button" class="icon-button" aria-label="Editar ficha" title="Editar ficha">✎</button><button type="button" class="icon-button atlas-internal-sheet-close" aria-label="Cerrar">×</button></div>
       </div>
       <div class="atlas-sheet-top-grid">
         <label>Nombre DM <small>(opcional para NPC)</small><input id="atlasSheetName" maxlength="100" /></label>
@@ -1047,6 +1056,17 @@
     </form>
   </dialog>
 
+  <dialog id="atlasNotebookCreateDialog">
+    <form id="atlasNotebookCreateForm" class="dialog-card">
+      <div class="dialog-card__header"><div><h2>Crear ficha en el Cuaderno</h2><p class="dialog-intro">Elige dónde quieres guardar la ficha asociada.</p></div><button type="button" class="icon-button atlas-notebook-create-close" aria-label="Cerrar">×</button></div>
+      <label>Nombre<input id="atlasNotebookCreateName" maxlength="100" required /></label>
+      <div class="form-grid"><label>Columna<select id="atlasNotebookCreateType"></select></label><label>Clase<select id="atlasNotebookCreateSubtype"></select></label></div>
+      <label>Capítulo<select id="atlasNotebookCreateChapter"></select></label>
+      <label>Dentro de <small>(opcional)</small><select id="atlasNotebookCreateParent"></select></label>
+      <div class="dialog-actions"><button type="button" class="button button--quiet atlas-notebook-create-cancel">Cancelar</button><button class="button" type="submit">Crear y asociar</button></div>
+    </form>
+  </dialog>
+
   <dialog id="atlasTextDialog"><form id="atlasTextForm" class="dialog-card"><div class="dialog-card__header"><h2>Texto del mapa</h2><button type="button" class="icon-button atlas-text-dialog-close">×</button></div><label>Texto<textarea id="atlasTextValue" rows="4" maxlength="300" required></textarea></label><label class="check-row"><input id="atlasTextVisible" type="checkbox" /> Visible para los jugadores</label><div class="dialog-actions"><button type="button" class="button button--quiet atlas-text-dialog-cancel">Cancelar</button><button class="button" type="submit">Añadir</button></div></form></dialog>
 
   <dialog id="atlasCategoryDialog"><form id="atlasCategoryForm" class="dialog-card"><div class="dialog-card__header"><h2>Nueva categoría</h2><button type="button" class="icon-button atlas-category-dialog-close">×</button></div><div class="form-grid"><label>Nombre<input id="atlasCategoryName" maxlength="50" required /></label><label>Símbolo<input id="atlasCategoryIcon" maxlength="8" value="✦" required /></label></div><div class="dialog-actions"><button type="button" class="button button--quiet atlas-category-dialog-cancel">Cancelar</button><button class="button" type="submit">Crear categoría</button></div></form></dialog>
@@ -1064,6 +1084,10 @@
       <label>
         Clase
         <select id="newItemSubtype"></select>
+      </label>
+      <label>
+        Capítulo
+        <select id="newItemChapter"></select>
       </label>
       <label id="parentField">
         Dentro de
@@ -1212,9 +1236,9 @@
     </section>
   </template>
 
-  <script src="app.js?v=2.10.0" defer></script>
-  <script src="history.js?v=2.10.0" defer></script>
-  <script src="atlas.js?v=2.10.0" defer></script>
-  <script src="dungeon.js?v=2.10.0" defer></script>
+  <script src="app.js?v=2.11.0" defer></script>
+  <script src="history.js?v=2.11.0" defer></script>
+  <script src="atlas.js?v=2.11.0" defer></script>
+  <script src="dungeon.js?v=2.11.0" defer></script>
 </body>
 </html>
