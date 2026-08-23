@@ -2962,7 +2962,7 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
 .history-ref-tree-add small { color: var(--muted); font-size: 10px; white-space: nowrap; }
 .history-ref-tree-children { margin-left: 15px; border-left: 1px solid var(--line-soft); padding-left: 4px; }
 
-.atlas-sheet-header-actions { display: flex; gap: 5px; align-items: center; }
+.atlas-sheet-header-actions, .atlas-dm-sheet__header-actions { display: flex; gap: 5px; align-items: center; flex: 0 0 auto; }
 #atlasInternalSheetForm.is-view-mode .view-hide { display: none !important; }
 #atlasInternalSheetForm.is-view-mode label { color: var(--muted); }
 #atlasInternalSheetForm.is-view-mode input:not([type="checkbox"]):not([type="radio"]),

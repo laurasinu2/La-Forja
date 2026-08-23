@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.11.3" />
+  <link rel="stylesheet" href="styles.css?v=2.11.4" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -660,7 +660,10 @@
           <div id="atlasDmSheetResize" class="atlas-dm-sheet__resize" role="separator" aria-orientation="vertical" aria-label="Cambiar ancho de la ficha" title="Arrastra para cambiar el ancho"></div>
           <header class="atlas-dm-sheet__header">
             <div><h2 id="atlasDmSheetTitle">Ficha del cuaderno</h2><small id="atlasDmSheetSubtitle">Solo visible para el DM</small></div>
-            <button id="atlasDmSheetClose" class="icon-button" type="button" aria-label="Cerrar ficha">×</button>
+            <div class="atlas-dm-sheet__header-actions">
+              <button id="atlasDmSheetEdit" class="icon-button" type="button" aria-label="Editar ficha" title="Editar ficha" hidden>✎</button>
+              <button id="atlasDmSheetClose" class="icon-button" type="button" aria-label="Cerrar ficha">×</button>
+            </div>
           </header>
           <div id="atlasDmNpcDispositionBar" class="atlas-dm-npc-disposition" hidden>
             <span>Actitud hacia los PJ</span>
@@ -1236,9 +1239,9 @@
     </section>
   </template>
 
-  <script src="app.js?v=2.11.3" defer></script>
-  <script src="history.js?v=2.11.3" defer></script>
-  <script src="atlas.js?v=2.11.3" defer></script>
-  <script src="dungeon.js?v=2.11.3" defer></script>
+  <script src="app.js?v=2.11.4" defer></script>
+  <script src="history.js?v=2.11.4" defer></script>
+  <script src="atlas.js?v=2.11.4" defer></script>
+  <script src="dungeon.js?v=2.11.4" defer></script>
 </body>
 </html>

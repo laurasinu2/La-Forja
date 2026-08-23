@@ -1,41 +1,8 @@
-# Versión 2.11.3 · Desplazamiento libre del mapa mental
-## Corrección 2.11.3
-- Arrastra cualquier zona vacía del mapa mental para desplazarte por el lienzo.
-- Arrastrar un nodo sigue moviendo sólo ese nodo.
-- Compatible con ratón y pantalla táctil.
-- Mantiene intactas las funciones de la versión 2.11.2.
+# Versión 2.11.4 · Restauración de la ficha privada de NPC
 
-# Versión 2.11.2 · Capítulos heredados por toda la rama del Cuaderno
-## Corrección 2.11.2
-
-- Al cambiar una ficha del Cuaderno de capítulo, todos sus hijos y descendientes se mueven automáticamente al mismo capítulo.
-- No se pregunta ficha por ficha y no hace falta repetir el cambio en cada hijo.
-- Sólo se mueven descendientes reales del árbol (`parentId`); conexiones, referencias de Historia y otras fichas enlazadas no cambian de capítulo.
-- Se mantiene intacto el resto de la v2.11.1.
-
-Esta versión parte de La Forja v2.10.0 y añade:
-
-- Capítulos compartidos entre Historia y Cuaderno.
-- Filtro del Cuaderno por capítulo y selector de capítulo en cada ficha.
-- Cambio de capítulo de nodos de Historia, con opción de mover también sus descendientes.
-- Padres e hijos de Historia entre capítulos diferentes.
-- Referencias de campaña jerárquicas y plegadas por defecto.
-- Creación opcional de fichas del Cuaderno desde escenas y marcadores del Atlas (excepto NPC, que conserva su tratamiento privado).
-- Fichas internas del Atlas reutilizables por varios NPC/marcadores.
-- Vista limpia de fichas internas: los campos vacíos no se muestran y el botón ✎ activa la edición.
-- Árboles jerárquicos del Atlas plegados inicialmente.
-- Nuevas ramas del Cuaderno nacen plegadas; se respeta el estado abierto/cerrado ya guardado en campañas anteriores.
-
-
-## Base heredada: v2.10.0
-
-## Cambio de esta versión
-- **Historia** pasa de tres columnas a un mapa mental editable organizado por capítulos.
-- Puedes crear, renombrar y eliminar capítulos definidos por ti.
-- Cada nodo puede arrastrarse libremente por el mapa y también moverse con controles de dirección.
-- Al marcar un nodo como **Ha ocurrido**, se desbloquean sus hijos directos; si un hijo tiene varios padres puedes exigir todos o cualquiera.
-- Botón **Añadir hijo directo** para construir ramas rápidamente.
-- Cada nodo admite referencias a fichas del **Cuaderno**, escenas del **Atlas** y marcadores del Atlas.
-- Se mantienen los desbloqueos latentes ya existentes: una escena o marcador puede aparecer cuando ocurre un nodo de Historia.
-- Los sucesos de versiones 2.9.x se migran automáticamente a **Capítulo 1** y reciben una posición inicial en el mapa; no se pierden sus estados ni sus vínculos al Atlas.
-- Los desplegables de desbloqueo del Atlas agrupan los nodos por capítulo.
+## Corrección 2.11.4
+- La ficha privada de NPC vuelve a poder editarse desde el panel lateral del Atlas.
+- El botón ✎ se muestra en la cabecera del panel; al pulsarlo reaparecen todos los campos editables, incluidos estadísticas, habilidades, acciones, reacciones, foto e inventario.
+- Al terminar con ✓, la ficha se guarda y vuelve al modo de lectura limpio.
+- En modo lectura sólo se ocultan los campos que de verdad están vacíos.
+- No se modifican Historia, Cuaderno, capítulos, marcadores ni el desplazamiento del mapa mental.
