@@ -1,3 +1,10 @@
+# Versión 2.11.3 · Desplazamiento libre del mapa mental
+## Corrección 2.11.3
+- Arrastra cualquier zona vacía del mapa mental para desplazarte por el lienzo.
+- Arrastrar un nodo sigue moviendo sólo ese nodo.
+- Compatible con ratón y pantalla táctil.
+- Mantiene intactas las funciones de la versión 2.11.2.
+
 # Versión 2.11.2 · Capítulos heredados por toda la rama del Cuaderno
 ## Corrección 2.11.2
 

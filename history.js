@@ -23,6 +23,7 @@
   if (!els.view) return;
 
   let drag = null;
+  let pan = null;
   function campaign() { return app.getState(); }
   function history() {
     const state = campaign();
@@ -151,6 +152,29 @@
   function endDrag(event) {
     if (!drag || event.pointerId !== drag.pointerId) return; drag.el.classList.remove("is-dragging"); if (drag.moved) { const node = eventById(drag.id); if (node) node.updatedAt = app.now(); app.saveState(); }
     setTimeout(() => { drag = null; }, 0);
+  }
+
+  function startPan(event) {
+    if (!els.mapViewport || (event.button !== undefined && event.button !== 0)) return;
+    if (event.target?.closest?.(".history-map-node, button, input, select, textarea, a, label, [contenteditable=\"true\"]")) return;
+    pan = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, scrollLeft: els.mapViewport.scrollLeft, scrollTop: els.mapViewport.scrollTop, moved: false };
+    els.mapViewport.setPointerCapture?.(event.pointerId);
+    els.mapViewport.classList.add("is-panning");
+    event.preventDefault();
+  }
+  function movePan(event) {
+    if (!pan || event.pointerId !== pan.pointerId || !els.mapViewport) return;
+    const dx = event.clientX - pan.startX, dy = event.clientY - pan.startY;
+    if (Math.abs(dx) + Math.abs(dy) > 3) pan.moved = true;
+    els.mapViewport.scrollLeft = pan.scrollLeft - dx;
+    els.mapViewport.scrollTop = pan.scrollTop - dy;
+    if (pan.moved) event.preventDefault();
+  }
+  function endPan(event) {
+    if (!pan || event.pointerId !== pan.pointerId || !els.mapViewport) return;
+    els.mapViewport.classList.remove("is-panning");
+    try { els.mapViewport.releasePointerCapture?.(event.pointerId); } catch (_) {}
+    pan = null;
   }
 
   function effectRow(icon, title, subtitle, actions = []) {
@@ -328,6 +352,7 @@
   els.autoLayout.addEventListener("click", autoLayout); els.centerSelection.addEventListener("click", () => centerOnEvent());
   els.moveLeft.addEventListener("click", () => nudge(-24,0)); els.moveRight.addEventListener("click", () => nudge(24,0)); els.moveUp.addEventListener("click", () => nudge(0,-24)); els.moveDown.addEventListener("click", () => nudge(0,24));
   els.nodeLayer.addEventListener("pointermove", moveDrag); els.nodeLayer.addEventListener("pointerup", endDrag); els.nodeLayer.addEventListener("pointercancel", endDrag);
+  els.mapViewport.addEventListener("pointerdown", startPan); els.mapViewport.addEventListener("pointermove", movePan); els.mapViewport.addEventListener("pointerup", endPan); els.mapViewport.addEventListener("pointercancel", endPan);
   document.addEventListener("forja:campaignchange", render); document.addEventListener("forja:historychange", () => { if (campaign().view === "history") render(); });
   window.ForjaHistory = { render, refreshUnlocks, requirementsMet, eventById, chapterById };
   render();
