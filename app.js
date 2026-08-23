@@ -358,28 +358,70 @@
   }
 
   function defaultHistoryState() {
-    return { selectedEventId: "", events: [] };
+    return { selectedChapterId: "", selectedEventId: "", chapters: [], events: [] };
   }
 
   function normaliseHistoryState(raw = {}) {
     const source = Array.isArray(raw?.events) ? raw.events : [];
     const allowedStatuses = new Set(["locked", "available", "inProgress", "occurred", "discarded"]);
+    const allowedTypes = new Set(["story", "combat", "investigation", "conversation", "objective", "decision", "discovery", "milestone"]);
+    let chapters = Array.isArray(raw?.chapters) ? raw.chapters.map((chapter, index) => ({
+      id: String(chapter?.id || uid()),
+      title: String(chapter?.title || `Capítulo ${index + 1}`).slice(0, 100),
+      order: Number.isFinite(Number(chapter?.order)) ? Number(chapter.order) : index,
+      createdAt: chapter?.createdAt || now(),
+      updatedAt: chapter?.updatedAt || now()
+    })) : [];
+    if (!chapters.length && source.length) chapters = [{ id: uid(), title: "Capítulo 1", order: 0, createdAt: now(), updatedAt: now() }];
+    chapters.sort((a,b) => a.order - b.order || a.title.localeCompare(b.title));
+    chapters.forEach((chapter, index) => { chapter.order = index; });
+    const chapterIds = new Set(chapters.map(chapter => chapter.id));
+    const fallbackChapterId = chapters[0]?.id || "";
     const events = source.map((event, index) => ({
       id: String(event?.id || uid()),
+      chapterId: chapterIds.has(String(event?.chapterId || "")) ? String(event.chapterId) : fallbackChapterId,
       title: String(event?.title || `Suceso ${index + 1}`).slice(0, 140),
       description: String(event?.description || "").slice(0, 6000),
+      nodeType: allowedTypes.has(String(event?.nodeType || "")) ? String(event.nodeType) : "story",
       status: allowedStatuses.has(event?.status) ? event.status : "available",
       requirementMode: event?.requirementMode === "any" ? "any" : "all",
       requirementIds: Array.isArray(event?.requirementIds) ? [...new Set(event.requirementIds.map(String))] : [],
+      linkedEntryIds: Array.isArray(event?.linkedEntryIds) ? [...new Set(event.linkedEntryIds.map(String))] : [],
+      linkedSceneIds: Array.isArray(event?.linkedSceneIds) ? [...new Set(event.linkedSceneIds.map(String))] : [],
+      linkedMarkerRefs: Array.isArray(event?.linkedMarkerRefs) ? [...new Set(event.linkedMarkerRefs.map(String))] : [],
+      x: Number.isFinite(Number(event?.x)) ? Math.max(24, Math.min(3600, Number(event.x))) : null,
+      y: Number.isFinite(Number(event?.y)) ? Math.max(24, Math.min(2200, Number(event.y))) : null,
       createdAt: event?.createdAt || now(),
       updatedAt: event?.updatedAt || now()
     }));
     const ids = new Set(events.map(event => event.id));
     events.forEach(event => { event.requirementIds = event.requirementIds.filter(id => ids.has(id) && id !== event.id); });
-    return {
-      selectedEventId: ids.has(String(raw?.selectedEventId || "")) ? String(raw.selectedEventId) : events[0]?.id || "",
-      events
-    };
+
+    // Migración visual: los sucesos de versiones anteriores reciben una posición de mapa mental.
+    const byChapter = new Map();
+    events.forEach(event => { if (!byChapter.has(event.chapterId)) byChapter.set(event.chapterId, []); byChapter.get(event.chapterId).push(event); });
+    byChapter.forEach(list => {
+      const depthCache = new Map();
+      const depthOf = (event, visiting = new Set()) => {
+        if (depthCache.has(event.id)) return depthCache.get(event.id);
+        if (visiting.has(event.id)) return 0;
+        const nextVisiting = new Set(visiting); nextVisiting.add(event.id);
+        const parents = event.requirementIds.map(id => events.find(candidate => candidate.id === id)).filter(parent => parent && parent.chapterId === event.chapterId);
+        const depth = parents.length ? Math.min(6, 1 + Math.max(...parents.map(parent => depthOf(parent, nextVisiting)))) : 0;
+        depthCache.set(event.id, depth); return depth;
+      };
+      const rows = new Map();
+      list.forEach(event => {
+        const depth = depthOf(event);
+        const row = rows.get(depth) || 0; rows.set(depth, row + 1);
+        if (event.x === null) event.x = 70 + depth * 290;
+        if (event.y === null) event.y = 70 + row * 135;
+      });
+    });
+    const selectedEventId = ids.has(String(raw?.selectedEventId || "")) ? String(raw.selectedEventId) : events[0]?.id || "";
+    const selectedEventChapter = events.find(event => event.id === selectedEventId)?.chapterId || "";
+    const selectedChapterId = chapterIds.has(String(raw?.selectedChapterId || "")) ? String(raw.selectedChapterId) : selectedEventChapter || chapters[0]?.id || "";
+    return { selectedChapterId, selectedEventId, chapters, events };
   }
 
   function defaultDiceState() {
@@ -560,7 +602,7 @@
       secret: { reveal: String(raw.secret?.reveal || "").slice(0, 5000), clues: String(raw.secret?.clues || "").slice(0, 5000), checkType: String(raw.secret?.checkType || "perception").slice(0, 40), dc: optionalNumber(raw.secret?.dc), success: String(raw.secret?.success || "").slice(0, 5000), failure: String(raw.secret?.failure || "").slice(0, 5000), discovered: Boolean(raw.secret?.discovered) },
       mission: { status: ["notStarted", "active", "completed", "failed"].includes(raw.mission?.status) ? raw.mission.status : "notStarted", giver: String(raw.mission?.giver || "").slice(0, 200), objective: String(raw.mission?.objective || "").slice(0, 500), secondary: String(raw.mission?.secondary || "").slice(0, 5000), reward: String(raw.mission?.reward || "").slice(0, 5000), notes: String(raw.mission?.notes || "").slice(0, 5000), stages },
       container: { cp: Math.max(0, Number(raw.container?.cp) || 0), sp: Math.max(0, Number(raw.container?.sp) || 0), gp: Math.max(0, Number(raw.container?.gp) || 0), pp: Math.max(0, Number(raw.container?.pp) || 0), locked: Boolean(raw.container?.locked), lockDc: optionalNumber(raw.container?.lockDc), key: String(raw.container?.key || "").slice(0, 500), trapped: Boolean(raw.container?.trapped), trapCheck: String(raw.container?.trapCheck || "perception").slice(0, 40), trapDc: optionalNumber(raw.container?.trapDc), trapEffect: String(raw.container?.trapEffect || "").slice(0, 3000), disarmDc: optionalNumber(raw.container?.disarmDc) },
-      loot, createdAt: raw.createdAt || now(), updatedAt: raw.updatedAt || now(), orphanedAt: String(raw.orphanedAt || "")
+      loot, vendorItems: Array.isArray(raw.vendorItems) ? raw.vendorItems.map(item => ({ id: String(item?.id || uid()), name: String(item?.name || "").slice(0, 100), priceAmount: Math.max(0, Number(item?.priceAmount ?? item?.price ?? 0) || 0), currency: ["cp","sp","gp","ptp"].includes(String(item?.currency || "")) ? String(item.currency) : "gp", description: String(item?.description || "").slice(0, 240) })).filter(item => item.name.trim()) : [], createdAt: raw.createdAt || now(), updatedAt: raw.updatedAt || now(), orphanedAt: String(raw.orphanedAt || "")
     };
   }
 
@@ -591,6 +633,7 @@
             alias: String(marker?.alias || "").slice(0, 60),
             disposition: ["enemy", "ally", "neutral"].includes(marker?.disposition) ? marker.disposition : (marker?.category === "enemy" ? "enemy" : marker?.category === "ally" ? "ally" : "neutral"),
             visibility: ["dm", "visible", "discovered"].includes(marker?.visibility) ? marker.visibility : "dm",
+            unlockEventId: historyEventIds.has(String(marker?.unlockEventId || "")) ? String(marker.unlockEventId) : "",
             targetSceneId: String(marker?.targetSceneId || ""),
             relatedEntryIds: Array.isArray(marker?.relatedEntryIds)
               ? marker.relatedEntryIds.map(String).filter(id => entryIds.has(id))

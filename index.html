@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.9.2" />
+  <link rel="stylesheet" href="styles.css?v=2.10.0" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -349,42 +349,72 @@
     <main class="history-view" id="historyView" hidden>
       <section class="history-shell">
         <header class="history-toolbar">
-          <div>
+          <div class="history-toolbar__intro">
             <h1>Historia</h1>
-            <p>Prepara sucesos, conecta requisitos y deja que La Forja abra nuevas posibilidades al ocurrir.</p>
+            <p>Organiza la campaña por capítulos. Cada nodo desbloquea a sus hijos y puede revelar contenido del Atlas.</p>
           </div>
-          <button id="historyNewEvent" class="button" type="button">+ Nuevo suceso</button>
+          <div class="history-toolbar__actions">
+            <button id="historyNewChapter" class="button button--quiet" type="button">+ Capítulo</button>
+            <button id="historyNewEvent" class="button" type="button">+ Nodo</button>
+          </div>
         </header>
+
+        <nav class="history-chapters" aria-label="Capítulos de la historia">
+          <div id="historyChapterTabs" class="history-chapter-tabs"></div>
+          <div class="history-chapter-actions">
+            <button id="historyRenameChapter" class="icon-button" type="button" title="Renombrar capítulo" aria-label="Renombrar capítulo">✎</button>
+            <button id="historyDeleteChapter" class="icon-button" type="button" title="Eliminar capítulo" aria-label="Eliminar capítulo">×</button>
+          </div>
+        </nav>
+
         <div class="history-workspace">
-          <section class="history-board" aria-label="Línea de sucesos">
-            <div class="history-lane">
-              <header><span>○</span><strong>Disponibles</strong><small id="historyAvailableCount">0</small></header>
-              <div id="historyAvailableList" class="history-event-list"></div>
+          <section class="history-map-panel" aria-label="Mapa mental del capítulo">
+            <div class="history-map-toolbar">
+              <div>
+                <strong id="historyChapterTitle">Sin capítulo</strong>
+                <small id="historyChapterStats">0 nodos</small>
+              </div>
+              <div class="history-map-toolbar__actions">
+                <button id="historyAutoLayout" class="button button--quiet" type="button">Ordenar mapa</button>
+                <button id="historyCenterSelection" class="button button--quiet" type="button">Centrar selección</button>
+              </div>
             </div>
-            <div class="history-lane">
-              <header><span>🔒</span><strong>Bloqueados</strong><small id="historyLockedCount">0</small></header>
-              <div id="historyLockedList" class="history-event-list"></div>
-            </div>
-            <div class="history-lane">
-              <header><span>✓</span><strong>Ocurridos / cerrados</strong><small id="historyResolvedCount">0</small></header>
-              <div id="historyResolvedList" class="history-event-list"></div>
+            <div id="historyMapViewport" class="history-map-viewport" tabindex="0">
+              <div id="historyMapStage" class="history-map-stage">
+                <svg id="historyMapEdges" class="history-map-edges" viewBox="0 0 3800 2400" aria-hidden="true">
+                  <defs><marker id="historyArrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z"></path></marker></defs>
+                  <g id="historyEdgeLayer"></g>
+                </svg>
+                <div id="historyNodeLayer" class="history-node-layer"></div>
+              </div>
+              <div id="historyMapEmpty" class="history-map-empty" hidden>
+                <span>⌁</span><h2>Este capítulo está vacío</h2><p>Crea un nodo raíz y luego añade hijos para dibujar cómo puede avanzar la campaña.</p>
+                <button id="historyEmptyNewEvent" class="button" type="button">+ Crear primer nodo</button>
+              </div>
             </div>
           </section>
+
           <aside class="history-detail">
             <div id="historyEmpty" class="history-empty">
-              <span>⌁</span><h2>Selecciona un suceso</h2><p>Los requisitos pueden desbloquear otros sucesos y contenido latente del Atlas.</p>
+              <span>⌁</span><h2>Selecciona un nodo</h2><p>Podrás conectarlo con otros nodos, el Cuaderno y el Atlas.</p>
             </div>
             <div id="historyEditor" hidden>
               <div class="history-detail__top">
-                <div><span id="historyStatusBadge" class="history-status-badge"></span><h2>Editar suceso</h2></div>
+                <div><span id="historyStatusBadge" class="history-status-badge"></span><h2>Editar nodo</h2></div>
                 <button id="historyDeleteEvent" class="button button--danger" type="button">Eliminar</button>
               </div>
               <label class="history-field">Nombre<input id="historyEventTitle" maxlength="140" /></label>
+              <label class="history-field">Tipo<select id="historyNodeType">
+                <option value="story">📖 Suceso</option><option value="combat">⚔ Combate</option><option value="investigation">🔎 Investigación</option><option value="conversation">💬 Conversación</option><option value="objective">🎯 Objetivo</option><option value="decision">❗ Decisión</option><option value="discovery">🗺 Descubrimiento</option><option value="milestone">👑 Evento importante</option>
+              </select></label>
               <label class="history-field">Descripción<textarea id="historyEventDescription" rows="5" maxlength="6000" placeholder="Qué puede ocurrir, pistas, consecuencias, notas para el DM…"></textarea></label>
+
               <section class="history-panel">
-                <div class="history-panel__heading"><div><h3>Requisitos</h3><p>Este suceso se desbloquea cuando los sucesos seleccionados han ocurrido.</p></div><label>Condición<select id="historyRequirementMode"><option value="all">Deben ocurrir todos</option><option value="any">Puede ocurrir cualquiera</option></select></label></div>
+                <div class="history-panel__heading"><div><h3>Padres del nodo</h3><p>Cuando los padres seleccionados hayan ocurrido, este nodo se desbloquea.</p></div><label>Condición<select id="historyRequirementMode"><option value="all">Deben ocurrir todos</option><option value="any">Puede ocurrir cualquiera</option></select></label></div>
                 <div id="historyRequirements" class="history-requirements"></div>
+                <button id="historyAddChild" class="button button--quiet" type="button">+ Añadir hijo directo</button>
               </section>
+
               <section class="history-panel">
                 <h3>Acciones durante la partida</h3>
                 <div class="history-actions">
@@ -394,13 +424,37 @@
                   <button id="historyResetStatus" class="button button--quiet" type="button">↺ Reabrir</button>
                 </div>
               </section>
+
               <section class="history-panel">
-                <h3>Desbloquea</h3>
+                <div class="history-panel__heading"><div><h3>Referencias de campaña</h3><p>Enlaza este nodo con fichas del Cuaderno, escenas o marcadores del Atlas.</p></div></div>
+                <div class="history-link-add">
+                  <select id="historyLinkEntrySelect" aria-label="Ficha del Cuaderno"></select><button id="historyAddEntryLink" class="button button--quiet" type="button">+ Cuaderno</button>
+                </div>
+                <div class="history-link-add">
+                  <select id="historyLinkSceneSelect" aria-label="Escena del Atlas"></select><button id="historyAddSceneLink" class="button button--quiet" type="button">+ Escena</button>
+                </div>
+                <div class="history-link-add">
+                  <select id="historyLinkMarkerSelect" aria-label="Marcador del Atlas"></select><button id="historyAddMarkerLink" class="button button--quiet" type="button">+ Marcador</button>
+                </div>
+                <div id="historyCampaignLinks" class="history-effects"></div>
+              </section>
+
+              <section class="history-panel">
+                <h3>Hijos directos</h3>
                 <div id="historyUnlocks" class="history-effects"></div>
               </section>
               <section class="history-panel">
-                <div class="history-panel__heading"><div><h3>Contenido latente del Atlas</h3><p>Escenas y marcadores preparados que no aparecen en el Atlas normal hasta que este suceso ocurra.</p></div></div>
+                <div class="history-panel__heading"><div><h3>Contenido latente del Atlas</h3><p>Escenas y marcadores que aparecen automáticamente cuando este nodo ocurre.</p></div></div>
                 <div id="historyLatentAtlas" class="history-effects"></div>
+              </section>
+              <section class="history-panel history-position-panel">
+                <div><h3>Posición en el mapa</h3><p>También puedes arrastrar el nodo directamente.</p></div>
+                <div class="history-nudge" aria-label="Mover nodo">
+                  <button id="historyMoveLeft" class="icon-button" type="button" aria-label="Mover a la izquierda">←</button>
+                  <button id="historyMoveUp" class="icon-button" type="button" aria-label="Mover arriba">↑</button>
+                  <button id="historyMoveDown" class="icon-button" type="button" aria-label="Mover abajo">↓</button>
+                  <button id="historyMoveRight" class="icon-button" type="button" aria-label="Mover a la derecha">→</button>
+                </div>
               </section>
             </div>
           </aside>
@@ -928,6 +982,18 @@
         </div>
       </section>
 
+      <section id="atlasMerchantSheetSection" class="atlas-sheet-section" hidden>
+        <div class="panel__titlebar"><h3>Items para vender</h3><span class="panel__hint">Inventario comercial del comerciante. Puede mostrarse a los jugadores desde Capas.</span></div>
+        <div class="merchant-table-head" aria-hidden="true"><span>Nombre</span><span>Precio</span><span>Descripción</span><span></span></div>
+        <div id="atlasMerchantItemsList" class="merchant-items-list"></div>
+        <div class="merchant-table-row merchant-table-form panel-add-form">
+          <label><span class="sr-only">Nombre del artículo</span><input id="atlasMerchantItemName" maxlength="100" placeholder="Ej.: Poción de curación" autocomplete="off" /></label>
+          <label class="merchant-price-label"><span class="sr-only">Precio del artículo</span><div class="merchant-price-control"><input id="atlasMerchantItemPrice" class="merchant-price-amount" type="number" min="0" step="1" inputmode="numeric" value="0" placeholder="0" aria-label="Cantidad del precio" /><span class="coin-icon coin-icon--gp" aria-hidden="true"></span><select id="atlasMerchantItemCurrency" class="merchant-currency-select" aria-label="Moneda del precio"><option value="cp">cp · Cobre</option><option value="sp">sp · Plata</option><option value="gp" selected>gp · Oro</option><option value="ptp">ptp · Platino</option></select></div></label>
+          <label><span class="sr-only">Descripción del artículo</span><input id="atlasMerchantItemDescription" maxlength="240" placeholder="Efecto, estado, procedencia…" autocomplete="off" /></label>
+          <button id="atlasMerchantItemAdd" class="button merchant-add" type="button" title="Añadir artículo" aria-label="Añadir artículo">+</button>
+        </div>
+      </section>
+
       <section id="atlasSecretSheetSection" class="atlas-sheet-section" hidden>
         <div class="panel__titlebar"><h3>Secreto</h3><span class="panel__hint">Privado del DM.</span></div>
         <label>Qué descubren los jugadores<textarea id="atlasSecretReveal" rows="4" maxlength="5000"></textarea></label>
@@ -1123,7 +1189,7 @@
       <p>En <strong>Calendario</strong> el día 1 es el inicio de la campaña. El tiempo solo avanza al pulsar <strong>Dormir · +1 día</strong>; puedes escoger el mes inicial y los días que tiene cada mes.</p>
       <p>El <strong>Mapa</strong> reúne todas las conexiones y permite filtrarlas por una localización. Los items obtenibles de una localización también aparecen enlazados con su entrada relacionada.</p>
       <p>En <strong>Dados</strong> puedes sumar varios d4, d6, d8, d10, d12, d20 o d100, elegir un modificador entre +20 y −20 y tirar fórmulas editables como <strong>2d20 + 4</strong>. Cada campaña conserva su propio historial.</p>
-      <p>En <strong>Historia</strong> puedes preparar sucesos con requisitos. Cuando un suceso ocurre, desbloquea automáticamente los siguientes y puede hacer aparecer escenas latentes del Atlas.</p>
+      <p>En <strong>Historia</strong> puedes crear capítulos y dibujar un mapa mental de la campaña. Al marcar un nodo como ocurrido se desbloquean sus hijos directos; cada nodo puede enlazar fichas del Cuaderno, escenas y marcadores, además de revelar contenido latente del Atlas.</p>
       <p>En <strong>Atlas</strong> puedes crear escenas anidadas con imágenes propias, marcadores, formas y niebla de guerra. Las escenas de tipo <strong>Mapa creado</strong> abren un editor cenital con cuadrícula de 1 m², habitaciones, pasillos, paredes, puertas, escaleras, mobiliario, texturas y exportación PNG.</p>
       <p>En <strong>Cuaderno</strong>, las entradas muertas, completadas, destruidas, fallidas o irrelevantes pasan al Archivo plegable de su columna sin borrarse.</p>
       <p>El panel ☰ reúne la contraseña del DM y las copias de seguridad: JSON ligero o ZIP completo con las imágenes del Atlas.</p>
@@ -1146,9 +1212,9 @@
     </section>
   </template>
 
-  <script src="app.js?v=2.9.2" defer></script>
-  <script src="history.js?v=2.9.2" defer></script>
-  <script src="atlas.js?v=2.9.2" defer></script>
-  <script src="dungeon.js?v=2.9.2" defer></script>
+  <script src="app.js?v=2.10.0" defer></script>
+  <script src="history.js?v=2.10.0" defer></script>
+  <script src="atlas.js?v=2.10.0" defer></script>
+  <script src="dungeon.js?v=2.10.0" defer></script>
 </body>
 </html>
