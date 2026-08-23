@@ -2328,6 +2328,23 @@
     return result;
   }
 
+  function moveEntryBranchToChapter(id, chapterId = "") {
+    const entry = state.entries.find(candidate => candidate.id === id);
+    if (!entry) return [];
+    const validChapterId = state.history?.chapters?.some(chapter => chapter.id === chapterId) ? chapterId : "";
+    const ids = [entry.id, ...descendantsOf(entry.id)];
+    const idSet = new Set(ids);
+    const changed = [];
+    state.entries.forEach(candidate => {
+      if (!idSet.has(candidate.id) || candidate.chapterId === validChapterId) return;
+      candidate.chapterId = validChapterId;
+      candidate.updatedAt = now();
+      changed.push(candidate.id);
+    });
+    if (changed.length) saveState(true);
+    return changed;
+  }
+
   function deleteEntry(id) {
     const entry = state.entries.find(candidate => candidate.id === id);
     if (!entry) return;
@@ -3521,9 +3538,11 @@
     });
 
     els.entryChapter?.addEventListener("change", () => {
-      updateSelected({ chapterId: els.entryChapter.value || "" });
+      const entry = selectedEntry();
+      if (!entry) return;
+      const changedIds = moveEntryBranchToChapter(entry.id, els.entryChapter.value || "");
       renderColumns();
-      document.dispatchEvent(new CustomEvent("forja:entrychapterchange", { detail: { entryId: selectedEntry()?.id || "" } }));
+      document.dispatchEvent(new CustomEvent("forja:entrychapterchange", { detail: { entryId: entry.id, changedEntryIds: changedIds } }));
     });
 
     els.entryName.addEventListener("input", () => {

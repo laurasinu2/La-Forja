@@ -1,11 +1,10 @@
-# Versión 2.11.1 · Selector de capítulo compacto y responsive
-## Corrección 2.11.1
+# Versión 2.11.2 · Capítulos heredados por toda la rama del Cuaderno
+## Corrección 2.11.2
 
-- El filtro de capítulo del Cuaderno ya no ocupa una fila propia: queda integrado de forma compacta a la derecha del buscador.
-- El selector se adapta a pantallas estrechas y oculta su etiqueta textual cuando hace falta espacio.
-- El selector de capítulo de la ficha también puede encogerse y saltar de línea correctamente en móvil.
-- No se modifica ninguna otra función de la v2.11.0.
-
+- Al cambiar una ficha del Cuaderno de capítulo, todos sus hijos y descendientes se mueven automáticamente al mismo capítulo.
+- No se pregunta ficha por ficha y no hace falta repetir el cambio en cada hijo.
+- Sólo se mueven descendientes reales del árbol (`parentId`); conexiones, referencias de Historia y otras fichas enlazadas no cambian de capítulo.
+- Se mantiene intacto el resto de la v2.11.1.
 
 Esta versión parte de La Forja v2.10.0 y añade:
 
