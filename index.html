@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.11.0" />
+  <link rel="stylesheet" href="styles.css?v=2.11.1" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -119,9 +119,9 @@
         <div class="collections__toolbar">
           <input id="globalSearch" type="search" placeholder="Buscar en la campaña…" />
           <button id="clearSearch" class="mini-button" type="button" title="Limpiar búsqueda">×</button>
+          <label class="notebook-chapter-filter" title="Filtrar Cuaderno por capítulo"><span>Capítulo</span><select id="notebookChapterFilter" aria-label="Filtrar Cuaderno por capítulo"></select></label>
         </div>
         <nav id="collectionTabs" class="collection-tabs" aria-label="Categorías del cuaderno"></nav>
-        <label class="notebook-chapter-filter"><span>Capítulo</span><select id="notebookChapterFilter" aria-label="Filtrar Cuaderno por capítulo"></select></label>
         <div id="connectionModeBanner" class="connection-mode-banner" hidden>
           <span id="selectionModeText"><strong>Modo conexión:</strong> pulsa cualquier entrada de las cinco columnas.</span>
           <button id="cancelConnectionBanner" class="button button--quiet" type="button">Cancelar</button>
@@ -1236,9 +1236,9 @@
     </section>
   </template>
 
-  <script src="app.js?v=2.11.0" defer></script>
-  <script src="history.js?v=2.11.0" defer></script>
-  <script src="atlas.js?v=2.11.0" defer></script>
-  <script src="dungeon.js?v=2.11.0" defer></script>
+  <script src="app.js?v=2.11.1" defer></script>
+  <script src="history.js?v=2.11.1" defer></script>
+  <script src="atlas.js?v=2.11.1" defer></script>
+  <script src="dungeon.js?v=2.11.1" defer></script>
 </body>
 </html>

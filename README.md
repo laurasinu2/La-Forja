@@ -1,4 +1,11 @@
-# Versión 2.11.0 · Capítulos compartidos, enlaces entre capítulos y fichas del Atlas
+# Versión 2.11.1 · Selector de capítulo compacto y responsive
+## Corrección 2.11.1
+
+- El filtro de capítulo del Cuaderno ya no ocupa una fila propia: queda integrado de forma compacta a la derecha del buscador.
+- El selector se adapta a pantallas estrechas y oculta su etiqueta textual cuando hace falta espacio.
+- El selector de capítulo de la ficha también puede encogerse y saltar de línea correctamente en móvil.
+- No se modifica ninguna otra función de la v2.11.0.
+
 
 Esta versión parte de La Forja v2.10.0 y añade:
 
