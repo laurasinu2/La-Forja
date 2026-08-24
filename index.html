@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.12.2" />
+  <link rel="stylesheet" href="styles.css?v=2.12.3" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -477,7 +477,13 @@
           <div class="world-toolbar__actions"><button id="worldNewCreature" class="button" type="button">+ Criatura</button><button id="worldNewOrganisation" class="button" type="button" hidden>+ Organización</button></div>
         </header>
         <nav class="world-tabs" aria-label="Secciones de Mundo"><button class="world-tab is-active" data-world-section="creatures" type="button">🐉 Criaturas</button><button class="world-tab" data-world-section="organisations" type="button">⚑ Organizaciones</button></nav>
-        <section id="worldCreaturesSection" class="world-library"><aside class="world-rail"><div class="world-rail__toolbar"><input id="worldCreatureSearch" type="search" placeholder="Buscar criatura…" /></div><div id="worldCreatureList" class="world-card-list"></div></aside><article id="worldCreatureDetail" class="world-detail"></article></section>
+        <section id="worldCreaturesSection" class="world-creatures-section">
+          <div class="world-creature-categories" aria-label="Categorías de criaturas">
+            <div id="worldCreatureCategories" class="world-category-strip"></div>
+            <button id="worldNewCreatureCategory" class="button button--quiet world-category-add" type="button">+ Categoría</button>
+          </div>
+          <div class="world-library world-library--creatures"><aside class="world-rail"><div class="world-rail__toolbar"><input id="worldCreatureSearch" type="search" placeholder="Buscar criatura…" /></div><div id="worldCreatureList" class="world-card-list"></div></aside><article id="worldCreatureDetail" class="world-detail"></article></div>
+        </section>
         <section id="worldOrganisationsSection" class="world-library" hidden><aside class="world-rail"><div class="world-rail__toolbar"><input id="worldOrganisationSearch" type="search" placeholder="Buscar organización…" /></div><div id="worldOrganisationList" class="world-card-list"></div></aside><article id="worldOrganisationDetail" class="world-detail"></article></section>
       </section>
     </main>
@@ -1274,7 +1280,7 @@
       <div class="dialog-card__header"><div><h2 id="worldCreatureDialogTitle">Criatura</h2><p class="dialog-intro">Ficha base reutilizable desde el Atlas.</p></div><button type="button" class="icon-button world-creature-close" aria-label="Cerrar">×</button></div>
       <div class="world-editor-hero">
         <div class="world-editor-photo"><img id="worldCreaturePhotoPreview" alt="" hidden /><div id="worldCreaturePhotoEmpty">Sin imagen</div><input id="worldCreaturePhotoInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden /><div><button id="worldCreaturePhotoChoose" class="button button--quiet" type="button">Elegir imagen</button><button id="worldCreaturePhotoRemove" class="button button--quiet" type="button" hidden>Quitar</button></div></div>
-        <div class="world-editor-main"><label>Nombre<input id="worldCreatureName" maxlength="120" required /></label><div class="form-grid"><label>Tipo / especie<input id="worldCreatureType" maxlength="100" placeholder="Ej.: Constructo, bestia, no-muerto…" /></label><label>Etiquetas<input id="worldCreatureTags" maxlength="300" placeholder="bosque, jefe, volador…" /></label></div><label>Descripción<textarea id="worldCreatureDescription" rows="5" maxlength="8000"></textarea></label></div>
+        <div class="world-editor-main"><label>Nombre<input id="worldCreatureName" maxlength="120" required /></label><div class="form-grid"><label>Tipo / especie<input id="worldCreatureType" maxlength="100" placeholder="Ej.: Constructo, bestia, no-muerto…" /></label><label>Categoría<select id="worldCreatureCategory"><option value="">Sin categoría</option></select></label><label>Etiquetas<input id="worldCreatureTags" maxlength="300" placeholder="bosque, jefe, volador…" /></label></div><label>Descripción<textarea id="worldCreatureDescription" rows="5" maxlength="8000"></textarea></label></div>
       </div>
       <section class="world-editor-section"><h3>Estadísticas</h3><div class="world-stat-edit-grid"><label>PG<input data-world-creature-stat="hp" type="number" /></label><label>PG máx.<input data-world-creature-stat="maxhp" type="number" /></label><label>CA<input data-world-creature-stat="ac" type="number" /></label><label>Velocidad<input data-world-creature-stat="speed" type="number" /></label><label>Iniciativa<input data-world-creature-stat="initiative" type="number" /></label><label>Competencia<input data-world-creature-stat="proficiency" type="number" /></label></div><div class="world-ability-edit-grid"><label>FUE<input data-world-creature-stat="str" type="number" min="1" max="30" /></label><label>DES<input data-world-creature-stat="dex" type="number" min="1" max="30" /></label><label>CON<input data-world-creature-stat="con" type="number" min="1" max="30" /></label><label>INT<input data-world-creature-stat="int" type="number" min="1" max="30" /></label><label>SAB<input data-world-creature-stat="wis" type="number" min="1" max="30" /></label><label>CAR<input data-world-creature-stat="cha" type="number" min="1" max="30" /></label></div></section>
       <section class="world-editor-section"><div class="atlas-sheet-text-grid"><label>Modificadores<textarea id="worldCreatureModifiers" rows="4" maxlength="5000"></textarea></label><label>Habilidades<textarea id="worldCreatureAbilities" rows="4" maxlength="5000"></textarea></label><label>Estilo de combate<textarea id="worldCreatureCombatStyle" rows="4" maxlength="5000"></textarea></label><label>Si los PJ no atacan<textarea id="worldCreatureNonAggression" rows="4" maxlength="5000"></textarea></label><label>Acciones<textarea id="worldCreatureActions" rows="5" maxlength="7000"></textarea></label><label>Reacciones<textarea id="worldCreatureReactions" rows="4" maxlength="5000"></textarea></label></div></section>
@@ -1317,10 +1323,10 @@
     <article class="dialog-card world-character-view-card"><div class="dialog-card__header"><div><h2 id="worldCharacterViewTitle">Personaje</h2><p id="worldCharacterViewSubtitle" class="dialog-intro"></p></div><div class="world-view-dialog-actions"><button id="worldCharacterViewEdit" class="icon-button" type="button" title="Editar" aria-label="Editar">✎</button><button type="button" class="icon-button world-character-view-close" aria-label="Cerrar">×</button></div></div><div id="worldCharacterViewBody"></div></article>
   </dialog>
 
-  <script src="app.js?v=2.12.2" defer></script>
-  <script src="history.js?v=2.12.2" defer></script>
-  <script src="world.js?v=2.12.2" defer></script>
-  <script src="atlas.js?v=2.12.2" defer></script>
-  <script src="dungeon.js?v=2.12.2" defer></script>
+  <script src="app.js?v=2.12.3" defer></script>
+  <script src="history.js?v=2.12.3" defer></script>
+  <script src="world.js?v=2.12.3" defer></script>
+  <script src="atlas.js?v=2.12.3" defer></script>
+  <script src="dungeon.js?v=2.12.3" defer></script>
 </body>
 </html>

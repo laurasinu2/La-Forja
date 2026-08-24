@@ -3213,3 +3213,54 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
   .player-battle-cards{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))}
   .atlas-world-sheet__hero{grid-template-columns:1fr}.atlas-world-sheet__image{max-width:180px}
 }
+
+/* v2.12.3 · categorías de criaturas y biblioteca contenida */
+.world-view{height:100%;overflow:hidden}
+.world-shell{height:100%;min-height:0;overflow:hidden}
+.world-creatures-section{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+.world-creature-categories{flex:0 0 auto;display:flex;align-items:center;gap:8px;min-width:0}
+.world-category-strip{min-width:0;display:flex;align-items:center;gap:6px;overflow-x:auto;overflow-y:hidden;padding:2px 1px 4px;scrollbar-width:thin}
+.world-category-chip{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:6px 10px;border:1px solid var(--line-soft,var(--border,#344047));border-radius:999px;background:transparent;color:var(--text);white-space:nowrap;cursor:pointer}
+.world-category-chip:hover{background:var(--surface-2,#1b2227)}
+.world-category-chip.is-active{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.world-category-chip small{min-width:20px;padding:1px 6px;border-radius:999px;background:rgba(255,255,255,.055);color:var(--muted);font-size:10px;text-align:center}
+.world-category-chip.is-active small{color:var(--text)}
+.world-category-add{flex:0 0 auto;min-height:32px;padding-block:5px}
+.world-library--creatures,#worldOrganisationsSection{flex:1;min-height:0;height:100%}
+.world-library--creatures{align-items:stretch}
+.world-library--creatures .world-rail,#worldOrganisationsSection .world-rail{height:100%;min-height:0}
+.world-library--creatures .world-card-list,#worldOrganisationsSection .world-card-list{min-height:0;overflow:auto;overscroll-behavior:contain}
+.world-library--creatures .world-detail{align-self:start;width:100%;height:auto;min-height:0;max-height:100%;overflow:auto;overscroll-behavior:contain}
+.world-sheet--creature{height:auto!important;min-height:0!important}
+.world-creature-profile{height:auto!important;min-height:0!important;align-items:stretch}
+.world-creature-info{overflow:visible}
+.world-creature-portrait{min-height:clamp(270px,38vh,430px);height:auto}
+.world-empty-detail{min-height:260px}
+
+@media (max-width:900px){
+  .world-shell{height:100%;padding:10px;gap:9px}
+  .world-creature-categories{gap:6px}
+  .world-category-add{padding-inline:9px}
+  .world-library--creatures,#worldOrganisationsSection{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(145px,30%) minmax(0,1fr);height:100%;min-height:0}
+  .world-library--creatures .world-rail,#worldOrganisationsSection .world-rail{height:100%;max-height:none}
+  .world-library--creatures .world-card-list,#worldOrganisationsSection .world-card-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));max-height:none;overflow:auto}
+  .world-library--creatures .world-detail,#worldOrganisationsSection .world-detail{align-self:stretch;height:100%;max-height:100%;overflow:auto}
+  .world-creature-profile{display:grid;grid-template-columns:minmax(300px,48%) minmax(0,1fr)}
+  .world-creature-portrait{order:initial;min-height:0;height:100%;max-height:none}
+  .world-creature-info{order:initial;overflow:visible}
+}
+@media (max-width:720px){
+  .world-category-strip{padding-bottom:3px}
+  .world-category-chip{min-height:30px;padding:5px 9px;font-size:12px}
+  .world-category-add{font-size:12px}
+  .world-library--creatures,#worldOrganisationsSection{grid-template-rows:minmax(135px,28%) minmax(0,1fr)}
+  .world-creature-profile{display:flex;flex-direction:column}
+  .world-creature-portrait{order:1;flex:0 0 clamp(190px,32vh,280px);height:auto}
+  .world-creature-info{order:2}
+}
+@media (max-width:430px){
+  .world-creature-categories{align-items:stretch}
+  .world-category-add{padding-inline:8px;white-space:nowrap}
+  .world-library--creatures,#worldOrganisationsSection{grid-template-rows:130px minmax(0,1fr)}
+  .world-library--creatures .world-card-list,#worldOrganisationsSection .world-card-list{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
+}
