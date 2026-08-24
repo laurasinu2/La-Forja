@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.11.4" />
+  <link rel="stylesheet" href="styles.css?v=2.12.2" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -76,6 +76,7 @@
           <button id="playerZoomIn" type="button" aria-label="Acercar">+</button>
         </div>
       </div>
+      <aside id="playerBattlePanel" class="player-battle-panel" hidden aria-label="Enemigos de la batalla"><h2 class="player-battle-panel__heading">Batalla</h2><div id="playerBattleCards" class="player-battle-cards"></div></aside>
       <section id="playerMerchantPanel" class="player-merchant-panel" hidden></section>
     </main>
   </section>
@@ -93,10 +94,10 @@
       <nav class="view-tabs" aria-label="Vistas">
         <button class="view-tab is-active" data-view="notebook" type="button" title="Cuaderno"><span aria-hidden="true">☷</span><span class="view-tab__label">Cuaderno</span></button>
         <button class="view-tab" data-view="history" type="button" title="Historia y sucesos"><span aria-hidden="true">⌁</span><span class="view-tab__label">Historia</span></button>
-        <button class="view-tab" data-view="calendar" type="button" title="Calendario"><span aria-hidden="true">▦</span><span class="view-tab__label">Calendario</span></button>
-        <button class="view-tab" data-view="atlas" type="button" title="Atlas interactivo"><span aria-hidden="true">⌖</span><span class="view-tab__label">Atlas</span></button>
-        <button class="view-tab" data-view="mindmap" type="button" title="Mapa de conexiones"><span aria-hidden="true">✦</span><span class="view-tab__label">Mapa</span></button>
+        <button class="view-tab" data-view="world" type="button" title="Mundo: criaturas y organizaciones"><span aria-hidden="true">◈</span><span class="view-tab__label">Mundo</span></button>
+        <button class="view-tab view-tab--atlas" data-view="atlas" type="button" title="Atlas interactivo"><span aria-hidden="true">⌖</span><span class="view-tab__label">Atlas</span></button>
         <button class="view-tab" data-view="dice" type="button" title="Tirador de dados"><span aria-hidden="true">⚄</span><span class="view-tab__label">Dados</span></button>
+        <button class="view-tab view-tab--calendar" data-view="calendar" type="button" title="Calendario"><span aria-hidden="true">▦</span><span class="view-tab__label">Calendario</span></button>
       </nav>
 
       <div class="topbar__actions">
@@ -469,6 +470,18 @@
       </section>
     </main>
 
+    <main class="world-view" id="worldView" hidden>
+      <section class="world-shell">
+        <header class="world-toolbar">
+          <div><h1>Mundo</h1><p>Biblioteca reutilizable de criaturas, personajes y organizaciones de la campaña.</p></div>
+          <div class="world-toolbar__actions"><button id="worldNewCreature" class="button" type="button">+ Criatura</button><button id="worldNewOrganisation" class="button" type="button" hidden>+ Organización</button></div>
+        </header>
+        <nav class="world-tabs" aria-label="Secciones de Mundo"><button class="world-tab is-active" data-world-section="creatures" type="button">🐉 Criaturas</button><button class="world-tab" data-world-section="organisations" type="button">⚑ Organizaciones</button></nav>
+        <section id="worldCreaturesSection" class="world-library"><aside class="world-rail"><div class="world-rail__toolbar"><input id="worldCreatureSearch" type="search" placeholder="Buscar criatura…" /></div><div id="worldCreatureList" class="world-card-list"></div></aside><article id="worldCreatureDetail" class="world-detail"></article></section>
+        <section id="worldOrganisationsSection" class="world-library" hidden><aside class="world-rail"><div class="world-rail__toolbar"><input id="worldOrganisationSearch" type="search" placeholder="Buscar organización…" /></div><div id="worldOrganisationList" class="world-card-list"></div></aside><article id="worldOrganisationDetail" class="world-detail"></article></section>
+      </section>
+    </main>
+
     <main class="calendar-view" id="calendarView" hidden>
       <section class="calendar-shell">
         <header class="calendar-toolbar campaign-calendar-toolbar">
@@ -597,6 +610,7 @@
             <button id="atlasNewScene" class="button button--quiet" type="button">+ Escena</button>
             <button id="atlasShowScene" class="button" type="button">▶ Mostrar esta escena</button>
             <button id="atlasOpenProjection" class="button button--projection" type="button">▣ Abrir proyección</button>
+            <button id="atlasWorldRefBtn" class="button button--quiet" type="button" hidden>◈ Mundo</button>
             <button id="atlasDmSheetBtn" class="button button--quiet" type="button" title="Abrir la ficha privada del cuaderno">☷ Ficha DM</button>
             <input id="atlasImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
           </div>
@@ -625,10 +639,11 @@
           <button id="atlasResetFog" class="button button--quiet atlas-reset-fog" type="button" title="Volver a cubrir por completo esta escena">⬛ Tapar todo</button>
           <button id="atlasRevealAllFog" class="button button--quiet atlas-reset-fog" type="button" title="Revelar por completo esta escena">◻ Revelar todo</button>
           <label class="atlas-mode-control">Vista de jugadores<select id="atlasPlayerMode"><option value="follow">Seguir al DM</option><option value="free">Exploración libre</option></select></label>
+          <button id="atlasBattleBtn" class="button button--quiet" type="button" title="Elegir marcadores para mostrar en el panel de batalla">⚔ Batalla</button>
           <button id="atlasCloseMerchant" class="button button--quiet" type="button" hidden>Cerrar tienda proyectada</button>
         </div>
 
-        <div class="atlas-layout">
+        <div id="atlasLayout" class="atlas-layout">
           <aside class="atlas-sidebar atlas-scenes-sidebar">
             <div class="atlas-sidebar__heading"><h2>Escenas</h2><button id="atlasSceneMenu" class="mini-button" type="button" title="Editar escena">⋮</button></div>
             <div id="atlasSceneTree" class="atlas-scene-tree"></div>
@@ -653,6 +668,11 @@
           <aside class="atlas-sidebar atlas-layers-sidebar">
             <div class="atlas-sidebar__heading"><h2>Capas y puntos</h2><span id="atlasLayerCount">0</span></div>
             <div id="atlasLayers" class="atlas-layers"></div>
+          </aside>
+
+          <aside id="atlasBattlePanel" class="atlas-battle-panel" hidden aria-label="Panel de batalla">
+            <header class="atlas-battle-panel__header"><h2>⚔ Batalla</h2><div class="atlas-battle-panel__actions"><button id="atlasBattleEdit" class="mini-button" type="button" title="Cambiar participantes">✎</button><button id="atlasBattleClose" class="mini-button" type="button" title="Terminar batalla">×</button></div></header>
+            <div id="atlasBattleCards" class="atlas-battle-cards"></div>
           </aside>
         </div>
 
@@ -917,6 +937,7 @@
       <fieldset id="atlasSceneSourceFieldset" class="atlas-scene-source"><legend>Contenido inicial</legend><label><input type="radio" name="atlasSceneSource" value="image" checked /><span><strong>Imagen subida</strong><small>Guarda la escena y selecciona después un PNG, JPG o WebP.</small></span></label><label><input type="radio" name="atlasSceneSource" value="dungeon" /><span><strong>Mapa creado</strong><small>Abre el editor con cuadrícula, arquitectura y mobiliario.</small></span></label></fieldset>
       <button id="atlasSceneEditDungeon" type="button" class="button button--quiet" hidden>✎ Abrir editor de mazmorras</button>
       <label>Disponibilidad en el Atlas<select id="atlasSceneUnlockEvent"><option value="">Visible para el DM desde el principio</option></select><small class="field-help">Si eliges un suceso, la escena quedará latente y no aparecerá en el Atlas normal hasta que ese suceso haya ocurrido.</small></label>
+      <fieldset class="atlas-world-reference"><legend>Referencia de Mundo <small>(opcional)</small></legend><div class="form-grid"><label>Tipo<select id="atlasSceneWorldRefType"><option value="">Ninguna</option><option value="creature">Criatura</option><option value="character">Personaje</option><option value="organisation">Organización</option></select></label><label>Ficha<select id="atlasSceneWorldRefId"><option value="">—</option></select></label></div></fieldset>
       <label class="check-row"><input id="atlasSceneDiscovered" type="checkbox" /> Descubierta por los jugadores</label>
       <label id="atlasSceneCreateNotebookWrap" class="check-row"><input id="atlasSceneCreateNotebook" type="checkbox" /> Crear y asociar una ficha en el Cuaderno al guardar</label>
       <div class="dialog-actions dialog-actions--split"><button id="atlasDeleteScene" type="button" class="button button--danger" hidden>Eliminar</button><span></span><button type="button" class="button button--quiet atlas-scene-dialog-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
@@ -932,6 +953,7 @@
       </div>
       <div class="form-grid"><label>Visibilidad<select id="atlasMarkerVisibility"><option value="dm">Solo DM</option><option value="visible">Visible, no descubierto</option><option value="discovered">Descubierto y visible</option></select></label><label>Tamaño en el mapa<div class="atlas-marker-size-control"><input id="atlasMarkerSize" type="range" min="0.25" max="8" step="0.25" value="1" /><output id="atlasMarkerSizeValue">1</output><span id="atlasMarkerSizeUnit">u</span></div></label></div>
       <label>Disponibilidad en el Atlas<select id="atlasMarkerUnlockEvent"><option value="">Visible para el DM desde el principio</option></select><small class="field-help">Si eliges un suceso, el marcador quedará latente: no aparecerá en el mapa ni en la lista de capas hasta que ese suceso haya ocurrido. Podrás editarlo desde Historia.</small></label>
+      <fieldset class="atlas-world-reference"><legend>Ficha de Mundo <small>(opcional)</small></legend><div class="form-grid"><label>Tipo<select id="atlasMarkerWorldRefType"><option value="">Ninguna</option><option value="creature">Criatura</option><option value="character">Personaje</option><option value="organisation">Organización</option></select></label><label>Ficha<select id="atlasMarkerWorldRefId"><option value="">—</option></select></label></div><small class="field-help">Puedes reutilizar una criatura o personaje en tantos marcadores como quieras sin duplicar su ficha.</small></fieldset>
       <div class="atlas-picker-field">
         <span>Escena que abre</span>
         <input id="atlasMarkerTargetScene" type="hidden" />
@@ -1067,6 +1089,14 @@
       <label>Capítulo<select id="atlasNotebookCreateChapter"></select></label>
       <label>Dentro de <small>(opcional)</small><select id="atlasNotebookCreateParent"></select></label>
       <div class="dialog-actions"><button type="button" class="button button--quiet atlas-notebook-create-cancel">Cancelar</button><button class="button" type="submit">Crear y asociar</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="atlasBattleDialog">
+    <form id="atlasBattleForm" class="dialog-card atlas-dialog-card">
+      <div class="dialog-card__header"><div><h2>Batalla</h2><p class="dialog-intro">Elige los marcadores que aparecerán en el panel. Durante la batalla sólo se mostrará su foto y su nombre.</p></div><button type="button" class="icon-button atlas-battle-dialog-close" aria-label="Cerrar">×</button></div>
+      <div id="atlasBattleMarkerList" class="atlas-battle-marker-list"></div>
+      <div class="dialog-actions dialog-actions--split"><button id="atlasBattleEnd" type="button" class="button button--danger">Terminar batalla</button><span></span><button type="button" class="button button--quiet atlas-battle-dialog-cancel">Cancelar</button><button class="button" type="submit">Mostrar batalla</button></div>
     </form>
   </dialog>
 
@@ -1214,9 +1244,9 @@
       <p>La descripción admite títulos, listas, negrita, cursiva, tachado, enlaces y bloques resaltados. La barra de formato está bajo el pergamino de escritura.</p>
       <p>Para conectar dos entradas, abre una de ellas, pulsa <strong>Crear conexión</strong> y después pulsa el destino directamente en cualquiera de las cinco columnas.</p>
       <p>En <strong>Calendario</strong> el día 1 es el inicio de la campaña. El tiempo solo avanza al pulsar <strong>Dormir · +1 día</strong>; puedes escoger el mes inicial y los días que tiene cada mes.</p>
-      <p>El <strong>Mapa</strong> reúne todas las conexiones y permite filtrarlas por una localización. Los items obtenibles de una localización también aparecen enlazados con su entrada relacionada.</p>
       <p>En <strong>Dados</strong> puedes sumar varios d4, d6, d8, d10, d12, d20 o d100, elegir un modificador entre +20 y −20 y tirar fórmulas editables como <strong>2d20 + 4</strong>. Cada campaña conserva su propio historial.</p>
       <p>En <strong>Historia</strong> puedes crear capítulos y dibujar un mapa mental de la campaña. Al marcar un nodo como ocurrido se desbloquean sus hijos directos; cada nodo puede enlazar fichas del Cuaderno, escenas y marcadores, además de revelar contenido latente del Atlas.</p>
+      <p>En <strong>Mundo</strong> puedes mantener un Bestiario de criaturas reutilizables y organizaciones con jerarquías de personajes. Sus fichas pueden asociarse a escenas y marcadores del Atlas sin duplicarlas.</p>
       <p>En <strong>Atlas</strong> puedes crear escenas anidadas con imágenes propias, marcadores, formas y niebla de guerra. Las escenas de tipo <strong>Mapa creado</strong> abren un editor cenital con cuadrícula de 1 m², habitaciones, pasillos, paredes, puertas, escaleras, mobiliario, texturas y exportación PNG.</p>
       <p>En <strong>Cuaderno</strong>, las entradas muertas, completadas, destruidas, fallidas o irrelevantes pasan al Archivo plegable de su columna sin borrarse.</p>
       <p>El panel ☰ reúne la contraseña del DM y las copias de seguridad: JSON ligero o ZIP completo con las imágenes del Atlas.</p>
@@ -1239,9 +1269,58 @@
     </section>
   </template>
 
-  <script src="app.js?v=2.11.4" defer></script>
-  <script src="history.js?v=2.11.4" defer></script>
-  <script src="atlas.js?v=2.11.4" defer></script>
-  <script src="dungeon.js?v=2.11.4" defer></script>
+  <dialog id="worldCreatureDialog">
+    <form id="worldCreatureForm" class="dialog-card world-editor-dialog">
+      <div class="dialog-card__header"><div><h2 id="worldCreatureDialogTitle">Criatura</h2><p class="dialog-intro">Ficha base reutilizable desde el Atlas.</p></div><button type="button" class="icon-button world-creature-close" aria-label="Cerrar">×</button></div>
+      <div class="world-editor-hero">
+        <div class="world-editor-photo"><img id="worldCreaturePhotoPreview" alt="" hidden /><div id="worldCreaturePhotoEmpty">Sin imagen</div><input id="worldCreaturePhotoInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden /><div><button id="worldCreaturePhotoChoose" class="button button--quiet" type="button">Elegir imagen</button><button id="worldCreaturePhotoRemove" class="button button--quiet" type="button" hidden>Quitar</button></div></div>
+        <div class="world-editor-main"><label>Nombre<input id="worldCreatureName" maxlength="120" required /></label><div class="form-grid"><label>Tipo / especie<input id="worldCreatureType" maxlength="100" placeholder="Ej.: Constructo, bestia, no-muerto…" /></label><label>Etiquetas<input id="worldCreatureTags" maxlength="300" placeholder="bosque, jefe, volador…" /></label></div><label>Descripción<textarea id="worldCreatureDescription" rows="5" maxlength="8000"></textarea></label></div>
+      </div>
+      <section class="world-editor-section"><h3>Estadísticas</h3><div class="world-stat-edit-grid"><label>PG<input data-world-creature-stat="hp" type="number" /></label><label>PG máx.<input data-world-creature-stat="maxhp" type="number" /></label><label>CA<input data-world-creature-stat="ac" type="number" /></label><label>Velocidad<input data-world-creature-stat="speed" type="number" /></label><label>Iniciativa<input data-world-creature-stat="initiative" type="number" /></label><label>Competencia<input data-world-creature-stat="proficiency" type="number" /></label></div><div class="world-ability-edit-grid"><label>FUE<input data-world-creature-stat="str" type="number" min="1" max="30" /></label><label>DES<input data-world-creature-stat="dex" type="number" min="1" max="30" /></label><label>CON<input data-world-creature-stat="con" type="number" min="1" max="30" /></label><label>INT<input data-world-creature-stat="int" type="number" min="1" max="30" /></label><label>SAB<input data-world-creature-stat="wis" type="number" min="1" max="30" /></label><label>CAR<input data-world-creature-stat="cha" type="number" min="1" max="30" /></label></div></section>
+      <section class="world-editor-section"><div class="atlas-sheet-text-grid"><label>Modificadores<textarea id="worldCreatureModifiers" rows="4" maxlength="5000"></textarea></label><label>Habilidades<textarea id="worldCreatureAbilities" rows="4" maxlength="5000"></textarea></label><label>Estilo de combate<textarea id="worldCreatureCombatStyle" rows="4" maxlength="5000"></textarea></label><label>Si los PJ no atacan<textarea id="worldCreatureNonAggression" rows="4" maxlength="5000"></textarea></label><label>Acciones<textarea id="worldCreatureActions" rows="5" maxlength="7000"></textarea></label><label>Reacciones<textarea id="worldCreatureReactions" rows="4" maxlength="5000"></textarea></label></div></section>
+      <section class="world-editor-section"><div class="panel__titlebar"><h3>Botín / recompensas</h3><span class="panel__hint">Opcional.</span></div><div id="worldCreatureLootList" class="world-loot-edit-list"></div><div class="world-loot-add"><input id="worldCreatureLootName" maxlength="160" placeholder="Objeto" /><input id="worldCreatureLootQty" type="number" min="1" value="1" aria-label="Cantidad" /><input id="worldCreatureLootNotes" maxlength="500" placeholder="Notas" /><button id="worldCreatureLootAdd" class="button button--quiet" type="button">+ Añadir</button></div></section>
+      <div class="dialog-actions"><button type="button" class="button button--danger" id="worldCreatureDelete">Eliminar</button><span class="spacer"></span><button type="button" class="button button--quiet world-creature-cancel">Cancelar</button><button class="button" type="submit">Guardar criatura</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="worldOrganisationDialog">
+    <form id="worldOrganisationForm" class="dialog-card world-editor-dialog world-editor-dialog--compact">
+      <div class="dialog-card__header"><div><h2 id="worldOrganisationDialogTitle">Organización</h2><p class="dialog-intro">Ficha y estructura de una facción del mundo.</p></div><button type="button" class="icon-button world-organisation-close" aria-label="Cerrar">×</button></div>
+      <div class="world-editor-hero"><div class="world-editor-photo"><img id="worldOrganisationPhotoPreview" alt="" hidden /><div id="worldOrganisationPhotoEmpty">Sin símbolo / imagen</div><input id="worldOrganisationPhotoInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden /><div><button id="worldOrganisationPhotoChoose" class="button button--quiet" type="button">Elegir imagen</button><button id="worldOrganisationPhotoRemove" class="button button--quiet" type="button" hidden>Quitar</button></div></div><div class="world-editor-main"><label>Nombre<input id="worldOrganisationName" maxlength="140" required /></label><label>Sede / territorio<input id="worldOrganisationHeadquarters" maxlength="500" /></label><label>Descripción<textarea id="worldOrganisationDescription" rows="4" maxlength="8000"></textarea></label></div></div>
+      <div class="atlas-sheet-text-grid"><label>Objetivos<textarea id="worldOrganisationGoals" rows="4" maxlength="5000"></textarea></label><label>Relación / actitud<textarea id="worldOrganisationAttitude" rows="4" maxlength="1000"></textarea></label><label>Notas DM<textarea id="worldOrganisationNotes" rows="5" maxlength="8000"></textarea></label></div>
+      <div class="dialog-actions"><button type="button" class="button button--danger" id="worldOrganisationDelete">Eliminar</button><span class="spacer"></span><button type="button" class="button button--quiet world-organisation-cancel">Cancelar</button><button class="button" type="submit">Guardar organización</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="worldMemberDialog">
+    <form id="worldMemberForm" class="dialog-card world-member-dialog">
+      <div class="dialog-card__header"><div><h2>Persona de la organización</h2><p class="dialog-intro">Reutiliza un personaje existente o crea uno nuevo.</p></div><button type="button" class="icon-button world-member-close" aria-label="Cerrar">×</button></div>
+      <label>Personaje<select id="worldMemberCharacter"><option value="__new">+ Crear personaje nuevo</option></select></label>
+      <label id="worldMemberNewNameWrap">Nombre del nuevo personaje<input id="worldMemberNewName" maxlength="120" /></label>
+      <label>Cargo / función<input id="worldMemberRole" maxlength="140" placeholder="Ej.: Gran maestre, capitana, agente…" /></label>
+      <label>Depende de<select id="worldMemberParent"><option value="">— Nivel superior —</option></select></label>
+      <div class="dialog-actions"><button id="worldMemberRemove" type="button" class="button button--danger" hidden>Quitar de organización</button><span class="spacer"></span><button type="button" class="button button--quiet world-member-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="worldCharacterDialog">
+    <form id="worldCharacterForm" class="dialog-card world-editor-dialog">
+      <div class="dialog-card__header"><div><h2 id="worldCharacterDialogTitle">Personaje</h2><p class="dialog-intro">Ficha reutilizable en organizaciones y Atlas.</p></div><button type="button" class="icon-button world-character-close" aria-label="Cerrar">×</button></div>
+      <div class="world-editor-hero"><div class="world-editor-photo"><img id="worldCharacterPhotoPreview" alt="" hidden /><div id="worldCharacterPhotoEmpty">Sin imagen</div><input id="worldCharacterPhotoInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden /><div><button id="worldCharacterPhotoChoose" class="button button--quiet" type="button">Elegir imagen</button><button id="worldCharacterPhotoRemove" class="button button--quiet" type="button" hidden>Quitar</button></div></div><div class="world-editor-main"><label>Nombre<input id="worldCharacterName" maxlength="120" required /></label><div class="form-grid"><label>Tipo / función<input id="worldCharacterType" maxlength="100" placeholder="Humano, mago, informante…" /></label><label>Actitud<select id="worldCharacterDisposition"><option value="neutral">Neutral / desconocido</option><option value="ally">Aliado</option><option value="enemy">Enemigo</option></select></label></div><label>Descripción<textarea id="worldCharacterDescription" rows="5" maxlength="8000"></textarea></label></div></div>
+      <section class="world-editor-section"><h3>Estadísticas</h3><div class="world-stat-edit-grid"><label>PG<input data-world-character-stat="hp" type="number" /></label><label>PG máx.<input data-world-character-stat="maxhp" type="number" /></label><label>CA<input data-world-character-stat="ac" type="number" /></label><label>Velocidad<input data-world-character-stat="speed" type="number" /></label><label>Iniciativa<input data-world-character-stat="initiative" type="number" /></label><label>Competencia<input data-world-character-stat="proficiency" type="number" /></label></div><div class="world-ability-edit-grid"><label>FUE<input data-world-character-stat="str" type="number" min="1" max="30" /></label><label>DES<input data-world-character-stat="dex" type="number" min="1" max="30" /></label><label>CON<input data-world-character-stat="con" type="number" min="1" max="30" /></label><label>INT<input data-world-character-stat="int" type="number" min="1" max="30" /></label><label>SAB<input data-world-character-stat="wis" type="number" min="1" max="30" /></label><label>CAR<input data-world-character-stat="cha" type="number" min="1" max="30" /></label></div></section>
+      <section class="world-editor-section"><div class="atlas-sheet-text-grid"><label>Modificadores<textarea id="worldCharacterModifiers" rows="4" maxlength="5000"></textarea></label><label>Habilidades<textarea id="worldCharacterAbilities" rows="4" maxlength="5000"></textarea></label><label>Estilo de combate<textarea id="worldCharacterCombatStyle" rows="4" maxlength="5000"></textarea></label><label>Si los PJ no atacan<textarea id="worldCharacterNonAggression" rows="4" maxlength="5000"></textarea></label><label>Acciones<textarea id="worldCharacterActions" rows="5" maxlength="7000"></textarea></label><label>Reacciones<textarea id="worldCharacterReactions" rows="4" maxlength="5000"></textarea></label><label>Notas DM<textarea id="worldCharacterNotes" rows="5" maxlength="8000"></textarea></label></div></section>
+      <div class="dialog-actions"><button type="button" class="button button--danger" id="worldCharacterDelete">Eliminar personaje</button><span class="spacer"></span><button type="button" class="button button--quiet world-character-cancel">Cancelar</button><button class="button" type="submit">Guardar personaje</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="worldCharacterViewDialog">
+    <article class="dialog-card world-character-view-card"><div class="dialog-card__header"><div><h2 id="worldCharacterViewTitle">Personaje</h2><p id="worldCharacterViewSubtitle" class="dialog-intro"></p></div><div class="world-view-dialog-actions"><button id="worldCharacterViewEdit" class="icon-button" type="button" title="Editar" aria-label="Editar">✎</button><button type="button" class="icon-button world-character-view-close" aria-label="Cerrar">×</button></div></div><div id="worldCharacterViewBody"></div></article>
+  </dialog>
+
+  <script src="app.js?v=2.12.2" defer></script>
+  <script src="history.js?v=2.12.2" defer></script>
+  <script src="world.js?v=2.12.2" defer></script>
+  <script src="atlas.js?v=2.12.2" defer></script>
+  <script src="dungeon.js?v=2.12.2" defer></script>
 </body>
 </html>

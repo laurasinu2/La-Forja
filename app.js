@@ -556,6 +556,60 @@
     };
   }
 
+  function defaultWorldState() {
+    return { selectedSection: "creatures", selectedCreatureId: "", selectedOrganisationId: "", selectedCharacterId: "", creatures: [], characters: [], organisations: [] };
+  }
+
+  function normaliseWorldStats(raw = {}) {
+    const optionalNumber = value => value === "" || value === null || value === undefined || !Number.isFinite(Number(value)) ? "" : Number(value);
+    const stats = {};
+    ["hp", "maxhp", "ac", "speed", "initiative", "proficiency", "str", "dex", "con", "int", "wis", "cha"].forEach(key => { stats[key] = optionalNumber(raw?.[key]); });
+    return stats;
+  }
+
+  function normaliseWorldCreature(raw = {}, kind = "creature") {
+    const loot = Array.isArray(raw.loot) ? raw.loot.map(item => ({
+      id: String(item?.id || uid()), name: String(item?.name || "").slice(0, 160), quantity: Math.max(1, Math.trunc(Number(item?.quantity) || 1)), notes: String(item?.notes || "").slice(0, 500)
+    })).filter(item => item.name.trim()) : [];
+    return {
+      id: String(raw.id || uid()), kind,
+      name: String(raw.name || (kind === "character" ? "Personaje sin nombre" : "Criatura sin nombre")).slice(0, 120),
+      imageId: String(raw.imageId || ""), type: String(raw.type || "").slice(0, 100), tags: String(raw.tags || "").slice(0, 300),
+      description: String(raw.description || "").slice(0, 8000), disposition: ["enemy","ally","neutral"].includes(raw.disposition) ? raw.disposition : "neutral",
+      stats: normaliseWorldStats(raw.stats), modifiers: String(raw.modifiers || "").slice(0, 5000), abilities: String(raw.abilities || "").slice(0, 5000),
+      combatStyle: String(raw.combatStyle || "").slice(0, 5000), nonAggression: String(raw.nonAggression || "").slice(0, 5000), actions: String(raw.actions || "").slice(0, 7000), reactions: String(raw.reactions || "").slice(0, 5000),
+      notes: String(raw.notes || "").slice(0, 8000), loot, createdAt: raw.createdAt || now(), updatedAt: raw.updatedAt || now()
+    };
+  }
+
+  function normaliseWorldState(raw = {}) {
+    const fallback = defaultWorldState();
+    const creatures = Array.isArray(raw.creatures) ? raw.creatures.map(item => normaliseWorldCreature(item, "creature")) : [];
+    const characters = Array.isArray(raw.characters) ? raw.characters.map(item => normaliseWorldCreature(item, "character")) : [];
+    const characterIds = new Set(characters.map(item => item.id));
+    const organisations = Array.isArray(raw.organisations) ? raw.organisations.map(item => {
+      const members = Array.isArray(item?.members) ? item.members.map(member => ({
+        id: String(member?.id || uid()), characterId: String(member?.characterId || ""), parentMemberId: String(member?.parentMemberId || ""), role: String(member?.role || "").slice(0, 140)
+      })).filter(member => characterIds.has(member.characterId)) : [];
+      const memberIds = new Set(members.map(member => member.id));
+      members.forEach(member => { if (!memberIds.has(member.parentMemberId) || member.parentMemberId === member.id) member.parentMemberId = ""; });
+      return {
+        id: String(item?.id || uid()), name: String(item?.name || "Organización sin nombre").slice(0, 140), imageId: String(item?.imageId || ""),
+        description: String(item?.description || "").slice(0, 8000), headquarters: String(item?.headquarters || "").slice(0, 500), goals: String(item?.goals || "").slice(0, 5000), attitude: String(item?.attitude || "").slice(0, 1000), notes: String(item?.notes || "").slice(0, 8000),
+        members, createdAt: item?.createdAt || now(), updatedAt: item?.updatedAt || now()
+      };
+    }) : [];
+    const creatureIds = new Set(creatures.map(item => item.id));
+    const organisationIds = new Set(organisations.map(item => item.id));
+    return {
+      selectedSection: raw.selectedSection === "organisations" ? "organisations" : "creatures",
+      selectedCreatureId: creatureIds.has(String(raw.selectedCreatureId || "")) ? String(raw.selectedCreatureId) : creatures[0]?.id || "",
+      selectedOrganisationId: organisationIds.has(String(raw.selectedOrganisationId || "")) ? String(raw.selectedOrganisationId) : organisations[0]?.id || "",
+      selectedCharacterId: characterIds.has(String(raw.selectedCharacterId || "")) ? String(raw.selectedCharacterId) : "",
+      creatures, characters, organisations
+    };
+  }
+
   function defaultAtlasState() {
     const rootId = uid();
     return {
@@ -563,6 +617,7 @@
       projectionSceneId: rootId,
       playerNavigationMode: "follow",
       publicMerchantEntryId: "",
+      battle: { active: false, sceneId: "", markerIds: [] },
       customCategories: [],
       markerSheets: [],
       scenes: [{
@@ -622,6 +677,8 @@
           mapProject: normaliseDungeonProject(scene?.mapProject),
           discovered: Boolean(scene?.discovered),
           unlockEventId: historyEventIds.has(String(scene?.unlockEventId || "")) ? String(scene.unlockEventId) : "",
+          worldRefType: ["creature", "character", "organisation"].includes(String(scene?.worldRefType || "")) ? String(scene.worldRefType) : "",
+          worldRefId: String(scene?.worldRefId || ""),
           fogBase: scene?.fogBase === "revealed" ? "revealed" : "covered",
           markers: Array.isArray(scene?.markers) ? scene.markers.map(marker => ({
             id: String(marker?.id || uid()),
@@ -642,6 +699,8 @@
             sheetMode: marker?.sheetMode === "internal" || marker?.sheetMode === "notebook" ? marker.sheetMode : "",
             primaryEntryId: entryIds.has(String(marker?.primaryEntryId || "")) ? String(marker.primaryEntryId) : "",
             internalSheetId: String(marker?.internalSheetId || ""),
+            worldRefType: ["creature", "character", "organisation"].includes(String(marker?.worldRefType || "")) ? String(marker.worldRefType) : "",
+            worldRefId: String(marker?.worldRefId || ""),
             mapSize: Math.max(0.25, Math.min(8, atlasNumber(marker?.mapSize, atlasNumber(marker?.size, 42) / 42))),
             size: Math.max(24, Math.min(80, atlasNumber(marker?.size, 42)))
           })) : [],
@@ -697,6 +756,13 @@
       projectionSceneId,
       playerNavigationMode: raw.playerNavigationMode === "free" ? "free" : "follow",
       publicMerchantEntryId: entryIds.has(raw.publicMerchantEntryId) ? raw.publicMerchantEntryId : "",
+      battle: (() => {
+        const sceneId = sceneIds.has(String(raw.battle?.sceneId || "")) ? String(raw.battle.sceneId) : "";
+        const scene = scenes.find(item => item.id === sceneId);
+        const validMarkerIds = new Set(scene?.markers?.map(marker => marker.id) || []);
+        const markerIds = Array.isArray(raw.battle?.markerIds) ? [...new Set(raw.battle.markerIds.map(String).filter(id => validMarkerIds.has(id)))] : [];
+        return { active: Boolean(raw.battle?.active && sceneId && markerIds.length), sceneId, markerIds };
+      })(),
       customCategories: Array.isArray(raw.customCategories) ? raw.customCategories.map(category => ({
         id: String(category?.id || uid()),
         label: String(category?.label || "Personalizada").slice(0, 50),
@@ -780,7 +846,7 @@
       view: "notebook", selectedId: null, search: "", notebookChapterFilter: "all",
       gameCalendar: defaultGameCalendar(), calendarEvents: [], entries: [], history: defaultHistoryState(),
       mindmapLocationFilter: "", mindmapLayoutVersion: MINDMAP_LAYOUT_VERSION, mindmapLayouts: {}, dice: defaultDiceState(),
-      atlas: defaultAtlasState(), auth: { passwordHash: "", passwordSalt: "", updatedAt: "" }, entriesCreated: 0,
+      atlas: defaultAtlasState(), world: defaultWorldState(), auth: { passwordHash: "", passwordSalt: "", updatedAt: "" }, entriesCreated: 0,
       createdAt: now(), updatedAt: now()
     };
   }
@@ -993,7 +1059,7 @@
       id: raw.id || uid(),
       version: 7,
       campaignName: String(raw.campaignName || fallbackName),
-      view: ["notebook", "history", "calendar", "mindmap", "dice", "atlas"].includes(raw.view) ? raw.view : (raw.view === "dungeon" ? "atlas" : "notebook"),
+      view: ["notebook", "history", "world", "calendar", "mindmap", "dice", "atlas"].includes(raw.view) ? raw.view : (raw.view === "dungeon" ? "atlas" : "notebook"),
       selectedId: ids.has(raw.selectedId) ? raw.selectedId : entries[0]?.id || null,
       search: String(raw.search || ""),
       notebookChapterFilter: raw.notebookChapterFilter === "none" || historyChapterIds.has(String(raw.notebookChapterFilter || "")) ? String(raw.notebookChapterFilter) : "all",
@@ -1007,6 +1073,7 @@
         : {},
       dice: normaliseDiceState(raw.dice),
       history,
+      world: normaliseWorldState(raw.world),
       atlas: normaliseAtlasState(raw.atlas, ids, historyEventIds),
       auth: {
         passwordHash: String(raw.auth?.passwordHash || ""),
@@ -1149,7 +1216,7 @@
   let activeCollectionType = state.entries.find(entry => entry.id === state.selectedId)?.type || "locations";
 
   const els = {
-    notebookView: $("#notebookView"), historyView: $("#historyView"), calendarView: $("#calendarView"), mindmapView: $("#mindmapView"), diceView: $("#diceView"), atlasView: $("#atlasView"), dungeonView: $("#dungeonView"), viewTabs: $$(".view-tab"),
+    notebookView: $("#notebookView"), historyView: $("#historyView"), worldView: $("#worldView"), calendarView: $("#calendarView"), mindmapView: $("#mindmapView"), diceView: $("#diceView"), atlasView: $("#atlasView"), dungeonView: $("#dungeonView"), viewTabs: $$(".view-tab"),
     campaignSelect: $("#campaignSelect"), campaignManagerBtn: $("#campaignManagerBtn"),
     campaignDialog: $("#campaignDialog"), newCampaignForm: $("#newCampaignForm"), newCampaignName: $("#newCampaignName"), campaignList: $("#campaignList"),
     columns: $("#columns"), collectionTabs: $("#collectionTabs"), notebookChapterFilter: $("#notebookChapterFilter"), collectionsPanel: $("#collectionsPanel"), connectionModeBanner: $("#connectionModeBanner"), selectionModeText: $("#selectionModeText"), cancelConnectionBanner: $("#cancelConnectionBanner"),
@@ -1309,6 +1376,7 @@
     renderColumns();
     renderEditor();
     window.ForjaHistory?.render?.();
+    window.ForjaWorld?.render?.();
     renderCalendar();
     renderMindMap();
     renderDice();
@@ -1430,9 +1498,11 @@
   }
 
   function renderView() {
+    if (state.view === "mindmap") state.view = "atlas";
     if (state.view !== "atlas") window.ForjaAtlas?.closeDmSheet?.();
     els.notebookView.hidden = state.view !== "notebook";
     if (els.historyView) els.historyView.hidden = state.view !== "history";
+    if (els.worldView) els.worldView.hidden = state.view !== "world";
     els.calendarView.hidden = state.view !== "calendar";
     els.mindmapView.hidden = state.view !== "mindmap";
     els.diceView.hidden = state.view !== "dice";
@@ -3498,6 +3568,7 @@
       saveState();
       renderView();
       if (state.view === "history") window.ForjaHistory?.render?.();
+      if (state.view === "world") window.ForjaWorld?.render?.();
       if (state.view === "calendar") renderCalendar();
       if (state.view === "mindmap") {
         resetMindmapTransform();
@@ -4148,11 +4219,12 @@
       document.dispatchEvent(new CustomEvent("forja:campaignchange", { detail: { campaignId: state.id } }));
     },
     setView(view) {
-      if (!["notebook", "history", "calendar", "mindmap", "dice", "atlas", "dungeon"].includes(view)) return;
+      if (!["notebook", "history", "world", "calendar", "mindmap", "dice", "atlas", "dungeon"].includes(view)) return;
       state.view = view;
       saveState();
       renderView();
       if (view === "history") window.ForjaHistory?.render?.();
+      if (view === "world") window.ForjaWorld?.render?.();
       if (view === "atlas") window.ForjaAtlas?.render?.();
       if (view === "dungeon") window.ForjaDungeon?.render?.();
     },

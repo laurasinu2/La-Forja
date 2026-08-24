@@ -1,12 +1,13 @@
-const CACHE = "forja-narrador-v2113-history-pan";
+const CACHE = "forja-narrador-v2122-battle-panel";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.11.4",
-  "./app.js?v=2.11.4",
-  "./history.js?v=2.11.4",
-  "./atlas.js?v=2.11.4",
-  "./dungeon.js?v=2.11.4",
+  "./styles.css?v=2.12.2",
+  "./app.js?v=2.12.2",
+  "./history.js?v=2.12.2",
+  "./world.js?v=2.12.2",
+  "./atlas.js?v=2.12.2",
+  "./dungeon.js?v=2.12.2",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",
