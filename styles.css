@@ -3264,3 +3264,21 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
   .world-library--creatures,#worldOrganisationsSection{grid-template-rows:130px minmax(0,1fr)}
   .world-library--creatures .world-card-list,#worldOrganisationsSection .world-card-list{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
 }
+
+/* v2.12.4 · ajustes locales por marcador para criaturas del Bestiario */
+.atlas-world-instance-editor{display:grid;gap:16px;padding:14px}
+.atlas-world-instance-note{display:grid;gap:3px;padding:11px 12px;border:1px solid var(--line-soft);border-radius:7px;background:rgba(255,255,255,.025)}
+.atlas-world-instance-note strong{font-size:13px;color:var(--accent-2)}
+.atlas-world-instance-note span{font-size:12px;line-height:1.45;color:var(--muted)}
+.atlas-world-instance-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.atlas-world-instance-stats label,.atlas-world-instance-fields label{display:grid;gap:5px;min-width:0}
+.atlas-world-instance-stats label span,.atlas-world-instance-fields label span{font-size:11px;font-weight:700;color:var(--muted)}
+.atlas-world-instance-stats input{width:100%;min-width:0;text-align:center}
+.atlas-world-instance-fields{display:grid;gap:11px}
+.atlas-world-instance-fields textarea{width:100%;min-height:74px;resize:vertical}
+.atlas-world-instance-actions{display:flex;flex-wrap:wrap;gap:7px;padding-top:4px;border-top:1px solid var(--line-soft)}
+.atlas-world-instance-actions .button--danger{margin-left:auto}
+@media (max-width:520px){
+  .atlas-world-instance-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .atlas-world-instance-actions .button--danger{margin-left:0}
+}

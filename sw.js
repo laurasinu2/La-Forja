@@ -1,13 +1,13 @@
-const CACHE = "forja-narrador-v2123-creature-categories";
+const CACHE = "forja-narrador-v2124-atlas-creature-overrides";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.12.3",
-  "./app.js?v=2.12.3",
-  "./history.js?v=2.12.3",
-  "./world.js?v=2.12.3",
-  "./atlas.js?v=2.12.3",
-  "./dungeon.js?v=2.12.3",
+  "./styles.css?v=2.12.4",
+  "./app.js?v=2.12.4",
+  "./history.js?v=2.12.4",
+  "./world.js?v=2.12.4",
+  "./atlas.js?v=2.12.4",
+  "./dungeon.js?v=2.12.4",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

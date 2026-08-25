@@ -99,6 +99,8 @@
   let internalSheetDraft = null;
   let pendingOrphanSheetId = "";
   let internalSheetEditMode = false;
+  let activeWorldPanel = null;
+  let worldInstanceEditMode = false;
   let pendingNotebookLink = null;
   let sheetPhotoRenderToken = 0;
   let lanHostPlugin = null;
@@ -155,6 +157,7 @@
         marker.internalSheetId = String(marker.internalSheetId || "");
         marker.worldRefType = ["creature","character","organisation"].includes(String(marker.worldRefType || "")) ? String(marker.worldRefType) : "";
         marker.worldRefId = String(marker.worldRefId || "");
+        marker.worldCreatureOverrides = normaliseWorldCreatureOverrides(marker.worldCreatureOverrides);
         if (!marker.sheetMode && marker.category === "merchant" && !marker.relatedEntryIds.length) {
           const sheet = defaultMarkerSheet("merchant", marker.name || "Comerciante", marker.id);
           campaign.atlas.markerSheets.push(sheet);
@@ -224,6 +227,140 @@
     return `${stats.length ? `<div class="atlas-world-sheet__stats">${stats.map(key => `<div class="atlas-world-sheet__stat"><small>${labels[key]}</small><strong>${app.escapeHtml(String(item.stats[key]))}</strong></div>`).join("")}</div>` : ""}${sections}${loot}`;
   }
 
+
+  const WORLD_CREATURE_TEXT_FIELDS = ["description","modifiers","abilities","combatStyle","nonAggression","actions","reactions"];
+  const WORLD_CREATURE_STAT_FIELDS = ["hp","maxhp","ac","speed","initiative","proficiency","str","dex","con","int","wis","cha"];
+
+  function normaliseWorldCreatureOverrides(raw) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+    const out = {};
+    const stats = raw.stats && typeof raw.stats === "object" && !Array.isArray(raw.stats) ? raw.stats : {};
+    const cleanStats = {};
+    WORLD_CREATURE_STAT_FIELDS.forEach(key => {
+      if (!Object.prototype.hasOwnProperty.call(stats, key)) return;
+      cleanStats[key] = normaliseOptionalNumber(stats[key]);
+    });
+    if (Object.keys(cleanStats).length) out.stats = cleanStats;
+    WORLD_CREATURE_TEXT_FIELDS.forEach(key => {
+      if (Object.prototype.hasOwnProperty.call(raw, key)) out[key] = String(raw[key] ?? "");
+    });
+    return out;
+  }
+
+  function hasWorldCreatureOverrides(marker) {
+    const local = normaliseWorldCreatureOverrides(marker?.worldCreatureOverrides);
+    return Boolean(Object.keys(local.stats || {}).length || WORLD_CREATURE_TEXT_FIELDS.some(key => Object.prototype.hasOwnProperty.call(local, key)));
+  }
+
+  function mergedWorldCreature(base, marker) {
+    if (!base) return null;
+    const local = normaliseWorldCreatureOverrides(marker?.worldCreatureOverrides);
+    const merged = app.clone(base);
+    merged.stats = { ...(base.stats || {}), ...(local.stats || {}) };
+    WORLD_CREATURE_TEXT_FIELDS.forEach(key => {
+      if (Object.prototype.hasOwnProperty.call(local, key)) merged[key] = local[key];
+    });
+    return merged;
+  }
+
+  function worldInstanceEditorHtml(base, marker) {
+    const item = mergedWorldCreature(base, marker);
+    const labels = { hp: "PG", maxhp: "PG máx.", ac: "CA", speed: "Velocidad", initiative: "Iniciativa", proficiency: "Competencia", str: "FUE", dex: "DES", con: "CON", int: "INT", wis: "SAB", cha: "CAR" };
+    const textLabels = { description: "Descripción", modifiers: "Modificadores", abilities: "Habilidades", combatStyle: "Estilo de combate", nonAggression: "Si los PJ no atacan", actions: "Acciones", reactions: "Reacciones" };
+    const local = hasWorldCreatureOverrides(marker);
+    return `<form class="atlas-world-instance-editor" data-world-instance-form>
+      <div class="atlas-world-instance-note"><strong>Edición local del Atlas</strong><span>Los cambios afectan sólo a este marcador. La ficha del Bestiario no se modifica.</span></div>
+      <div class="atlas-world-instance-stats">${WORLD_CREATURE_STAT_FIELDS.map(key => `<label><span>${labels[key]}</span><input data-world-instance-stat="${key}" type="number" step="1" value="${app.escapeHtml(String(item?.stats?.[key] ?? ""))}" placeholder="${app.escapeHtml(String(base?.stats?.[key] ?? ""))}"></label>`).join("")}</div>
+      <div class="atlas-world-instance-fields">${WORLD_CREATURE_TEXT_FIELDS.map(key => `<label><span>${textLabels[key]}</span><textarea data-world-instance-text="${key}" rows="${key === "description" ? 3 : 4}">${app.escapeHtml(String(item?.[key] ?? ""))}</textarea></label>`).join("")}</div>
+      <div class="atlas-world-instance-actions"><button class="button" type="submit">Guardar sólo aquí</button><button class="button button--quiet" type="button" data-world-instance-cancel>Cancelar</button><button class="button button--danger" type="button" data-world-instance-reset ${local ? "" : "disabled"}>Restablecer Bestiario</button></div>
+    </form>`;
+  }
+
+  function collectWorldCreatureOverrides(form, base) {
+    const out = {};
+    const stats = {};
+    form.querySelectorAll("[data-world-instance-stat]").forEach(input => {
+      const key = input.dataset.worldInstanceStat;
+      const localValue = normaliseOptionalNumber(input.value);
+      const baseValue = normaliseOptionalNumber(base?.stats?.[key]);
+      if (localValue !== baseValue) stats[key] = localValue;
+    });
+    if (Object.keys(stats).length) out.stats = stats;
+    form.querySelectorAll("[data-world-instance-text]").forEach(input => {
+      const key = input.dataset.worldInstanceText;
+      const localValue = String(input.value || "").trim();
+      const baseValue = String(base?.[key] || "").trim();
+      if (localValue !== baseValue) out[key] = localValue;
+    });
+    return out;
+  }
+
+  function renderWorldReferencePanel() {
+    const context = activeWorldPanel;
+    if (!context) return false;
+    const item = worldReferenceData(context.type, context.id);
+    const sourceMarker = markerById(context.markerId);
+    if (!item || !els.atlasDmDetailHost) return false;
+    const displayItem = context.type === "creature" && sourceMarker ? mergedWorldCreature(item, sourceMarker) : item;
+    const displayName = sourceMarker?.name || displayItem.name || "Ficha";
+    const local = context.type === "creature" && sourceMarker && hasWorldCreatureOverrides(sourceMarker);
+    if (els.atlasDmSheetTitle) els.atlasDmSheetTitle.textContent = `${context.type === "creature" ? "◆" : context.type === "character" ? "●" : "⚑"} ${displayName}`;
+    if (els.atlasDmSheetSubtitle) {
+      if (context.type === "creature" && sourceMarker) els.atlasDmSheetSubtitle.textContent = local ? "Criatura de Mundo · ajustes locales en este marcador" : "Criatura de Mundo · heredando la ficha del Bestiario";
+      else els.atlasDmSheetSubtitle.textContent = context.type === "creature" ? "Criatura de Mundo · ficha reutilizable" : context.type === "character" ? "Personaje de Mundo · ficha reutilizable" : "Organización de Mundo";
+    }
+    if (els.atlasDmSheetEdit) {
+      els.atlasDmSheetEdit.hidden = !(context.type === "creature" && sourceMarker);
+      els.atlasDmSheetEdit.textContent = worldInstanceEditMode ? "✓" : "✎";
+      els.atlasDmSheetEdit.title = worldInstanceEditMode ? "Guardar cambios locales" : "Editar sólo este marcador";
+      els.atlasDmSheetEdit.setAttribute("aria-label", els.atlasDmSheetEdit.title);
+    }
+    let body = "";
+    if (worldInstanceEditMode && context.type === "creature" && sourceMarker) {
+      body = worldInstanceEditorHtml(item, sourceMarker);
+    } else if (context.type === "organisation") {
+      body = `<div class="atlas-world-sheet"><div class="atlas-world-sheet__hero"><div><h3>${app.escapeHtml(displayItem.name || "Organización")}</h3>${displayItem.headquarters ? `<p class="atlas-world-sheet__meta">⌂ ${app.escapeHtml(displayItem.headquarters)}</p>` : ""}${displayItem.description ? `<p class="atlas-world-sheet__description">${app.escapeHtml(displayItem.description)}</p>` : ""}</div><div class="atlas-world-sheet__image" data-atlas-world-image><span>⚑</span></div></div>${worldPanelSection("Objetivos",displayItem.goals)}${worldPanelSection("Relación / actitud",displayItem.attitude)}${worldPanelSection("Notas DM",displayItem.notes)}</div>`;
+    } else {
+      body = `<div class="atlas-world-sheet"><div class="atlas-world-sheet__hero"><div><h3>${app.escapeHtml(displayName)}</h3><p class="atlas-world-sheet__meta">${app.escapeHtml([displayItem.type,displayItem.tags].filter(Boolean).join(" · ") || (context.type === "creature" ? "Criatura" : "Personaje"))}${local ? " · ajustes locales" : ""}</p>${displayItem.description ? `<p class="atlas-world-sheet__description">${app.escapeHtml(displayItem.description)}</p>` : ""}</div><div class="atlas-world-sheet__image" data-atlas-world-image><span>${context.type === "creature" ? "◆" : "●"}</span></div></div>${worldPersonPanelHtml(displayItem,context.type)}</div>`;
+    }
+    els.atlasDmDetailHost.innerHTML = body;
+    if (worldInstanceEditMode) {
+      const form = els.atlasDmDetailHost.querySelector("[data-world-instance-form]");
+      form?.addEventListener("submit", event => { event.preventDefault(); saveWorldInstanceEdits(); });
+      form?.querySelector("[data-world-instance-cancel]")?.addEventListener("click", () => { worldInstanceEditMode = false; renderWorldReferencePanel(); });
+      form?.querySelector("[data-world-instance-reset]")?.addEventListener("click", () => {
+        if (!sourceMarker || !hasWorldCreatureOverrides(sourceMarker) || !confirm("¿Restablecer este marcador para que vuelva a usar exactamente la ficha del Bestiario?")) return;
+        sourceMarker.worldCreatureOverrides = {};
+        worldInstanceEditMode = false;
+        save({ render: false, immediate: true });
+        renderWorldReferencePanel();
+      });
+    }
+    const imageHost = els.atlasDmDetailHost.querySelector("[data-atlas-world-image]");
+    if (!worldInstanceEditMode && displayItem.imageId && imageHost) imageUrl(displayItem.imageId).then(url => { if (!url || !imageHost.isConnected) return; imageHost.replaceChildren(); const img=document.createElement("img"); img.src=url; img.alt=displayName; imageHost.append(img); }).catch(()=>{});
+    requestAnimationFrame(() => els.atlasDmDetailHost.scrollTo?.({ top: 0, behavior: "instant" }));
+    return true;
+  }
+
+  function saveWorldInstanceEdits() {
+    const context = activeWorldPanel;
+    if (!context || context.type !== "creature") return;
+    const marker = markerById(context.markerId);
+    const base = worldReferenceData(context.type, context.id);
+    const form = els.atlasDmDetailHost?.querySelector("[data-world-instance-form]");
+    if (!marker || !base || !form) return;
+    marker.worldCreatureOverrides = collectWorldCreatureOverrides(form, base);
+    worldInstanceEditMode = false;
+    save({ render: false, immediate: true });
+    renderWorldReferencePanel();
+  }
+
+  function toggleWorldInstanceEdit() {
+    if (!activeWorldPanel || activeWorldPanel.type !== "creature" || !activeWorldPanel.markerId) return;
+    if (worldInstanceEditMode) saveWorldInstanceEdits();
+    else { worldInstanceEditMode = true; renderWorldReferencePanel(); requestAnimationFrame(() => els.atlasDmDetailHost?.querySelector("[data-world-instance-stat]")?.focus()); }
+  }
+
   function openWorldReferencePanel(type, id, sourceMarker = null) {
     const item = worldReferenceData(type, id);
     if (!item || !els.atlasDmSheet || !els.atlasDmDetailHost) return false;
@@ -234,25 +371,14 @@
     }
     dmSheetMode = "world";
     dmSheetOpen = true;
+    activeWorldPanel = { type, id, markerId: sourceMarker?.id || "" };
+    worldInstanceEditMode = false;
     setDmNpcMarkerContext(sourceMarker);
     els.atlasDmSheet.hidden = false;
     els.atlasMarkerDialog?.close?.();
     const picker = els.atlasDmEntryPicker?.closest(".atlas-dm-sheet__picker");
     if (picker) picker.hidden = true;
-    if (els.atlasDmSheetEdit) els.atlasDmSheetEdit.hidden = true;
-    if (els.atlasDmSheetTitle) els.atlasDmSheetTitle.textContent = `${type === "creature" ? "◆" : type === "character" ? "●" : "⚑"} ${item.name || "Ficha"}`;
-    if (els.atlasDmSheetSubtitle) els.atlasDmSheetSubtitle.textContent = type === "creature" ? "Criatura de Mundo · ficha reutilizable" : type === "character" ? "Personaje de Mundo · ficha reutilizable" : "Organización de Mundo";
-    let body = "";
-    if (type === "organisation") {
-      body = `<div class="atlas-world-sheet"><div class="atlas-world-sheet__hero"><div><h3>${app.escapeHtml(item.name || "Organización")}</h3>${item.headquarters ? `<p class="atlas-world-sheet__meta">⌂ ${app.escapeHtml(item.headquarters)}</p>` : ""}${item.description ? `<p class="atlas-world-sheet__description">${app.escapeHtml(item.description)}</p>` : ""}</div><div class="atlas-world-sheet__image" data-atlas-world-image><span>⚑</span></div></div>${worldPanelSection("Objetivos",item.goals)}${worldPanelSection("Relación / actitud",item.attitude)}${worldPanelSection("Notas DM",item.notes)}</div>`;
-    } else {
-      body = `<div class="atlas-world-sheet"><div class="atlas-world-sheet__hero"><div><h3>${app.escapeHtml(item.name || "Ficha")}</h3><p class="atlas-world-sheet__meta">${app.escapeHtml([item.type,item.tags].filter(Boolean).join(" · ") || (type === "creature" ? "Criatura" : "Personaje"))}</p>${item.description ? `<p class="atlas-world-sheet__description">${app.escapeHtml(item.description)}</p>` : ""}</div><div class="atlas-world-sheet__image" data-atlas-world-image><span>${type === "creature" ? "◆" : "●"}</span></div></div>${worldPersonPanelHtml(item,type)}</div>`;
-    }
-    els.atlasDmDetailHost.innerHTML = body;
-    const imageHost = els.atlasDmDetailHost.querySelector("[data-atlas-world-image]");
-    if (item.imageId && imageHost) imageUrl(item.imageId).then(url => { if (!url || !imageHost.isConnected) return; imageHost.replaceChildren(); const img=document.createElement("img"); img.src=url; img.alt=item.name || ""; imageHost.append(img); }).catch(()=>{});
-    requestAnimationFrame(() => els.atlasDmDetailHost.scrollTo?.({ top: 0, behavior: "instant" }));
-    return true;
+    return renderWorldReferencePanel();
   }
 
   function battleState() {
@@ -1674,6 +1800,8 @@
   }
 
   function restoreDmSheetChrome() {
+    activeWorldPanel = null;
+    worldInstanceEditMode = false;
     if (els.atlasDmSheetTitle) els.atlasDmSheetTitle.textContent = "Ficha del cuaderno";
     if (els.atlasDmSheetSubtitle) els.atlasDmSheetSubtitle.textContent = "Solo visible para el DM";
     if (els.atlasDmSheetEdit) els.atlasDmSheetEdit.hidden = true;
@@ -2334,6 +2462,8 @@
     let marker = scene.markers.find(item => item.id === editingMarkerId);
     const previousTargetSceneId = marker?.targetSceneId || "";
     const previousInternalSheetId = marker?.internalSheetId || "";
+    const previousWorldRefType = marker?.worldRefType || "";
+    const previousWorldRefId = marker?.worldRefId || "";
     const category = categoryMeta(els.atlasMarkerCategory.value);
     const createNotebook = category.id !== "npc" && Boolean(els.atlasMarkerCreateNotebook?.checked);
     const relatedEntryIds = orderedEntryIds($$('input[type="checkbox"]:checked', els.atlasRelatedEntries).map(input => input.value));
@@ -2358,7 +2488,8 @@
       sheetMode: requestedMode, primaryEntryId: requestedMode === "notebook" ? (marker?.primaryEntryId && relatedEntryIds.includes(marker.primaryEntryId) ? marker.primaryEntryId : relatedEntryIds[0] || "") : ""
     };
     if (marker) Object.assign(marker, patch);
-    else { marker = { id: app.uid(), x: pendingPoint?.x ?? 0.5, y: pendingPoint?.y ?? 0.5, internalSheetId: "", ...patch }; scene.markers.push(marker); }
+    else { marker = { id: app.uid(), x: pendingPoint?.x ?? 0.5, y: pendingPoint?.y ?? 0.5, internalSheetId: "", worldCreatureOverrides: {}, ...patch }; scene.markers.push(marker); }
+    if (marker.worldRefType !== "creature" || marker.worldRefType !== previousWorldRefType || marker.worldRefId !== previousWorldRefId) marker.worldCreatureOverrides = {};
 
     if (requestedMode === "internal") {
       if (pendingOrphanSheetId && previousInternalSheetId && previousInternalSheetId !== pendingOrphanSheetId) { marker.internalSheetId = previousInternalSheetId; orphanInternalSheet(marker); }
@@ -3462,7 +3593,7 @@
 
     els.atlasInternalSheetForm?.addEventListener("submit", saveInternalSheetDialog);
     els.atlasInternalSheetEditToggle?.addEventListener("click", toggleInternalSheetEdit);
-    els.atlasDmSheetEdit?.addEventListener("click", toggleInternalSheetEdit);
+    els.atlasDmSheetEdit?.addEventListener("click", () => { if (dmSheetMode === "world") toggleWorldInstanceEdit(); else toggleInternalSheetEdit(); });
     $$('[data-sheet-stat]', els.atlasCreatureSheetSection).forEach(input => input.addEventListener("input", () => {
       if (["str", "dex", "con", "int", "wis", "cha"].includes(input.dataset.sheetStat)) syncInternalCreatureModifiers();
     }));
