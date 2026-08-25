@@ -1,13 +1,13 @@
-const CACHE = "forja-narrador-v2124-atlas-creature-overrides";
+const CACHE = "forja-narrador-v2125-world-picker-persistence";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.12.4",
-  "./app.js?v=2.12.4",
-  "./history.js?v=2.12.4",
-  "./world.js?v=2.12.4",
-  "./atlas.js?v=2.12.4",
-  "./dungeon.js?v=2.12.4",
+  "./styles.css?v=2.12.5",
+  "./app.js?v=2.12.5",
+  "./history.js?v=2.12.5",
+  "./world.js?v=2.12.5",
+  "./atlas.js?v=2.12.5",
+  "./dungeon.js?v=2.12.5",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

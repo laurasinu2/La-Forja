@@ -44,8 +44,8 @@
     atlasMapViewport: $("#atlasMapViewport"), atlasEmptyMap: $("#atlasEmptyMap"), atlasMapStage: $("#atlasMapStage"), atlasBackground: $("#atlasBackground"),
     atlasObjectLayer: $("#atlasObjectLayer"), atlasMarkerLayer: $("#atlasMarkerLayer"), atlasFogCanvas: $("#atlasFogCanvas"), atlasDmZoneLayer: $("#atlasDmZoneLayer"), atlasDraft: $("#atlasDraft"),
     atlasLayers: $("#atlasLayers"), atlasLayerCount: $("#atlasLayerCount"),
-    atlasSceneDialog: $("#atlasSceneDialog"), atlasSceneForm: $("#atlasSceneForm"), atlasSceneDialogTitle: $("#atlasSceneDialogTitle"), atlasSceneName: $("#atlasSceneName"), atlasSceneParent: $("#atlasSceneParent"), atlasSceneDiscovered: $("#atlasSceneDiscovered"), atlasSceneUnlockEvent: $("#atlasSceneUnlockEvent"), atlasSceneWorldRefType: $("#atlasSceneWorldRefType"), atlasSceneWorldRefId: $("#atlasSceneWorldRefId"), atlasSceneCreateNotebookWrap: $("#atlasSceneCreateNotebookWrap"), atlasSceneCreateNotebook: $("#atlasSceneCreateNotebook"), atlasDeleteScene: $("#atlasDeleteScene"), atlasSceneSourceFieldset: $("#atlasSceneSourceFieldset"), atlasSceneEditDungeon: $("#atlasSceneEditDungeon"),
-    atlasMarkerDialog: $("#atlasMarkerDialog"), atlasMarkerForm: $("#atlasMarkerForm"), atlasMarkerDialogTitle: $("#atlasMarkerDialogTitle"), atlasMarkerName: $("#atlasMarkerName"), atlasMarkerCategory: $("#atlasMarkerCategory"), atlasMarkerAlias: $("#atlasMarkerAlias"), atlasMarkerDisposition: $("#atlasMarkerDisposition"), atlasNpcFields: $("#atlasNpcFields"), atlasMarkerVisibility: $("#atlasMarkerVisibility"), atlasMarkerUnlockEvent: $("#atlasMarkerUnlockEvent"), atlasMarkerWorldRefType: $("#atlasMarkerWorldRefType"), atlasMarkerWorldRefId: $("#atlasMarkerWorldRefId"), atlasMarkerSize: $("#atlasMarkerSize"), atlasMarkerSizeValue: $("#atlasMarkerSizeValue"), atlasMarkerSizeUnit: $("#atlasMarkerSizeUnit"), atlasMarkerTargetScene: $("#atlasMarkerTargetScene"), atlasMarkerTargetTree: $("#atlasMarkerTargetTree"), atlasRelatedEntries: $("#atlasRelatedEntries"), atlasRelatedFieldset: $("#atlasRelatedFieldset"), atlasMarkerCreateNotebookWrap: $("#atlasMarkerCreateNotebookWrap"), atlasMarkerCreateNotebook: $("#atlasMarkerCreateNotebook"), atlasMarkerSheetModeWrap: $("#atlasMarkerSheetModeWrap"), atlasOrphanSheets: $("#atlasOrphanSheets"), atlasOrphanSheetList: $("#atlasOrphanSheetList"), atlasMarkerAutoDmSheet: $("#atlasMarkerAutoDmSheet"), atlasMarkerOpenSheet: $("#atlasMarkerOpenSheet"), atlasDeleteMarker: $("#atlasDeleteMarker"),
+    atlasSceneDialog: $("#atlasSceneDialog"), atlasSceneForm: $("#atlasSceneForm"), atlasSceneDialogTitle: $("#atlasSceneDialogTitle"), atlasSceneName: $("#atlasSceneName"), atlasSceneParent: $("#atlasSceneParent"), atlasSceneDiscovered: $("#atlasSceneDiscovered"), atlasSceneUnlockEvent: $("#atlasSceneUnlockEvent"), atlasSceneWorldRefPicker: $("#atlasSceneWorldRefPicker"), atlasSceneWorldRefType: $("#atlasSceneWorldRefType"), atlasSceneWorldRefId: $("#atlasSceneWorldRefId"), atlasSceneCreateNotebookWrap: $("#atlasSceneCreateNotebookWrap"), atlasSceneCreateNotebook: $("#atlasSceneCreateNotebook"), atlasDeleteScene: $("#atlasDeleteScene"), atlasSceneSourceFieldset: $("#atlasSceneSourceFieldset"), atlasSceneEditDungeon: $("#atlasSceneEditDungeon"),
+    atlasMarkerDialog: $("#atlasMarkerDialog"), atlasMarkerForm: $("#atlasMarkerForm"), atlasMarkerDialogTitle: $("#atlasMarkerDialogTitle"), atlasMarkerName: $("#atlasMarkerName"), atlasMarkerCategory: $("#atlasMarkerCategory"), atlasMarkerAlias: $("#atlasMarkerAlias"), atlasMarkerDisposition: $("#atlasMarkerDisposition"), atlasNpcFields: $("#atlasNpcFields"), atlasMarkerVisibility: $("#atlasMarkerVisibility"), atlasMarkerUnlockEvent: $("#atlasMarkerUnlockEvent"), atlasMarkerWorldRefPicker: $("#atlasMarkerWorldRefPicker"), atlasMarkerWorldRefType: $("#atlasMarkerWorldRefType"), atlasMarkerWorldRefId: $("#atlasMarkerWorldRefId"), atlasMarkerSize: $("#atlasMarkerSize"), atlasMarkerSizeValue: $("#atlasMarkerSizeValue"), atlasMarkerSizeUnit: $("#atlasMarkerSizeUnit"), atlasMarkerTargetScene: $("#atlasMarkerTargetScene"), atlasMarkerTargetTree: $("#atlasMarkerTargetTree"), atlasRelatedEntries: $("#atlasRelatedEntries"), atlasRelatedFieldset: $("#atlasRelatedFieldset"), atlasMarkerCreateNotebookWrap: $("#atlasMarkerCreateNotebookWrap"), atlasMarkerCreateNotebook: $("#atlasMarkerCreateNotebook"), atlasMarkerSheetModeWrap: $("#atlasMarkerSheetModeWrap"), atlasOrphanSheets: $("#atlasOrphanSheets"), atlasOrphanSheetList: $("#atlasOrphanSheetList"), atlasMarkerAutoDmSheet: $("#atlasMarkerAutoDmSheet"), atlasMarkerOpenSheet: $("#atlasMarkerOpenSheet"), atlasDeleteMarker: $("#atlasDeleteMarker"),
     atlasInternalSheetDialog: $("#atlasInternalSheetDialog"), atlasInternalSheetForm: $("#atlasInternalSheetForm"), atlasInternalSheetEditToggle: $("#atlasInternalSheetEditToggle"), atlasInternalSheetTitle: $("#atlasInternalSheetTitle"), atlasInternalSheetKind: $("#atlasInternalSheetKind"), atlasSheetName: $("#atlasSheetName"), atlasSheetStatusWrap: $("#atlasSheetStatusWrap"), atlasSheetStatus: $("#atlasSheetStatus"), atlasSheetCreaturePhotoWrap: $("#atlasSheetCreaturePhotoWrap"), atlasSheetPhotoPreview: $("#atlasSheetPhotoPreview"), atlasSheetPhotoEmpty: $("#atlasSheetPhotoEmpty"), atlasSheetPhotoChoose: $("#atlasSheetPhotoChoose"), atlasSheetPhotoRemove: $("#atlasSheetPhotoRemove"), atlasSheetPhotoInput: $("#atlasSheetPhotoInput"), atlasSheetDescription: $("#atlasSheetDescription"), atlasCreatureSheetSection: $("#atlasCreatureSheetSection"), atlasCreatureModifiers: $("#atlasCreatureModifiers"), atlasCreatureAbilities: $("#atlasCreatureAbilities"), atlasCreatureCombatStyle: $("#atlasCreatureCombatStyle"), atlasCreatureNonAggression: $("#atlasCreatureNonAggression"), atlasCreatureActions: $("#atlasCreatureActions"), atlasCreatureReactions: $("#atlasCreatureReactions"), atlasMerchantSheetSection: $("#atlasMerchantSheetSection"), atlasMerchantItemsList: $("#atlasMerchantItemsList"), atlasMerchantItemName: $("#atlasMerchantItemName"), atlasMerchantItemPrice: $("#atlasMerchantItemPrice"), atlasMerchantItemCurrency: $("#atlasMerchantItemCurrency"), atlasMerchantItemDescription: $("#atlasMerchantItemDescription"), atlasMerchantItemAdd: $("#atlasMerchantItemAdd"), atlasSecretSheetSection: $("#atlasSecretSheetSection"), atlasSecretReveal: $("#atlasSecretReveal"), atlasSecretClues: $("#atlasSecretClues"), atlasSecretCheckType: $("#atlasSecretCheckType"), atlasSecretCheckDc: $("#atlasSecretCheckDc"), atlasSecretSuccess: $("#atlasSecretSuccess"), atlasSecretFailure: $("#atlasSecretFailure"), atlasSecretDiscovered: $("#atlasSecretDiscovered"), atlasMissionSheetSection: $("#atlasMissionSheetSection"), atlasMissionGiver: $("#atlasMissionGiver"), atlasMissionObjective: $("#atlasMissionObjective"), atlasMissionSecondary: $("#atlasMissionSecondary"), atlasMissionReward: $("#atlasMissionReward"), atlasMissionNotes: $("#atlasMissionNotes"), atlasMissionStages: $("#atlasMissionStages"), atlasMissionStageInput: $("#atlasMissionStageInput"), atlasMissionStageAdd: $("#atlasMissionStageAdd"), atlasContainerSheetSection: $("#atlasContainerSheetSection"), atlasContainerTitle: $("#atlasContainerTitle"), atlasContainerCp: $("#atlasContainerCp"), atlasContainerSp: $("#atlasContainerSp"), atlasContainerGp: $("#atlasContainerGp"), atlasContainerPp: $("#atlasContainerPp"), atlasContainerLocked: $("#atlasContainerLocked"), atlasContainerLockDc: $("#atlasContainerLockDc"), atlasContainerKey: $("#atlasContainerKey"), atlasContainerTrapped: $("#atlasContainerTrapped"), atlasContainerTrapCheck: $("#atlasContainerTrapCheck"), atlasContainerTrapDc: $("#atlasContainerTrapDc"), atlasContainerTrapEffect: $("#atlasContainerTrapEffect"), atlasContainerDisarmDc: $("#atlasContainerDisarmDc"), atlasLootSheetSection: $("#atlasLootSheetSection"), atlasSheetLootGroups: $("#atlasSheetLootGroups"), atlasLootName: $("#atlasLootName"), atlasLootQuantity: $("#atlasLootQuantity"), atlasLootCheckType: $("#atlasLootCheckType"), atlasLootCheckDc: $("#atlasLootCheckDc"), atlasLootNotes: $("#atlasLootNotes"), atlasLootAdd: $("#atlasLootAdd"), atlasLootSearchCheck: $("#atlasLootSearchCheck"), atlasLootSearchModifier: $("#atlasLootSearchModifier"), atlasLootSearchResult: $("#atlasLootSearchResult"), atlasLootSearchRoll: $("#atlasLootSearchRoll"), atlasLootSearchResultList: $("#atlasLootSearchResultList"),
     atlasDmSheet: $("#atlasDmSheet"), atlasDmSheetResize: $("#atlasDmSheetResize"), atlasDmSheetTitle: $("#atlasDmSheetTitle"), atlasDmSheetSubtitle: $("#atlasDmSheetSubtitle"), atlasDmSheetEdit: $("#atlasDmSheetEdit"), atlasDmSheetClose: $("#atlasDmSheetClose"), atlasDmNpcDispositionBar: $("#atlasDmNpcDispositionBar"), atlasDmNpcDisposition: $("#atlasDmNpcDisposition"), atlasDmEntryPicker: $("#atlasDmEntryPicker"), atlasDmEntrySummary: $("#atlasDmEntrySummary"), atlasDmEntryTree: $("#atlasDmEntryTree"), atlasDmRelatedWrap: $("#atlasDmRelatedWrap"), atlasDmRelatedSelect: $("#atlasDmRelatedSelect"), atlasDmDetailHost: $("#atlasDmDetailHost"), detailPanel: $("#detailPanel"), detailPanelPlaceholder: $("#detailPanelPlaceholder"),
     atlasNotebookCreateDialog: $("#atlasNotebookCreateDialog"), atlasNotebookCreateForm: $("#atlasNotebookCreateForm"), atlasNotebookCreateName: $("#atlasNotebookCreateName"), atlasNotebookCreateType: $("#atlasNotebookCreateType"), atlasNotebookCreateSubtype: $("#atlasNotebookCreateSubtype"), atlasNotebookCreateChapter: $("#atlasNotebookCreateChapter"), atlasNotebookCreateParent: $("#atlasNotebookCreateParent"),
@@ -199,6 +199,82 @@
     idSelect.innerHTML = '<option value="">— Ninguna —</option>' + items.map(item => `<option value="${app.escapeHtml(item.id)}">${app.escapeHtml(item.name)}</option>`).join("");
     idSelect.disabled = !typeSelect.value || !items.length;
     idSelect.value = items.some(item => item.id === id) ? id : "";
+  }
+  function worldReferenceTree() {
+    return window.ForjaWorld?.referenceTree?.() || { creatureGroups: [], organisationGroups: [], unattachedCharacters: [] };
+  }
+
+  function renderWorldReferencePicker(host, typeSelect, idSelect, { marker = false } = {}) {
+    if (!host || !typeSelect || !idSelect) return;
+    const tree = worldReferenceTree();
+    const selectedType = String(typeSelect.value || "");
+    const selectedId = String(idSelect.value || "");
+    const selectedLabel = worldReferenceLabel(selectedType, selectedId);
+    host.replaceChildren();
+
+    const current = document.createElement("div");
+    current.className = `atlas-world-ref-current${selectedLabel ? " has-value" : ""}`;
+    const currentText = document.createElement("span");
+    currentText.textContent = selectedLabel ? `${selectedType === "creature" ? "◆" : selectedType === "character" ? "●" : "⚑"} ${selectedLabel}` : "Sin ficha de Mundo asociada";
+    const clear = document.createElement("button");
+    clear.type = "button"; clear.className = "mini-button"; clear.textContent = "×"; clear.title = "Quitar referencia"; clear.hidden = !selectedLabel;
+    clear.addEventListener("click", () => {
+      fillWorldReferenceSelect(typeSelect, idSelect, "", "");
+      if (marker) { updateMarkerDialogFields(); renderMarkerSheetMode(); }
+      renderWorldReferencePicker(host, typeSelect, idSelect, { marker });
+    });
+    current.append(currentText, clear); host.append(current);
+
+    const choose = (item) => {
+      fillWorldReferenceSelect(typeSelect, idSelect, item.type, item.id);
+      if (marker) {
+        if (item.type === "creature" && els.atlasMarkerCategory?.value === "place") els.atlasMarkerCategory.value = "creature";
+        if (item.type === "character" && els.atlasMarkerCategory?.value === "place") els.atlasMarkerCategory.value = "npc";
+        const label = worldReferenceLabel(item.type, item.id);
+        if (label && !els.atlasMarkerName?.value.trim()) els.atlasMarkerName.value = label;
+        updateMarkerDialogFields(); renderMarkerSheetMode();
+      }
+      renderWorldReferencePicker(host, typeSelect, idSelect, { marker });
+    };
+    const makeItemButton = (item, icon, secondary = "") => {
+      const button = document.createElement("button"); button.type = "button";
+      button.className = `atlas-world-ref-item${selectedType === item.type && selectedId === item.id ? " is-selected" : ""}`;
+      button.innerHTML = `<span aria-hidden="true">${icon}</span><strong>${app.escapeHtml(item.name)}</strong>${secondary ? `<small>${app.escapeHtml(secondary)}</small>` : ""}`;
+      button.addEventListener("click", () => choose(item));
+      return button;
+    };
+    const addHeading = text => { const heading=document.createElement("div"); heading.className="atlas-world-ref-heading"; heading.textContent=text; host.append(heading); };
+
+    addHeading("Criaturas");
+    const creatureGroups = document.createElement("div"); creatureGroups.className = "atlas-world-ref-groups";
+    (tree.creatureGroups || []).forEach(group => {
+      const details=document.createElement("details"); details.className="atlas-world-ref-group";
+      const summary=document.createElement("summary"); summary.innerHTML=`<span>${app.escapeHtml(group.name)}</span><small>${group.items?.length || 0}</small>`; details.append(summary);
+      const body=document.createElement("div"); body.className="atlas-world-ref-group__body";
+      if (group.items?.length) group.items.forEach(item => body.append(makeItemButton(item,"◆")));
+      else { const empty=document.createElement("p"); empty.className="panel__hint"; empty.textContent="Sin criaturas en esta categoría."; body.append(empty); }
+      details.append(body); creatureGroups.append(details);
+    });
+    if (!tree.creatureGroups?.length) { const empty=document.createElement("p"); empty.className="panel__hint atlas-world-ref-empty"; empty.textContent="Todavía no hay criaturas en Mundo."; creatureGroups.append(empty); }
+    host.append(creatureGroups);
+
+    addHeading("Organizaciones y personajes");
+    const organisationGroups=document.createElement("div"); organisationGroups.className="atlas-world-ref-groups";
+    (tree.organisationGroups || []).forEach(group => {
+      const details=document.createElement("details"); details.className="atlas-world-ref-group";
+      const summary=document.createElement("summary"); summary.innerHTML=`<span>${app.escapeHtml(group.name)}</span><small>${group.characters?.length || 0}</small>`; details.append(summary);
+      const body=document.createElement("div"); body.className="atlas-world-ref-group__body";
+      if (group.organisation) body.append(makeItemButton(group.organisation,"⚑","Organización"));
+      (group.characters || []).forEach(item => body.append(makeItemButton(item,"●",item.role || "Personaje")));
+      details.append(body); organisationGroups.append(details);
+    });
+    if (tree.unattachedCharacters?.length) {
+      const details=document.createElement("details"); details.className="atlas-world-ref-group";
+      const summary=document.createElement("summary"); summary.innerHTML=`<span>Personajes sin organización</span><small>${tree.unattachedCharacters.length}</small>`; details.append(summary);
+      const body=document.createElement("div"); body.className="atlas-world-ref-group__body"; tree.unattachedCharacters.forEach(item=>body.append(makeItemButton(item,"●","Personaje"))); details.append(body); organisationGroups.append(details);
+    }
+    if (!tree.organisationGroups?.length && !tree.unattachedCharacters?.length) { const empty=document.createElement("p"); empty.className="panel__hint atlas-world-ref-empty"; empty.textContent="Todavía no hay organizaciones ni personajes en Mundo."; organisationGroups.append(empty); }
+    host.append(organisationGroups);
   }
   function openWorldReference(type, id) { if (worldReferenceValid(type, id)) return window.ForjaWorld?.openReference?.(type, id); return false; }
 
@@ -2005,6 +2081,7 @@
     if (els.atlasSceneSourceFieldset) els.atlasSceneSourceFieldset.hidden = Boolean(editing);
     if (els.atlasSceneEditDungeon) els.atlasSceneEditDungeon.hidden = !(editing?.mapProject || editing?.sourceType === "dungeon");
     fillWorldReferenceSelect(els.atlasSceneWorldRefType, els.atlasSceneWorldRefId, editing?.worldRefType || "", editing?.worldRefId || "");
+    renderWorldReferencePicker(els.atlasSceneWorldRefPicker, els.atlasSceneWorldRefType, els.atlasSceneWorldRefId);
     const defaultSource = $("input[name='atlasSceneSource'][value='image']");
     if (!editing && defaultSource) defaultSource.checked = true;
     els.atlasSceneDialog.showModal();
@@ -2439,6 +2516,7 @@
       els.atlasMarkerUnlockEvent.value = marker?.unlockEventId || "";
     }
     fillWorldReferenceSelect(els.atlasMarkerWorldRefType, els.atlasMarkerWorldRefId, marker?.worldRefType || "", marker?.worldRefId || "");
+    renderWorldReferencePicker(els.atlasMarkerWorldRefPicker, els.atlasMarkerWorldRefType, els.atlasMarkerWorldRefId, { marker: true });
     els.atlasMarkerSize.value = marker?.mapSize || Math.max(.25, Math.min(8, (Number(marker?.size) || 42) / 42));
     els.atlasMarkerTargetScene.value = marker?.targetSceneId || "";
     updateMarkerDialogFields();
@@ -3523,9 +3601,9 @@
     els.changePasswordForm.addEventListener("submit", changePassword);
     els.logoutDm.addEventListener("click", () => { forgetDevice(); closeDrawer(); showRoleChoice(); });
 
-    els.atlasSceneWorldRefType?.addEventListener("change", () => fillWorldReferenceSelect(els.atlasSceneWorldRefType, els.atlasSceneWorldRefId, els.atlasSceneWorldRefType.value, ""));
-    els.atlasMarkerWorldRefType?.addEventListener("change", () => { fillWorldReferenceSelect(els.atlasMarkerWorldRefType, els.atlasMarkerWorldRefId, els.atlasMarkerWorldRefType.value, ""); if (els.atlasMarkerWorldRefType.value === "creature" && els.atlasMarkerCategory?.value === "place") els.atlasMarkerCategory.value = "creature"; updateMarkerDialogFields(); renderMarkerSheetMode(); });
-    els.atlasMarkerWorldRefId?.addEventListener("change", () => { const label = worldReferenceLabel(els.atlasMarkerWorldRefType?.value, els.atlasMarkerWorldRefId?.value); if (label && !els.atlasMarkerName.value.trim()) els.atlasMarkerName.value = label; renderMarkerSheetMode(); });
+    els.atlasSceneWorldRefType?.addEventListener("change", () => { fillWorldReferenceSelect(els.atlasSceneWorldRefType, els.atlasSceneWorldRefId, els.atlasSceneWorldRefType.value, ""); renderWorldReferencePicker(els.atlasSceneWorldRefPicker, els.atlasSceneWorldRefType, els.atlasSceneWorldRefId); });
+    els.atlasMarkerWorldRefType?.addEventListener("change", () => { fillWorldReferenceSelect(els.atlasMarkerWorldRefType, els.atlasMarkerWorldRefId, els.atlasMarkerWorldRefType.value, ""); if (els.atlasMarkerWorldRefType.value === "creature" && els.atlasMarkerCategory?.value === "place") els.atlasMarkerCategory.value = "creature"; updateMarkerDialogFields(); renderMarkerSheetMode(); renderWorldReferencePicker(els.atlasMarkerWorldRefPicker, els.atlasMarkerWorldRefType, els.atlasMarkerWorldRefId, { marker: true }); });
+    els.atlasMarkerWorldRefId?.addEventListener("change", () => { const label = worldReferenceLabel(els.atlasMarkerWorldRefType?.value, els.atlasMarkerWorldRefId?.value); if (label && !els.atlasMarkerName.value.trim()) els.atlasMarkerName.value = label; renderMarkerSheetMode(); renderWorldReferencePicker(els.atlasMarkerWorldRefPicker, els.atlasMarkerWorldRefType, els.atlasMarkerWorldRefId, { marker: true }); });
     els.atlasWorldRefBtn?.addEventListener("click", () => { const scene = currentScene(); if (scene) openWorldReference(scene.worldRefType, scene.worldRefId); });
     els.atlasBackBtn.addEventListener("click", () => currentScene()?.parentSceneId && setScene(currentScene().parentSceneId));
     els.atlasNewScene.addEventListener("click", () => openSceneDialog()); els.atlasSceneMenu.addEventListener("click", () => openSceneDialog(currentScene()?.id));

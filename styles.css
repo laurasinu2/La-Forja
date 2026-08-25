@@ -3282,3 +3282,115 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
   .atlas-world-instance-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .atlas-world-instance-actions .button--danger{margin-left:0}
 }
+
+/* v2.12.5 · selector jerárquico de Mundo + scroll de edición local */
+.atlas-dm-sheet__detail{
+  overflow:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+.atlas-world-instance-editor{
+  min-width:0;
+  align-content:start;
+  padding-bottom:28px;
+}
+.atlas-world-reference{min-width:0}
+.atlas-world-ref-picker{
+  display:grid;
+  gap:8px;
+  min-width:0;
+  max-height:300px;
+  overflow:auto;
+  overscroll-behavior:contain;
+  padding:2px;
+}
+.atlas-world-ref-current{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+  padding:8px 9px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:var(--surface-2);
+  color:var(--muted);
+  font-size:12px;
+}
+.atlas-world-ref-current.has-value{color:var(--text);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.atlas-world-ref-current>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.atlas-world-ref-heading{
+  margin-top:2px;
+  padding:3px 4px 1px;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.atlas-world-ref-groups{display:grid;gap:5px;min-width:0}
+.atlas-world-ref-group{
+  min-width:0;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:var(--surface-2);
+  overflow:hidden;
+}
+.atlas-world-ref-group>summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:34px;
+  padding:7px 9px;
+  cursor:pointer;
+  color:var(--text);
+  font-size:12px;
+  font-weight:750;
+  list-style-position:inside;
+}
+.atlas-world-ref-group>summary:hover{background:var(--surface-3)}
+.atlas-world-ref-group>summary span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.atlas-world-ref-group>summary small{
+  flex:0 0 auto;
+  min-width:22px;
+  padding:1px 6px;
+  border-radius:999px;
+  background:rgba(255,255,255,.05);
+  color:var(--muted);
+  font-size:10px;
+  text-align:center;
+}
+.atlas-world-ref-group[open]>summary{border-bottom:1px solid var(--line)}
+.atlas-world-ref-group__body{display:grid;gap:3px;padding:5px}
+.atlas-world-ref-item{
+  width:100%;
+  min-width:0;
+  display:grid;
+  grid-template-columns:22px minmax(0,1fr) auto;
+  align-items:center;
+  gap:7px;
+  min-height:34px;
+  padding:6px 8px;
+  border:0;
+  border-radius:5px;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
+}
+.atlas-world-ref-item:hover{background:var(--surface-3)}
+.atlas-world-ref-item.is-selected{background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.atlas-world-ref-item>span{text-align:center;color:var(--accent-2)}
+.atlas-world-ref-item>strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.atlas-world-ref-item>small{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:10px}
+.atlas-world-ref-empty{margin:0;padding:8px 9px}
+
+@media (max-width:640px){
+  .atlas-world-ref-picker{max-height:260px}
+  .atlas-world-ref-item{grid-template-columns:20px minmax(0,1fr)}
+  .atlas-world-ref-item>small{grid-column:2;max-width:none;margin-top:-4px}
+}

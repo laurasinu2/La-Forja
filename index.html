@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.12.4" />
+  <link rel="stylesheet" href="styles.css?v=2.12.5" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -943,7 +943,7 @@
       <fieldset id="atlasSceneSourceFieldset" class="atlas-scene-source"><legend>Contenido inicial</legend><label><input type="radio" name="atlasSceneSource" value="image" checked /><span><strong>Imagen subida</strong><small>Guarda la escena y selecciona después un PNG, JPG o WebP.</small></span></label><label><input type="radio" name="atlasSceneSource" value="dungeon" /><span><strong>Mapa creado</strong><small>Abre el editor con cuadrícula, arquitectura y mobiliario.</small></span></label></fieldset>
       <button id="atlasSceneEditDungeon" type="button" class="button button--quiet" hidden>✎ Abrir editor de mazmorras</button>
       <label>Disponibilidad en el Atlas<select id="atlasSceneUnlockEvent"><option value="">Visible para el DM desde el principio</option></select><small class="field-help">Si eliges un suceso, la escena quedará latente y no aparecerá en el Atlas normal hasta que ese suceso haya ocurrido.</small></label>
-      <fieldset class="atlas-world-reference"><legend>Referencia de Mundo <small>(opcional)</small></legend><div class="form-grid"><label>Tipo<select id="atlasSceneWorldRefType"><option value="">Ninguna</option><option value="creature">Criatura</option><option value="character">Personaje</option><option value="organisation">Organización</option></select></label><label>Ficha<select id="atlasSceneWorldRefId"><option value="">—</option></select></label></div></fieldset>
+      <fieldset class="atlas-world-reference"><legend>Referencia de Mundo <small>(opcional)</small></legend><div id="atlasSceneWorldRefPicker" class="atlas-world-ref-picker"></div><select id="atlasSceneWorldRefType" hidden aria-hidden="true"><option value="">Ninguna</option><option value="creature">Criatura</option><option value="character">Personaje</option><option value="organisation">Organización</option></select><select id="atlasSceneWorldRefId" hidden aria-hidden="true"><option value="">—</option></select></fieldset>
       <label class="check-row"><input id="atlasSceneDiscovered" type="checkbox" /> Descubierta por los jugadores</label>
       <label id="atlasSceneCreateNotebookWrap" class="check-row"><input id="atlasSceneCreateNotebook" type="checkbox" /> Crear y asociar una ficha en el Cuaderno al guardar</label>
       <div class="dialog-actions dialog-actions--split"><button id="atlasDeleteScene" type="button" class="button button--danger" hidden>Eliminar</button><span></span><button type="button" class="button button--quiet atlas-scene-dialog-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
@@ -959,7 +959,7 @@
       </div>
       <div class="form-grid"><label>Visibilidad<select id="atlasMarkerVisibility"><option value="dm">Solo DM</option><option value="visible">Visible, no descubierto</option><option value="discovered">Descubierto y visible</option></select></label><label>Tamaño en el mapa<div class="atlas-marker-size-control"><input id="atlasMarkerSize" type="range" min="0.25" max="8" step="0.25" value="1" /><output id="atlasMarkerSizeValue">1</output><span id="atlasMarkerSizeUnit">u</span></div></label></div>
       <label>Disponibilidad en el Atlas<select id="atlasMarkerUnlockEvent"><option value="">Visible para el DM desde el principio</option></select><small class="field-help">Si eliges un suceso, el marcador quedará latente: no aparecerá en el mapa ni en la lista de capas hasta que ese suceso haya ocurrido. Podrás editarlo desde Historia.</small></label>
-      <fieldset class="atlas-world-reference"><legend>Ficha de Mundo <small>(opcional)</small></legend><div class="form-grid"><label>Tipo<select id="atlasMarkerWorldRefType"><option value="">Ninguna</option><option value="creature">Criatura</option><option value="character">Personaje</option><option value="organisation">Organización</option></select></label><label>Ficha<select id="atlasMarkerWorldRefId"><option value="">—</option></select></label></div><small class="field-help">Puedes reutilizar una criatura o personaje en tantos marcadores como quieras sin duplicar su ficha.</small></fieldset>
+      <fieldset class="atlas-world-reference"><legend>Ficha de Mundo <small>(opcional)</small></legend><div id="atlasMarkerWorldRefPicker" class="atlas-world-ref-picker"></div><select id="atlasMarkerWorldRefType" hidden aria-hidden="true"><option value="">Ninguna</option><option value="creature">Criatura</option><option value="character">Personaje</option><option value="organisation">Organización</option></select><select id="atlasMarkerWorldRefId" hidden aria-hidden="true"><option value="">—</option></select><small class="field-help">Las categorías y organizaciones empiezan plegadas. Puedes vincular una criatura, una organización completa o cualquiera de sus personajes.</small></fieldset>
       <div class="atlas-picker-field">
         <span>Escena que abre</span>
         <input id="atlasMarkerTargetScene" type="hidden" />
@@ -1323,10 +1323,10 @@
     <article class="dialog-card world-character-view-card"><div class="dialog-card__header"><div><h2 id="worldCharacterViewTitle">Personaje</h2><p id="worldCharacterViewSubtitle" class="dialog-intro"></p></div><div class="world-view-dialog-actions"><button id="worldCharacterViewEdit" class="icon-button" type="button" title="Editar" aria-label="Editar">✎</button><button type="button" class="icon-button world-character-view-close" aria-label="Cerrar">×</button></div></div><div id="worldCharacterViewBody"></div></article>
   </dialog>
 
-  <script src="app.js?v=2.12.4" defer></script>
-  <script src="history.js?v=2.12.4" defer></script>
-  <script src="world.js?v=2.12.4" defer></script>
-  <script src="atlas.js?v=2.12.4" defer></script>
-  <script src="dungeon.js?v=2.12.4" defer></script>
+  <script src="app.js?v=2.12.5" defer></script>
+  <script src="history.js?v=2.12.5" defer></script>
+  <script src="world.js?v=2.12.5" defer></script>
+  <script src="atlas.js?v=2.12.5" defer></script>
+  <script src="dungeon.js?v=2.12.5" defer></script>
 </body>
 </html>

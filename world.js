@@ -106,6 +106,34 @@
     if (type === "organisation") return world().organisations.map(item => ({ id: item.id, name: item.name }));
     return [];
   }
+  function referenceTree() {
+    const w = world();
+    const creatureItem = item => ({ type: "creature", id: item.id, name: item.name, imageId: item.imageId || "" });
+    const allCreatures = w.creatures.slice().sort((a,b)=>a.name.localeCompare(b.name,"es"));
+    const creatureGroups = [{ id: ALL_CREATURES_CATEGORY, name: "Todos", fixed: true, items: allCreatures.map(creatureItem) }];
+    w.creatureCategories.slice().sort((a,b)=>a.name.localeCompare(b.name,"es")).forEach(category => {
+      creatureGroups.push({ id: category.id, name: category.name, items: allCreatures.filter(item => item.categoryId === category.id).map(creatureItem) });
+    });
+    const uncategorised = allCreatures.filter(item => !item.categoryId);
+    if (uncategorised.length) creatureGroups.push({ id: "__none", name: "Sin categoría", items: uncategorised.map(creatureItem) });
+
+    const organisationGroups = w.organisations.slice().sort((a,b)=>a.name.localeCompare(b.name,"es")).map(org => {
+      const seen = new Set();
+      const characters = [];
+      org.members.forEach(member => {
+        if (seen.has(member.characterId)) return;
+        const character = characterById(member.characterId);
+        if (!character) return;
+        seen.add(character.id);
+        characters.push({ type: "character", id: character.id, name: character.name, role: member.role || "", imageId: character.imageId || "" });
+      });
+      characters.sort((a,b)=>a.name.localeCompare(b.name,"es"));
+      return { id: org.id, name: org.name, organisation: { type: "organisation", id: org.id, name: org.name, imageId: org.imageId || "" }, characters };
+    });
+    const memberCharacterIds = new Set(w.organisations.flatMap(org => org.members.map(member => member.characterId)));
+    const unattachedCharacters = w.characters.filter(character => !memberCharacterIds.has(character.id)).sort((a,b)=>a.name.localeCompare(b.name,"es")).map(character => ({ type: "character", id: character.id, name: character.name, role: "", imageId: character.imageId || "" }));
+    return { creatureGroups, organisationGroups, unattachedCharacters };
+  }
 
   function section(sectionName) {
     const w = world();
@@ -326,7 +354,7 @@
     window.addEventListener('resize',()=>{if(state().view==='world'&&world().selectedSection==='organisations')drawHierarchyLines();});
   }
 
-  window.ForjaWorld = { render, openReference, referenceItems, referenceLabel: worldReferenceLabel, getCreature: creatureById, getCharacter: characterById, getOrganisation: organisationById, openCharacter: openCharacterView };
+  window.ForjaWorld = { render, openReference, referenceItems, referenceTree, referenceLabel: worldReferenceLabel, getCreature: creatureById, getCharacter: characterById, getOrganisation: organisationById, openCharacter: openCharacterView };
   bind();
   render();
 })();

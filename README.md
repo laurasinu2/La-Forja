@@ -1,30 +1,23 @@
-# Versión 2.12.4 · Criaturas del Atlas con ajustes locales
+# Versión 2.12.5 · Persistencia y selector jerárquico de Mundo
 
-Base: v2.12.3.
+Base: v2.12.4.
 
-## Cambio
+## Correcciones
 
-- Una criatura asociada desde Mundo/Bestiario a un marcador del Atlas sigue heredando su ficha base.
-- Desde la ficha lateral del propio Atlas, el botón ✎ permite editar estadísticas y textos sólo para ese marcador.
-- Los cambios se guardan como ajustes locales del marcador y no modifican la criatura original del Bestiario.
-- Los campos no modificados continúan heredándose de la ficha base.
-- «Restablecer Bestiario» elimina los ajustes locales y devuelve ese marcador a la ficha original.
-- Si se cambia la criatura asociada al marcador, sus ajustes locales anteriores se descartan para evitar aplicarlos a otra criatura.
+- La edición local de criaturas desde el panel lateral del Atlas vuelve a tener desplazamiento vertical completo.
+- Las categorías personalizadas del Bestiario se conservan al guardar, recargar, cerrar/abrir, exportar e importar la campaña.
+- También se conserva la categoría asignada a cada criatura.
 
-## Mundo · Criaturas
-- Nueva barra de **categorías personalizadas** encima de la biblioteca de criaturas.
-- La categoría **Todos** existe siempre y muestra el Bestiario completo.
-- El botón **+ Categoría** permite crear las categorías que necesites para cada campaña.
-- Al pulsar una categoría, la lista muestra únicamente las criaturas asignadas a ella.
-- Dentro de **Editar criatura** aparece el campo **Categoría** para decidir a cuál pertenece; también puede dejarse sin categoría.
-- Las criaturas de campañas anteriores siguen siendo compatibles y aparecen en **Todos**.
+## Atlas · Ficha de Mundo
 
-## Tamaño y navegación
-- La lista de criaturas ya no alarga la página: tiene desplazamiento interno cuando hay muchas entradas.
-- La ficha seleccionada deja de forzar una altura mínima enorme y ocupa sólo el espacio que necesita.
-- Si una ficha tiene mucha información, el desplazamiento queda dentro de su panel en vez de hacer crecer toda la vista de Mundo.
-- En tablet y móvil, lista y ficha se reparten el espacio disponible sin salirse de la pantalla.
+- El selector antiguo Tipo/Ficha se sustituye visualmente por un selector jerárquico plegable.
+- Criaturas: aparecen **Todos**, las categorías personalizadas y **Sin categoría** cuando corresponde; cada grupo empieza cerrado y se despliega al pulsarlo.
+- Organizaciones: cada organización aparece como grupo plegable por su nombre. Dentro se puede elegir la propia organización o cualquiera de sus personajes.
+- Los personajes que no pertenecen a ninguna organización aparecen en un grupo independiente.
+- Un marcador puede enlazarse directamente a una criatura, una organización completa o un personaje de Mundo.
+- Las escenas usan el mismo selector para mantener un comportamiento coherente.
 
 ## Compatibilidad
-- Base: v2.12.2.
-- No se modifican Batalla, Atlas, organizaciones, Historia, Cuaderno ni las fichas existentes.
+
+- No se modifica la lógica de ajustes locales por marcador introducida en v2.12.4.
+- No se cambian Historia, Cuaderno, Batalla ni la jerarquía de Mundo.
