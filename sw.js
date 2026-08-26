@@ -1,13 +1,13 @@
-const CACHE = "forja-narrador-v2128-personality-interpretation";
+const CACHE = "forja-narrador-v2130-atlas-rotate-background";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.12.8",
-  "./app.js?v=2.12.8",
-  "./history.js?v=2.12.8",
-  "./world.js?v=2.12.8",
-  "./atlas.js?v=2.12.8",
-  "./dungeon.js?v=2.12.8",
+  "./styles.css?v=2.13.0",
+  "./app.js?v=2.13.0",
+  "./history.js?v=2.13.0",
+  "./world.js?v=2.13.0",
+  "./atlas.js?v=2.13.0",
+  "./dungeon.js?v=2.13.0",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

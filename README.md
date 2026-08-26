@@ -1,30 +1,17 @@
-# Versión 2.12.8 · Personalidad e interpretación
+# Versión 2.13.0 · Giro del fondo del Atlas
 
-Base: v2.12.7.  
+Base: v2.12.9 / v2.12.8 funcional.
 
-## Personalidad de personajes
+## Atlas
 
-- NPC, comerciantes y personajes de organizaciones incorporan una sección plegable **🎭 Personalidad e interpretación** justo después de la descripción.
-- Incluye 20 rasgos seleccionables y campos de voz, conducta, apariencia, motivaciones, pasado, origen, reacción ante los PJ, contradicciones, ancla emocional, entrada en escena, rango vocal, acento, nivel cultural, expresiones, lenguaje corporal, tics y obsesiones.
-- La sección empieza cerrada. En vistas de lectura sólo se muestran los rasgos seleccionados y los campos con contenido.
-- Las fichas compartidas conservan una única personalidad: si varios marcadores usan la misma ficha privada o un personaje de Mundo, todos apuntan al mismo contenido.
+- Añadidos controles ↶ y ↷ junto al botón de Fondo para girar la escena 90° a izquierda o derecha.
+- El giro transforma también marcadores, líneas, formas, zonas y niebla para que sigan anclados al mismo punto físico del mapa.
+- Los marcadores no giran visualmente: su icono y su nombre permanecen derechos, con el texto debajo.
+- La proyección de jugadores recibe la imagen y coordenadas ya giradas, por lo que mantiene la misma disposición.
+- En mapas creados con el editor, la orientación elegida se conserva cuando el mapa vuelve a generarse.
+- Sustituir la imagen de fondo conserva la orientación actual de la escena.
 
-## Criaturas
+## Compatibilidad
 
-- Las criaturas del Bestiario tienen **Cómo se comunica**.
-- Opcionalmente se puede activar **Usar personalidad completa** para criaturas inteligentes o relevantes.
-- Al abrir una criatura o personaje de Mundo desde Atlas, esta información aparece en el panel del propio Atlas.
-- La edición local de una criatura desde Atlas también permite personalizar localmente “Cómo se comunica” sin modificar el Bestiario.
-
-## Cuaderno y Atlas
-
-- Las fichas de PNJ/comerciante del Cuaderno usan la misma estructura de personalidad.
-- Las fichas internas de NPC/comerciante del Atlas mantienen el modo lectura limpio y el botón ✎; la personalidad queda plegada y los campos vacíos no aparecen.
-- La lectura de personajes se acerca visualmente al lenguaje del Cuaderno: bloques documentales, cabeceras claras y menos aspecto de formulario.
-
-## Persistencia y compatibilidad
-
-- Los datos nuevos se normalizan y conservan al guardar, recargar, exportar e importar.
-- Se corrige también la persistencia general de color e imagen de fondo de las categorías de Criaturas de v2.12.7.
-- Los fondos de categoría se incluyen en las copias ZIP completas.
-- No se cambia la lógica de Historia, capítulos, Batalla ni jerarquías de organizaciones.
+- Las escenas antiguas se consideran con orientación 0° y no necesitan migración manual.
+- Se mantienen intactos Mundo, Personalidad, Cuaderno, Historia, Batalla y organizaciones.

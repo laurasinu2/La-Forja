@@ -3507,3 +3507,30 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
 #atlasInternalSheetForm.is-view-mode[data-sheet-category="npc"] .atlas-sheet-description-field textarea,#atlasInternalSheetForm.is-view-mode[data-sheet-category="merchant"] .atlas-sheet-description-field textarea{padding:14px!important;min-height:80px!important;color:#221d17!important;-webkit-text-fill-color:#221d17!important;line-height:1.55;background:var(--paper)!important}
 .world-sheet--character .world-sheet__hero{align-items:stretch}.world-character-description{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper);color:#221d17}.world-character-description h3{margin:0;padding:8px 10px;background:var(--surface-2);color:var(--text);font:700 16px/1 Georgia,serif}.world-character-description p{margin:0;padding:14px;white-space:pre-wrap;line-height:1.55}.world-sheet--character>.world-sheet__stats{margin-top:14px}.world-character-view-card .world-info-section{border:1px solid var(--line-soft);border-radius:7px;padding:0;overflow:hidden;background:rgba(255,255,255,.015)}.world-character-view-card .world-info-section h3{margin:0;padding:8px 10px;background:var(--surface-2);font:700 14px/1.1 Georgia,serif;color:var(--text)}.world-character-view-card .world-info-section p,.world-character-view-card .world-loot-view{padding:10px 12px}.atlas-world-sheet--character .atlas-world-sheet__description{padding:12px;border:1px solid var(--line-soft);border-radius:7px;background:var(--paper);color:#221d17;line-height:1.55}
 .atlas-sheet-section.personality-panel{display:block;padding:0;gap:0}
+
+
+/* v2.12.9 — quitar caja negra detrás del PNG del bestiario */
+.world-library--creatures .world-creature-compendium{background:
+  radial-gradient(circle at 82% 28%, color-mix(in srgb,var(--world-category-color,#6b7f8f) 18%, transparent) 0%, transparent 38%),
+  linear-gradient(180deg,#081018 0%,#0a1117 100%)!important}
+.world-library--creatures .world-creature-atmosphere{opacity:.10!important;filter:saturate(.78) blur(1.2px)!important}
+.world-library--creatures .world-creature-atmosphere::after{background:linear-gradient(90deg,#081019 0%,rgba(8,16,25,.94) 24%,rgba(8,16,25,.76) 46%,rgba(8,16,25,.34) 68%,rgba(8,16,25,.06) 100%)!important}
+.world-library--creatures .world-creature-stage{padding:10px 10px 0!important;min-height:0!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;background:transparent!important}
+.world-library--creatures .world-creature-portrait{background:transparent!important;border:0!important;box-shadow:none!important;outline:0!important;overflow:visible!important;align-self:stretch!important;min-height:0!important;height:clamp(235px,34vh,380px)!important;max-height:380px!important}
+.world-library--creatures .world-creature-portrait::before,
+.world-library--creatures .world-creature-portrait::after{display:none!important;content:none!important;background:none!important}
+.world-library--creatures .world-creature-portrait img{width:auto!important;max-width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;background:transparent!important;isolation:isolate;filter:drop-shadow(0 22px 24px rgba(0,0,0,.42))}
+@media (max-width:1100px){
+  .world-library--creatures .world-creature-stage{padding:6px 12px 0!important}
+  .world-library--creatures .world-creature-portrait{height:clamp(210px,30vh,300px)!important;max-height:300px!important}
+  .world-library--creatures .world-creature-atmosphere::after{background:linear-gradient(0deg,#081019 0%,rgba(8,16,25,.88) 22%,rgba(8,16,25,.46) 48%,rgba(8,16,25,.10) 100%)!important}
+}
+@media (max-width:700px){
+  .world-library--creatures .world-creature-portrait{height:clamp(180px,26vh,240px)!important;max-height:240px!important}
+}
+
+
+/* v2.13.0 — giro del fondo del Atlas */
+.atlas-rotate-controls{display:inline-flex;gap:4px;align-items:center}
+.atlas-rotate-controls .button{min-width:38px;padding-inline:9px;font-size:17px;line-height:1}
+@media (max-width:700px){.atlas-rotate-controls{flex:1 1 auto}.atlas-rotate-controls .button{flex:1 1 0;min-width:42px}}

@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.12.8" />
+  <link rel="stylesheet" href="styles.css?v=2.13.0" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -645,6 +645,7 @@
           </div>
           <div class="atlas-toolbar__actions">
             <button id="atlasUploadImage" class="button button--quiet" type="button">▧ Fondo</button>
+            <div class="atlas-rotate-controls" role="group" aria-label="Girar fondo del Atlas"><button id="atlasRotateLeft" class="button button--quiet" type="button" title="Girar fondo 90° a la izquierda" aria-label="Girar fondo 90° a la izquierda">↶</button><button id="atlasRotateRight" class="button button--quiet" type="button" title="Girar fondo 90° a la derecha" aria-label="Girar fondo 90° a la derecha">↷</button></div>
             <button id="atlasEditDungeon" class="button button--quiet" type="button" hidden>✎ Editar mapa</button>
             <button id="atlasNewScene" class="button button--quiet" type="button">+ Escena</button>
             <button id="atlasShowScene" class="button" type="button">▶ Mostrar esta escena</button>
@@ -1468,10 +1469,10 @@
     <article class="dialog-card world-character-view-card"><div class="dialog-card__header"><div><h2 id="worldCharacterViewTitle">Personaje</h2><p id="worldCharacterViewSubtitle" class="dialog-intro"></p></div><div class="world-view-dialog-actions"><button id="worldCharacterViewEdit" class="icon-button" type="button" title="Editar" aria-label="Editar">✎</button><button type="button" class="icon-button world-character-view-close" aria-label="Cerrar">×</button></div></div><div id="worldCharacterViewBody"></div></article>
   </dialog>
 
-  <script src="app.js?v=2.12.8" defer></script>
-  <script src="history.js?v=2.12.8" defer></script>
-  <script src="world.js?v=2.12.8" defer></script>
-  <script src="atlas.js?v=2.12.8" defer></script>
-  <script src="dungeon.js?v=2.12.8" defer></script>
+  <script src="app.js?v=2.13.0" defer></script>
+  <script src="history.js?v=2.13.0" defer></script>
+  <script src="world.js?v=2.13.0" defer></script>
+  <script src="atlas.js?v=2.13.0" defer></script>
+  <script src="dungeon.js?v=2.13.0" defer></script>
 </body>
 </html>

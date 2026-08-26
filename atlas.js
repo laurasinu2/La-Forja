@@ -37,7 +37,7 @@
     lanHostSection: $("#lanHostSection"), lanHostDot: $("#lanHostDot"), lanHostStatus: $("#lanHostStatus"), lanHostHint: $("#lanHostHint"), lanHostUrlWrap: $("#lanHostUrlWrap"), lanHostUrl: $("#lanHostUrl"), lanHostStart: $("#lanHostStart"), lanHostStop: $("#lanHostStop"), lanHostCopy: $("#lanHostCopy"),
     changePasswordForm: $("#changePasswordForm"), currentDmPassword: $("#currentDmPassword"), newDmPassword: $("#newDmPassword"), newDmPasswordConfirm: $("#newDmPasswordConfirm"), passwordChangeError: $("#passwordChangeError"), logoutDm: $("#logoutDm"),
     atlasView: $("#atlasView"), atlasBackBtn: $("#atlasBackBtn"), atlasBreadcrumbs: $("#atlasBreadcrumbs"), atlasSceneTitle: $("#atlasSceneTitle"),
-    atlasUploadImage: $("#atlasUploadImage"), atlasEditDungeon: $("#atlasEditDungeon"), atlasEmptyUpload: $("#atlasEmptyUpload"), atlasEmptyCreateMap: $("#atlasEmptyCreateMap"), atlasImageInput: $("#atlasImageInput"), atlasNewScene: $("#atlasNewScene"),
+    atlasUploadImage: $("#atlasUploadImage"), atlasRotateLeft: $("#atlasRotateLeft"), atlasRotateRight: $("#atlasRotateRight"), atlasEditDungeon: $("#atlasEditDungeon"), atlasEmptyUpload: $("#atlasEmptyUpload"), atlasEmptyCreateMap: $("#atlasEmptyCreateMap"), atlasImageInput: $("#atlasImageInput"), atlasNewScene: $("#atlasNewScene"),
     atlasShowScene: $("#atlasShowScene"), atlasOpenProjection: $("#atlasOpenProjection"), atlasWorldRefBtn: $("#atlasWorldRefBtn"), atlasDmSheetBtn: $("#atlasDmSheetBtn"), atlasTools: $("#atlasTools"), atlasZoomOut: $("#atlasZoomOut"), atlasZoomReset: $("#atlasZoomReset"), atlasZoomIn: $("#atlasZoomIn"), atlasBrushSize: $("#atlasBrushSize"), atlasBrushValue: $("#atlasBrushValue"),
     atlasResetFog: $("#atlasResetFog"), atlasRevealAllFog: $("#atlasRevealAllFog"), atlasPlayerMode: $("#atlasPlayerMode"), atlasBattleBtn: $("#atlasBattleBtn"), atlasCloseMerchant: $("#atlasCloseMerchant"), atlasSceneTree: $("#atlasSceneTree"), atlasSceneMenu: $("#atlasSceneMenu"), atlasCustomCategory: $("#atlasCustomCategory"),
     atlasLayout: $("#atlasLayout"), atlasBattlePanel: $("#atlasBattlePanel"), atlasBattleCards: $("#atlasBattleCards"), atlasBattleEdit: $("#atlasBattleEdit"), atlasBattleClose: $("#atlasBattleClose"),
@@ -118,7 +118,7 @@
       const rootId = app.uid();
       campaign.atlas = {
         currentSceneId: rootId, projectionSceneId: rootId, playerNavigationMode: "follow", publicMerchantEntryId: "", battle: { active: false, sceneId: "", markerIds: [] }, customCategories: [],
-        scenes: [{ id: rootId, name: "Mundo", parentSceneId: "", imageId: "", imageName: "", imageType: "", imageWidth: 1600, imageHeight: 900, sourceType: "image", mapProject: null, discovered: true, unlockEventId: "", markers: [], objects: [], fogBase: "covered", fogStrokes: [], fogZones: [], createdAt: app.now(), updatedAt: app.now() }]
+        scenes: [{ id: rootId, name: "Mundo", parentSceneId: "", imageId: "", imageName: "", imageType: "", imageWidth: 1600, imageHeight: 900, rotationQuarterTurns: 0, sourceType: "image", mapProject: null, discovered: true, unlockEventId: "", markers: [], objects: [], fogBase: "covered", fogStrokes: [], fogZones: [], createdAt: app.now(), updatedAt: app.now() }]
       };
     }
     if (!Array.isArray(campaign.atlas.markerSheets)) campaign.atlas.markerSheets = [];
@@ -130,6 +130,7 @@
     campaign.atlas.battle.active = Boolean(campaign.atlas.battle.active);
     campaign.atlas.scenes.forEach(scene => {
       scene.sourceType = scene.sourceType === "dungeon" || scene.mapProject ? "dungeon" : "image";
+      scene.rotationQuarterTurns = ((Math.round(Number(scene.rotationQuarterTurns) || 0) % 4) + 4) % 4;
       if (!Object.prototype.hasOwnProperty.call(scene, "mapProject")) scene.mapProject = null;
       scene.fogBase = scene.fogBase === "revealed" ? "revealed" : "covered";
       if (!Array.isArray(scene.fogStrokes)) scene.fogStrokes = [];
@@ -1140,6 +1141,8 @@
     els.atlasCloseMerchant.hidden = !data.publicMerchantEntryId;
     if (els.atlasWorldRefBtn) { const valid = worldReferenceValid(scene.worldRefType, scene.worldRefId); els.atlasWorldRefBtn.hidden = !valid; els.atlasWorldRefBtn.textContent = valid ? `◈ ${worldReferenceLabel(scene.worldRefType, scene.worldRefId)}` : "◈ Mundo"; }
     if (els.atlasEditDungeon) els.atlasEditDungeon.hidden = !(scene.mapProject || scene.sourceType === "dungeon");
+    if (els.atlasRotateLeft) els.atlasRotateLeft.disabled = !scene.imageId;
+    if (els.atlasRotateRight) els.atlasRotateRight.disabled = !scene.imageId;
     renderBreadcrumbs(scene);
     renderSceneTree();
     renderCategories();
@@ -1314,7 +1317,9 @@
   }
 
   function sceneUnitWidth(scene) {
-    const width = Number(scene?.mapProject?.widthCells);
+    const turns = ((Number(scene?.rotationQuarterTurns) || 0) % 4 + 4) % 4;
+    const source = turns % 2 ? scene?.mapProject?.heightCells : scene?.mapProject?.widthCells;
+    const width = Number(source);
     return Number.isFinite(width) && width > 0 ? width : 40;
   }
 
@@ -2104,7 +2109,7 @@
     if (scene) {
       scene.name = name; scene.parentSceneId = els.atlasSceneParent.value; scene.discovered = els.atlasSceneDiscovered.checked; scene.unlockEventId = unlockEventId; scene.worldRefType = String(els.atlasSceneWorldRefType?.value || ""); scene.worldRefId = String(els.atlasSceneWorldRefId?.value || ""); scene.updatedAt = app.now();
     } else {
-      scene = { id: app.uid(), name, parentSceneId: els.atlasSceneParent.value, imageId: "", imageName: "", imageType: "", imageWidth: 1600, imageHeight: 900, sourceType: source === "dungeon" ? "dungeon" : "image", mapProject: null, discovered: els.atlasSceneDiscovered.checked, unlockEventId, worldRefType: String(els.atlasSceneWorldRefType?.value || ""), worldRefId: String(els.atlasSceneWorldRefId?.value || ""), markers: [], objects: [], fogBase: "covered", fogStrokes: [], fogZones: [], createdAt: app.now(), updatedAt: app.now() };
+      scene = { id: app.uid(), name, parentSceneId: els.atlasSceneParent.value, imageId: "", imageName: "", imageType: "", imageWidth: 1600, imageHeight: 900, rotationQuarterTurns: 0, sourceType: source === "dungeon" ? "dungeon" : "image", mapProject: null, discovered: els.atlasSceneDiscovered.checked, unlockEventId, worldRefType: String(els.atlasSceneWorldRefType?.value || ""), worldRefId: String(els.atlasSceneWorldRefId?.value || ""), markers: [], objects: [], fogBase: "covered", fogStrokes: [], fogZones: [], createdAt: app.now(), updatedAt: app.now() };
       atlas().scenes.push(scene);
     }
     atlas().currentSceneId = sceneIsUnlocked(scene) ? scene.id : (scene.parentSceneId && sceneIsUnlocked(sceneById(scene.parentSceneId)) ? scene.parentSceneId : previousCurrentId);
@@ -2585,7 +2590,7 @@
     if (!hasWorldReference && supported && requestedMode === "notebook" && !relatedEntryIds.length && !createNotebook) { alert("Elige al menos una ficha del Cuaderno o marca «Crear además una ficha en el Cuaderno»."); return; }
     let targetSceneId = els.atlasMarkerTargetScene.value;
     if (targetSceneId === "__new__") {
-      const child = { id: app.uid(), name: els.atlasMarkerName.value.trim() || els.atlasMarkerAlias?.value.trim() || "Nueva escena", parentSceneId: scene.id, imageId: "", imageName: "", imageType: "", imageWidth: 1600, imageHeight: 900, sourceType: "image", mapProject: null, discovered: els.atlasMarkerVisibility.value === "discovered", unlockEventId: "", worldRefType: "", worldRefId: "", markers: [], objects: [], fogBase: "covered", fogStrokes: [], fogZones: [], createdAt: app.now(), updatedAt: app.now() };
+      const child = { id: app.uid(), name: els.atlasMarkerName.value.trim() || els.atlasMarkerAlias?.value.trim() || "Nueva escena", parentSceneId: scene.id, imageId: "", imageName: "", imageType: "", imageWidth: 1600, imageHeight: 900, rotationQuarterTurns: 0, sourceType: "image", mapProject: null, discovered: els.atlasMarkerVisibility.value === "discovered", unlockEventId: "", worldRefType: "", worldRefId: "", markers: [], objects: [], fogBase: "covered", fogStrokes: [], fogZones: [], createdAt: app.now(), updatedAt: app.now() };
       atlas().scenes.push(child); targetSceneId = child.id;
     }
     const requestedName = els.atlasMarkerName.value.trim();
@@ -2665,28 +2670,128 @@
     save({ render: true });
   }
 
+  function rotateNormalisedPoint(point, direction) {
+    const x = clamp(Number(point?.x) || 0);
+    const y = clamp(Number(point?.y) || 0);
+    return direction > 0 ? { x: clamp(1 - y), y: clamp(x) } : { x: clamp(y), y: clamp(1 - x) };
+  }
+
+  function rotateNormalisedRect(rect, direction) {
+    const x = clamp(Number(rect?.x) || 0), y = clamp(Number(rect?.y) || 0);
+    const width = Math.max(0, Math.min(1 - x, Number(rect?.width) || 0));
+    const height = Math.max(0, Math.min(1 - y, Number(rect?.height) || 0));
+    if (direction > 0) return { x: clamp(1 - y - height), y: clamp(x), width: height, height: width };
+    return { x: clamp(y), y: clamp(1 - x - width), width: height, height: width };
+  }
+
+  function rotateSceneSpatialData(scene, direction) {
+    scene.markers.forEach(marker => Object.assign(marker, rotateNormalisedPoint(marker, direction)));
+    scene.objects.forEach(object => {
+      const p1 = rotateNormalisedPoint({ x: object.x1, y: object.y1 }, direction);
+      const p2 = rotateNormalisedPoint({ x: object.x2, y: object.y2 }, direction);
+      object.x1 = p1.x; object.y1 = p1.y; object.x2 = p2.x; object.y2 = p2.y;
+    });
+    scene.fogStrokes.forEach(stroke => Object.assign(stroke, rotateNormalisedPoint(stroke, direction)));
+    scene.fogZones.forEach(zone => Object.assign(zone, rotateNormalisedRect(zone, direction)));
+  }
+
+  function loadBlobImage(blob) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(blob);
+      const image = new Image();
+      image.onload = () => { URL.revokeObjectURL(url); resolve(image); };
+      image.onerror = () => { URL.revokeObjectURL(url); reject(new Error("No se pudo leer la imagen del Atlas.")); };
+      image.src = url;
+    });
+  }
+
+  function canvasBlob(canvas, type = "image/png") {
+    return new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("No se pudo girar la imagen.")), type));
+  }
+
+  async function rotateImageBlob(blob, quarterTurns) {
+    const turns = ((Math.round(Number(quarterTurns) || 0) % 4) + 4) % 4;
+    const image = await loadBlobImage(blob);
+    if (!turns) return { blob, width: image.naturalWidth || image.width || 1, height: image.naturalHeight || image.height || 1 };
+    const sourceWidth = image.naturalWidth || image.width || 1;
+    const sourceHeight = image.naturalHeight || image.height || 1;
+    const odd = turns % 2 === 1;
+    const canvas = document.createElement("canvas");
+    canvas.width = odd ? sourceHeight : sourceWidth;
+    canvas.height = odd ? sourceWidth : sourceHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.save();
+    if (turns === 1) { ctx.translate(canvas.width, 0); ctx.rotate(Math.PI / 2); }
+    else if (turns === 2) { ctx.translate(canvas.width, canvas.height); ctx.rotate(Math.PI); }
+    else { ctx.translate(0, canvas.height); ctx.rotate(-Math.PI / 2); }
+    ctx.drawImage(image, 0, 0);
+    ctx.restore();
+    return { blob: await canvasBlob(canvas, "image/png"), width: canvas.width, height: canvas.height };
+  }
+
+  let atlasRotationBusy = false;
+  async function rotateCurrentScene(direction) {
+    const scene = currentScene();
+    if (!scene?.imageId || atlasRotationBusy) return;
+    atlasRotationBusy = true;
+    if (els.atlasRotateLeft) els.atlasRotateLeft.disabled = true;
+    if (els.atlasRotateRight) els.atlasRotateRight.disabled = true;
+    try {
+      const record = await getImage(scene.imageId);
+      if (!record?.blob) throw new Error("No se encontró la imagen de fondo.");
+      const turns = direction > 0 ? 1 : 3;
+      const rotated = await rotateImageBlob(record.blob, turns);
+      await putImage({ ...record, blob: rotated.blob, type: "image/png", name: record.name || scene.imageName || "Mapa", createdAt: record.createdAt || app.now() });
+      rotateSceneSpatialData(scene, direction);
+      scene.imageWidth = rotated.width;
+      scene.imageHeight = rotated.height;
+      scene.imageType = "image/png";
+      scene.rotationQuarterTurns = (((Number(scene.rotationQuarterTurns) || 0) + (direction > 0 ? 1 : 3)) % 4 + 4) % 4;
+      scene.updatedAt = app.now();
+      currentTransform = { x: 0, y: 0, scale: 1 };
+      if (els.atlasZoomReset) els.atlasZoomReset.textContent = "100%";
+      save({ publish: true, render: true, immediate: true });
+    } catch (error) {
+      alert(error?.message || "No se pudo girar el fondo del Atlas.");
+    } finally {
+      atlasRotationBusy = false;
+      const hasImage = Boolean(currentScene()?.imageId);
+      if (els.atlasRotateLeft) els.atlasRotateLeft.disabled = !hasImage;
+      if (els.atlasRotateRight) els.atlasRotateRight.disabled = !hasImage;
+    }
+  }
+
   async function uploadImage(file) {
     if (!file || !file.type.startsWith("image/")) return;
-    const dimensions = await readImageDimensions(file);
-    const id = app.uid();
-    await putImage({ id, blob: file, name: file.name, type: file.type, createdAt: app.now() });
     const scene = currentScene();
-    scene.imageId = id; scene.imageName = file.name; scene.imageType = file.type; scene.imageWidth = dimensions.width; scene.imageHeight = dimensions.height; scene.sourceType = "image"; scene.updatedAt = app.now();
-    save({ render: true });
+    const turns = ((Number(scene?.rotationQuarterTurns) || 0) % 4 + 4) % 4;
+    const rotated = turns ? await rotateImageBlob(file, turns) : null;
+    const dimensions = rotated ? { width: rotated.width, height: rotated.height } : await readImageDimensions(file);
+    const storedBlob = rotated?.blob || file;
+    const storedType = rotated ? "image/png" : file.type;
+    const id = app.uid();
+    await putImage({ id, blob: storedBlob, name: file.name, type: storedType, createdAt: app.now() });
+    scene.imageId = id; scene.imageName = file.name; scene.imageType = storedType; scene.imageWidth = dimensions.width; scene.imageHeight = dimensions.height; scene.sourceType = "image"; scene.updatedAt = app.now();
+    save({ publish: true, render: true });
   }
 
   async function setSceneImageFromBlob(sceneId, blob, options = {}) {
     const scene = sceneById(sceneId);
     if (!scene || !(blob instanceof Blob)) throw new Error("No se pudo guardar la imagen generada.");
     const id = app.uid();
-    const type = options.type || blob.type || "image/png";
+    let type = options.type || blob.type || "image/png";
     const name = options.name || `${scene.name || "mapa"}.png`;
-    await putImage({ id, blob, name, type, createdAt: app.now() });
+    const turns = ((Number(scene.rotationQuarterTurns) || 0) % 4 + 4) % 4;
+    let storedBlob = blob;
+    let width = Math.max(1, Number(options.width) || 1600);
+    let height = Math.max(1, Number(options.height) || 900);
+    if (turns) { const rotated = await rotateImageBlob(blob, turns); storedBlob = rotated.blob; width = rotated.width; height = rotated.height; type = "image/png"; }
+    await putImage({ id, blob: storedBlob, name, type, createdAt: app.now() });
     scene.imageId = id;
     scene.imageName = name;
     scene.imageType = type;
-    scene.imageWidth = Math.max(1, Number(options.width) || 1600);
-    scene.imageHeight = Math.max(1, Number(options.height) || 900);
+    scene.imageWidth = width;
+    scene.imageHeight = height;
     scene.sourceType = "dungeon";
     scene.updatedAt = app.now();
     save({ publish: true, render: state().view === "atlas" });
@@ -3643,6 +3748,7 @@
     els.atlasBackBtn.addEventListener("click", () => currentScene()?.parentSceneId && setScene(currentScene().parentSceneId));
     els.atlasNewScene.addEventListener("click", () => openSceneDialog()); els.atlasSceneMenu.addEventListener("click", () => openSceneDialog(currentScene()?.id));
     els.atlasUploadImage.addEventListener("click", () => els.atlasImageInput.click()); els.atlasEmptyUpload.addEventListener("click", () => els.atlasImageInput.click());
+    els.atlasRotateLeft?.addEventListener("click", () => rotateCurrentScene(-1)); els.atlasRotateRight?.addEventListener("click", () => rotateCurrentScene(1));
     els.atlasEditDungeon?.addEventListener("click", () => window.ForjaDungeon?.open?.(currentScene()?.id));
     els.atlasEmptyCreateMap?.addEventListener("click", () => window.ForjaDungeon?.open?.(currentScene()?.id));
     els.atlasSceneEditDungeon?.addEventListener("click", () => { const id = editingSceneId; els.atlasSceneDialog.close(); window.ForjaDungeon?.open?.(id); });
