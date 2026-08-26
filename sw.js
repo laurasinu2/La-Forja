@@ -1,13 +1,13 @@
-const CACHE = "forja-narrador-v2125-world-picker-persistence";
+const CACHE = "forja-narrador-v2126-world-category-edit";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.12.5",
-  "./app.js?v=2.12.5",
-  "./history.js?v=2.12.5",
-  "./world.js?v=2.12.5",
-  "./atlas.js?v=2.12.5",
-  "./dungeon.js?v=2.12.5",
+  "./styles.css?v=2.12.6",
+  "./app.js?v=2.12.6",
+  "./history.js?v=2.12.6",
+  "./world.js?v=2.12.6",
+  "./atlas.js?v=2.12.6",
+  "./dungeon.js?v=2.12.6",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

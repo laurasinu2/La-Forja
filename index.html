@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.12.5" />
+  <link rel="stylesheet" href="styles.css?v=2.12.6" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -480,7 +480,7 @@
         <section id="worldCreaturesSection" class="world-creatures-section">
           <div class="world-creature-categories" aria-label="Categorías de criaturas">
             <div id="worldCreatureCategories" class="world-category-strip"></div>
-            <button id="worldNewCreatureCategory" class="button button--quiet world-category-add" type="button">+ Categoría</button>
+            <button id="worldNewCreatureCategory" class="button button--quiet world-category-add" type="button">+ Categoría</button><div class="world-category-selected-actions" aria-label="Acciones de categoría"><button id="worldEditCreatureCategory" class="icon-button" type="button" title="Renombrar categoría" aria-label="Renombrar categoría" hidden>✎</button><button id="worldDeleteCreatureCategory" class="icon-button" type="button" title="Eliminar categoría" aria-label="Eliminar categoría" hidden>⌫</button></div>
           </div>
           <div class="world-library world-library--creatures"><aside class="world-rail"><div class="world-rail__toolbar"><input id="worldCreatureSearch" type="search" placeholder="Buscar criatura…" /></div><div id="worldCreatureList" class="world-card-list"></div></aside><article id="worldCreatureDetail" class="world-detail"></article></div>
         </section>
@@ -1323,10 +1323,10 @@
     <article class="dialog-card world-character-view-card"><div class="dialog-card__header"><div><h2 id="worldCharacterViewTitle">Personaje</h2><p id="worldCharacterViewSubtitle" class="dialog-intro"></p></div><div class="world-view-dialog-actions"><button id="worldCharacterViewEdit" class="icon-button" type="button" title="Editar" aria-label="Editar">✎</button><button type="button" class="icon-button world-character-view-close" aria-label="Cerrar">×</button></div></div><div id="worldCharacterViewBody"></div></article>
   </dialog>
 
-  <script src="app.js?v=2.12.5" defer></script>
-  <script src="history.js?v=2.12.5" defer></script>
-  <script src="world.js?v=2.12.5" defer></script>
-  <script src="atlas.js?v=2.12.5" defer></script>
-  <script src="dungeon.js?v=2.12.5" defer></script>
+  <script src="app.js?v=2.12.6" defer></script>
+  <script src="history.js?v=2.12.6" defer></script>
+  <script src="world.js?v=2.12.6" defer></script>
+  <script src="atlas.js?v=2.12.6" defer></script>
+  <script src="dungeon.js?v=2.12.6" defer></script>
 </body>
 </html>
