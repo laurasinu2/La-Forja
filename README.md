@@ -1,6 +1,6 @@
 # Versión 2.12.8 · Personalidad e interpretación
 
-Base: v2.12.7.
+Base: v2.12.7.  
 
 ## Personalidad de personajes
 
