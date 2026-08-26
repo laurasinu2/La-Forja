@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.12.6" />
+  <link rel="stylesheet" href="styles.css?v=2.12.8" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -187,6 +187,39 @@
               </div>
             </div>
           </section>
+
+
+          <details id="entryPersonalityPanel" class="panel personality-panel" hidden>
+            <summary><span>🎭 Personalidad e interpretación</span><small>Interpretación del personaje</small></summary>
+            <div class="personality-panel__body"><div class="personality-editor " data-personality-root="entry">
+      <section class="personality-subsection"><h3>Rasgos</h3><p class="panel__hint">Selecciona todos los que encajen con el personaje.</p><div class="personality-trait-grid" data-personality-traits></div></section>
+      <section class="personality-subsection"><h3>Quién es</h3><div class="personality-field-grid">
+        <label>Cómo habla<textarea data-personality-field="speech" rows="3" maxlength="2500" placeholder="Ritmo, vocabulario, forma de expresarse…"></textarea></label>
+        <label>Qué hace / conducta habitual<textarea data-personality-field="conduct" rows="3" maxlength="2500" placeholder="Gestos, costumbres, qué suele hacer mientras habla…"></textarea></label>
+        <label>Apariencia<textarea data-personality-field="appearance" rows="3" maxlength="2500" placeholder="Rasgos físicos, ropa, detalles que llaman la atención…"></textarea></label>
+        <label>Qué quiere en realidad<textarea data-personality-field="wants" rows="3" maxlength="2500" placeholder="Motivación profunda, deseo o necesidad real…"></textarea></label>
+        <label>Qué ha vivido antes<textarea data-personality-field="past" rows="3" maxlength="3000" placeholder="Experiencias importantes de su pasado…"></textarea></label>
+        <label>De dónde viene<textarea data-personality-field="origin" rows="3" maxlength="2500" placeholder="Lugar, cultura, familia, entorno…"></textarea></label>
+        <label>Por qué reacciona así ante los personajes<textarea data-personality-field="reactionToPlayers" rows="3" maxlength="3000" placeholder="Qué ve en los PJ y por qué les responde de esa manera…"></textarea></label>
+        <label>Contradicciones<textarea data-personality-field="contradictions" rows="3" maxlength="3000" placeholder="Choques internos, puntos débiles, rasgos que se contradicen…"></textarea></label>
+      </div></section>
+      <section class="personality-subsection"><h3>Cómo interpretarlo</h3><div class="personality-field-grid">
+        <label>Ancla emocional<textarea data-personality-field="emotionalAnchor" rows="3" maxlength="2500" placeholder="Alguna situación o emoción tuya que se parezca a esta escena…"></textarea></label>
+        <label>Entrada en escena<textarea data-personality-field="entrance" rows="3" maxlength="2500" placeholder="Cómo entra, qué presencia transmite, qué hace primero…"></textarea></label>
+        <label>Rango vocal<select data-personality-field="voiceRange"><option value="">Sin definir</option><option value="high">Agudo</option><option value="neutral">Neutral</option><option value="low">Grave</option></select></label>
+        <label>Acento / pronunciación<input data-personality-field="accent" maxlength="500" placeholder="Ej.: norteño suave, arrastra las erres…" /></label>
+        <label>Nivel cultural<input data-personality-field="culturalLevel" maxlength="500" placeholder="Formación, vocabulario, registro…" /></label>
+        <label>Expresiones habituales<textarea data-personality-field="expressions" rows="3" maxlength="2500" placeholder="Frases recurrentes, palabras que evita, muletillas…"></textarea></label>
+        <label>Expresión corporal<textarea data-personality-field="bodyLanguage" rows="3" maxlength="2500" placeholder="Postura, mirada, distancia, manos, movimientos…"></textarea></label>
+        <label>Tics<textarea data-personality-field="tics" rows="3" maxlength="2000" placeholder="Pequeños gestos o hábitos involuntarios…"></textarea></label>
+        <label>Obsesiones<textarea data-personality-field="obsessions" rows="3" maxlength="2500" placeholder="Temas, objetos, ideas o hábitos que no puede soltar…"></textarea></label>
+      </div></section>
+    </div></div>
+          </details>
+          <details id="entryCommunicationPanel" class="panel personality-panel" hidden>
+            <summary><span>🗣 Cómo se comunica</span><small>Voz, sonidos o lenguaje de la criatura</small></summary>
+            <div class="personality-panel__body"><label>Cómo se comunica<textarea id="entryCommunication" rows="4" maxlength="3000" placeholder="Habla, gruñe, imita voces, usa telepatía, gestos…"></textarea></label></div>
+          </details>
 
           <section class="panel vendor-panel" id="vendorPanel" hidden>
             <div class="panel__titlebar">
@@ -480,7 +513,7 @@
         <section id="worldCreaturesSection" class="world-creatures-section">
           <div class="world-creature-categories" aria-label="Categorías de criaturas">
             <div id="worldCreatureCategories" class="world-category-strip"></div>
-            <button id="worldNewCreatureCategory" class="button button--quiet world-category-add" type="button">+ Categoría</button><div class="world-category-selected-actions" aria-label="Acciones de categoría"><button id="worldEditCreatureCategory" class="icon-button" type="button" title="Renombrar categoría" aria-label="Renombrar categoría" hidden>✎</button><button id="worldDeleteCreatureCategory" class="icon-button" type="button" title="Eliminar categoría" aria-label="Eliminar categoría" hidden>⌫</button></div>
+            <button id="worldNewCreatureCategory" class="button button--quiet world-category-add" type="button">+ Categoría</button><div class="world-category-selected-actions" aria-label="Acciones de categoría"><button id="worldEditCreatureCategory" class="icon-button" type="button" title="Editar categoría" aria-label="Editar categoría" hidden>✎</button><button id="worldDeleteCreatureCategory" class="icon-button" type="button" title="Eliminar categoría" aria-label="Eliminar categoría" hidden>⌫</button></div>
           </div>
           <div class="world-library world-library--creatures"><aside class="world-rail"><div class="world-rail__toolbar"><input id="worldCreatureSearch" type="search" placeholder="Buscar criatura…" /></div><div id="worldCreatureList" class="world-card-list"></div></aside><article id="worldCreatureDetail" class="world-detail"></article></div>
         </section>
@@ -997,7 +1030,40 @@
         <div class="atlas-sheet-photo-actions"><button id="atlasSheetPhotoChoose" type="button" class="button button--quiet">Añadir / cambiar foto</button><button id="atlasSheetPhotoRemove" type="button" class="button button--danger" hidden>Quitar foto</button></div>
         <input id="atlasSheetPhotoInput" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" hidden />
       </section>
-      <label>Descripción<textarea id="atlasSheetDescription" rows="5" maxlength="8000" placeholder="Aspecto, personalidad, contexto, notas para el DM…"></textarea></label>
+      <label class="atlas-sheet-description-field"><span>Descripción</span><textarea id="atlasSheetDescription" rows="5" maxlength="8000" placeholder="Aspecto, personalidad, contexto, notas para el DM…"></textarea></label>
+
+
+      <details id="atlasPersonalityDetails" class="atlas-sheet-section personality-panel" hidden>
+        <summary><span>🎭 Personalidad e interpretación</span><small>Siempre empieza plegado</small></summary>
+        <div class="personality-panel__body">
+          <div id="atlasPersonalityCommunicationWrap" class="personality-communication" hidden><label>Cómo se comunica<textarea id="atlasPersonalityCommunication" rows="4" maxlength="3000" placeholder="Habla, gruñe, imita voces, usa telepatía, gestos…"></textarea></label></div>
+          <label id="atlasPersonalityFullToggleWrap" class="check-row" hidden><input id="atlasPersonalityFullToggle" type="checkbox" /> Usar personalidad completa para esta criatura</label>
+          <div id="atlasPersonalityFullFields"><div class="personality-editor " data-personality-root="atlas">
+      <section class="personality-subsection"><h3>Rasgos</h3><p class="panel__hint">Selecciona todos los que encajen con el personaje.</p><div class="personality-trait-grid" data-personality-traits></div></section>
+      <section class="personality-subsection"><h3>Quién es</h3><div class="personality-field-grid">
+        <label>Cómo habla<textarea data-personality-field="speech" rows="3" maxlength="2500" placeholder="Ritmo, vocabulario, forma de expresarse…"></textarea></label>
+        <label>Qué hace / conducta habitual<textarea data-personality-field="conduct" rows="3" maxlength="2500" placeholder="Gestos, costumbres, qué suele hacer mientras habla…"></textarea></label>
+        <label>Apariencia<textarea data-personality-field="appearance" rows="3" maxlength="2500" placeholder="Rasgos físicos, ropa, detalles que llaman la atención…"></textarea></label>
+        <label>Qué quiere en realidad<textarea data-personality-field="wants" rows="3" maxlength="2500" placeholder="Motivación profunda, deseo o necesidad real…"></textarea></label>
+        <label>Qué ha vivido antes<textarea data-personality-field="past" rows="3" maxlength="3000" placeholder="Experiencias importantes de su pasado…"></textarea></label>
+        <label>De dónde viene<textarea data-personality-field="origin" rows="3" maxlength="2500" placeholder="Lugar, cultura, familia, entorno…"></textarea></label>
+        <label>Por qué reacciona así ante los personajes<textarea data-personality-field="reactionToPlayers" rows="3" maxlength="3000" placeholder="Qué ve en los PJ y por qué les responde de esa manera…"></textarea></label>
+        <label>Contradicciones<textarea data-personality-field="contradictions" rows="3" maxlength="3000" placeholder="Choques internos, puntos débiles, rasgos que se contradicen…"></textarea></label>
+      </div></section>
+      <section class="personality-subsection"><h3>Cómo interpretarlo</h3><div class="personality-field-grid">
+        <label>Ancla emocional<textarea data-personality-field="emotionalAnchor" rows="3" maxlength="2500" placeholder="Alguna situación o emoción tuya que se parezca a esta escena…"></textarea></label>
+        <label>Entrada en escena<textarea data-personality-field="entrance" rows="3" maxlength="2500" placeholder="Cómo entra, qué presencia transmite, qué hace primero…"></textarea></label>
+        <label>Rango vocal<select data-personality-field="voiceRange"><option value="">Sin definir</option><option value="high">Agudo</option><option value="neutral">Neutral</option><option value="low">Grave</option></select></label>
+        <label>Acento / pronunciación<input data-personality-field="accent" maxlength="500" placeholder="Ej.: norteño suave, arrastra las erres…" /></label>
+        <label>Nivel cultural<input data-personality-field="culturalLevel" maxlength="500" placeholder="Formación, vocabulario, registro…" /></label>
+        <label>Expresiones habituales<textarea data-personality-field="expressions" rows="3" maxlength="2500" placeholder="Frases recurrentes, palabras que evita, muletillas…"></textarea></label>
+        <label>Expresión corporal<textarea data-personality-field="bodyLanguage" rows="3" maxlength="2500" placeholder="Postura, mirada, distancia, manos, movimientos…"></textarea></label>
+        <label>Tics<textarea data-personality-field="tics" rows="3" maxlength="2000" placeholder="Pequeños gestos o hábitos involuntarios…"></textarea></label>
+        <label>Obsesiones<textarea data-personality-field="obsessions" rows="3" maxlength="2500" placeholder="Temas, objetos, ideas o hábitos que no puede soltar…"></textarea></label>
+      </div></section>
+    </div></div>
+        </div>
+      </details>
 
       <section id="atlasCreatureSheetSection" class="atlas-sheet-section" hidden>
         <div class="panel__titlebar"><h3>Estadísticas · D&amp;D 5e</h3><span class="panel__hint">Los modificadores se calculan solos · campos opcionales.</span></div>
@@ -1275,6 +1341,23 @@
     </section>
   </template>
 
+  <dialog id="worldCreatureCategoryDialog">
+    <form id="worldCreatureCategoryForm" class="dialog-card world-editor-dialog world-editor-dialog--compact">
+      <div class="dialog-card__header"><div><h2 id="worldCreatureCategoryDialogTitle">Categoría de criaturas</h2><p class="dialog-intro">Define su nombre, color e imagen/fondo temático.</p></div><button type="button" class="icon-button world-category-close" aria-label="Cerrar">×</button></div>
+      <div class="world-editor-hero">
+        <div class="world-editor-photo"><img id="worldCreatureCategoryPhotoPreview" alt="" hidden /><div id="worldCreatureCategoryPhotoEmpty">Sin fondo temático</div><input id="worldCreatureCategoryPhotoInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden /><div><button id="worldCreatureCategoryPhotoChoose" class="button button--quiet" type="button">Elegir fondo</button><button id="worldCreatureCategoryPhotoRemove" class="button button--quiet" type="button" hidden>Quitar</button></div></div>
+        <div class="world-editor-main">
+          <label>Nombre<input id="worldCreatureCategoryName" maxlength="80" required /></label>
+          <div class="form-grid">
+            <label>Color principal<input id="worldCreatureCategoryColor" type="color" value="#6b7f8f" /></label>
+          </div>
+          <p class="panel__hint">El color se usará en el título, acentos y estado visual de la categoría. El fondo se mostrará muy suavizado detrás de las criaturas asociadas.</p>
+        </div>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button--quiet world-category-cancel">Cancelar</button><span class="spacer"></span><button class="button" type="submit">Guardar categoría</button></div>
+    </form>
+  </dialog>
+
   <dialog id="worldCreatureDialog">
     <form id="worldCreatureForm" class="dialog-card world-editor-dialog">
       <div class="dialog-card__header"><div><h2 id="worldCreatureDialogTitle">Criatura</h2><p class="dialog-intro">Ficha base reutilizable desde el Atlas.</p></div><button type="button" class="icon-button world-creature-close" aria-label="Cerrar">×</button></div>
@@ -1282,6 +1365,39 @@
         <div class="world-editor-photo"><img id="worldCreaturePhotoPreview" alt="" hidden /><div id="worldCreaturePhotoEmpty">Sin imagen</div><input id="worldCreaturePhotoInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden /><div><button id="worldCreaturePhotoChoose" class="button button--quiet" type="button">Elegir imagen</button><button id="worldCreaturePhotoRemove" class="button button--quiet" type="button" hidden>Quitar</button></div></div>
         <div class="world-editor-main"><label>Nombre<input id="worldCreatureName" maxlength="120" required /></label><div class="form-grid"><label>Tipo / especie<input id="worldCreatureType" maxlength="100" placeholder="Ej.: Constructo, bestia, no-muerto…" /></label><label>Categoría<select id="worldCreatureCategory"><option value="">Sin categoría</option></select></label><label>Etiquetas<input id="worldCreatureTags" maxlength="300" placeholder="bosque, jefe, volador…" /></label></div><label>Descripción<textarea id="worldCreatureDescription" rows="5" maxlength="8000"></textarea></label></div>
       </div>
+
+      <details id="worldCreaturePersonalityDetails" class="world-editor-section personality-panel">
+        <summary><span>🗣 Comunicación y personalidad</span><small>Opcional</small></summary>
+        <div class="personality-panel__body">
+          <label>Cómo se comunica<textarea id="worldCreatureCommunication" rows="4" maxlength="3000" placeholder="Habla, gruñe, imita voces, usa telepatía, gestos…"></textarea></label>
+          <label class="check-row"><input id="worldCreaturePersonalityFull" type="checkbox" /> Usar personalidad completa para esta criatura</label>
+          <div id="worldCreaturePersonalityFullFields"><div class="personality-editor " data-personality-root="world-creature">
+      <section class="personality-subsection"><h3>Rasgos</h3><p class="panel__hint">Selecciona todos los que encajen con el personaje.</p><div class="personality-trait-grid" data-personality-traits></div></section>
+      <section class="personality-subsection"><h3>Quién es</h3><div class="personality-field-grid">
+        <label>Cómo habla<textarea data-personality-field="speech" rows="3" maxlength="2500" placeholder="Ritmo, vocabulario, forma de expresarse…"></textarea></label>
+        <label>Qué hace / conducta habitual<textarea data-personality-field="conduct" rows="3" maxlength="2500" placeholder="Gestos, costumbres, qué suele hacer mientras habla…"></textarea></label>
+        <label>Apariencia<textarea data-personality-field="appearance" rows="3" maxlength="2500" placeholder="Rasgos físicos, ropa, detalles que llaman la atención…"></textarea></label>
+        <label>Qué quiere en realidad<textarea data-personality-field="wants" rows="3" maxlength="2500" placeholder="Motivación profunda, deseo o necesidad real…"></textarea></label>
+        <label>Qué ha vivido antes<textarea data-personality-field="past" rows="3" maxlength="3000" placeholder="Experiencias importantes de su pasado…"></textarea></label>
+        <label>De dónde viene<textarea data-personality-field="origin" rows="3" maxlength="2500" placeholder="Lugar, cultura, familia, entorno…"></textarea></label>
+        <label>Por qué reacciona así ante los personajes<textarea data-personality-field="reactionToPlayers" rows="3" maxlength="3000" placeholder="Qué ve en los PJ y por qué les responde de esa manera…"></textarea></label>
+        <label>Contradicciones<textarea data-personality-field="contradictions" rows="3" maxlength="3000" placeholder="Choques internos, puntos débiles, rasgos que se contradicen…"></textarea></label>
+      </div></section>
+      <section class="personality-subsection"><h3>Cómo interpretarlo</h3><div class="personality-field-grid">
+        <label>Ancla emocional<textarea data-personality-field="emotionalAnchor" rows="3" maxlength="2500" placeholder="Alguna situación o emoción tuya que se parezca a esta escena…"></textarea></label>
+        <label>Entrada en escena<textarea data-personality-field="entrance" rows="3" maxlength="2500" placeholder="Cómo entra, qué presencia transmite, qué hace primero…"></textarea></label>
+        <label>Rango vocal<select data-personality-field="voiceRange"><option value="">Sin definir</option><option value="high">Agudo</option><option value="neutral">Neutral</option><option value="low">Grave</option></select></label>
+        <label>Acento / pronunciación<input data-personality-field="accent" maxlength="500" placeholder="Ej.: norteño suave, arrastra las erres…" /></label>
+        <label>Nivel cultural<input data-personality-field="culturalLevel" maxlength="500" placeholder="Formación, vocabulario, registro…" /></label>
+        <label>Expresiones habituales<textarea data-personality-field="expressions" rows="3" maxlength="2500" placeholder="Frases recurrentes, palabras que evita, muletillas…"></textarea></label>
+        <label>Expresión corporal<textarea data-personality-field="bodyLanguage" rows="3" maxlength="2500" placeholder="Postura, mirada, distancia, manos, movimientos…"></textarea></label>
+        <label>Tics<textarea data-personality-field="tics" rows="3" maxlength="2000" placeholder="Pequeños gestos o hábitos involuntarios…"></textarea></label>
+        <label>Obsesiones<textarea data-personality-field="obsessions" rows="3" maxlength="2500" placeholder="Temas, objetos, ideas o hábitos que no puede soltar…"></textarea></label>
+      </div></section>
+    </div></div>
+        </div>
+      </details>
+
       <section class="world-editor-section"><h3>Estadísticas</h3><div class="world-stat-edit-grid"><label>PG<input data-world-creature-stat="hp" type="number" /></label><label>PG máx.<input data-world-creature-stat="maxhp" type="number" /></label><label>CA<input data-world-creature-stat="ac" type="number" /></label><label>Velocidad<input data-world-creature-stat="speed" type="number" /></label><label>Iniciativa<input data-world-creature-stat="initiative" type="number" /></label><label>Competencia<input data-world-creature-stat="proficiency" type="number" /></label></div><div class="world-ability-edit-grid"><label>FUE<input data-world-creature-stat="str" type="number" min="1" max="30" /></label><label>DES<input data-world-creature-stat="dex" type="number" min="1" max="30" /></label><label>CON<input data-world-creature-stat="con" type="number" min="1" max="30" /></label><label>INT<input data-world-creature-stat="int" type="number" min="1" max="30" /></label><label>SAB<input data-world-creature-stat="wis" type="number" min="1" max="30" /></label><label>CAR<input data-world-creature-stat="cha" type="number" min="1" max="30" /></label></div></section>
       <section class="world-editor-section"><div class="atlas-sheet-text-grid"><label>Modificadores<textarea id="worldCreatureModifiers" rows="4" maxlength="5000"></textarea></label><label>Habilidades<textarea id="worldCreatureAbilities" rows="4" maxlength="5000"></textarea></label><label>Estilo de combate<textarea id="worldCreatureCombatStyle" rows="4" maxlength="5000"></textarea></label><label>Si los PJ no atacan<textarea id="worldCreatureNonAggression" rows="4" maxlength="5000"></textarea></label><label>Acciones<textarea id="worldCreatureActions" rows="5" maxlength="7000"></textarea></label><label>Reacciones<textarea id="worldCreatureReactions" rows="4" maxlength="5000"></textarea></label></div></section>
       <section class="world-editor-section"><div class="panel__titlebar"><h3>Botín / recompensas</h3><span class="panel__hint">Opcional.</span></div><div id="worldCreatureLootList" class="world-loot-edit-list"></div><div class="world-loot-add"><input id="worldCreatureLootName" maxlength="160" placeholder="Objeto" /><input id="worldCreatureLootQty" type="number" min="1" value="1" aria-label="Cantidad" /><input id="worldCreatureLootNotes" maxlength="500" placeholder="Notas" /><button id="worldCreatureLootAdd" class="button button--quiet" type="button">+ Añadir</button></div></section>
@@ -1313,6 +1429,35 @@
     <form id="worldCharacterForm" class="dialog-card world-editor-dialog">
       <div class="dialog-card__header"><div><h2 id="worldCharacterDialogTitle">Personaje</h2><p class="dialog-intro">Ficha reutilizable en organizaciones y Atlas.</p></div><button type="button" class="icon-button world-character-close" aria-label="Cerrar">×</button></div>
       <div class="world-editor-hero"><div class="world-editor-photo"><img id="worldCharacterPhotoPreview" alt="" hidden /><div id="worldCharacterPhotoEmpty">Sin imagen</div><input id="worldCharacterPhotoInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden /><div><button id="worldCharacterPhotoChoose" class="button button--quiet" type="button">Elegir imagen</button><button id="worldCharacterPhotoRemove" class="button button--quiet" type="button" hidden>Quitar</button></div></div><div class="world-editor-main"><label>Nombre<input id="worldCharacterName" maxlength="120" required /></label><div class="form-grid"><label>Tipo / función<input id="worldCharacterType" maxlength="100" placeholder="Humano, mago, informante…" /></label><label>Actitud<select id="worldCharacterDisposition"><option value="neutral">Neutral / desconocido</option><option value="ally">Aliado</option><option value="enemy">Enemigo</option></select></label></div><label>Descripción<textarea id="worldCharacterDescription" rows="5" maxlength="8000"></textarea></label></div></div>
+
+      <details id="worldCharacterPersonalityDetails" class="world-editor-section personality-panel">
+        <summary><span>🎭 Personalidad e interpretación</span><small>Opcional</small></summary>
+        <div class="personality-panel__body"><div class="personality-editor " data-personality-root="world-character">
+      <section class="personality-subsection"><h3>Rasgos</h3><p class="panel__hint">Selecciona todos los que encajen con el personaje.</p><div class="personality-trait-grid" data-personality-traits></div></section>
+      <section class="personality-subsection"><h3>Quién es</h3><div class="personality-field-grid">
+        <label>Cómo habla<textarea data-personality-field="speech" rows="3" maxlength="2500" placeholder="Ritmo, vocabulario, forma de expresarse…"></textarea></label>
+        <label>Qué hace / conducta habitual<textarea data-personality-field="conduct" rows="3" maxlength="2500" placeholder="Gestos, costumbres, qué suele hacer mientras habla…"></textarea></label>
+        <label>Apariencia<textarea data-personality-field="appearance" rows="3" maxlength="2500" placeholder="Rasgos físicos, ropa, detalles que llaman la atención…"></textarea></label>
+        <label>Qué quiere en realidad<textarea data-personality-field="wants" rows="3" maxlength="2500" placeholder="Motivación profunda, deseo o necesidad real…"></textarea></label>
+        <label>Qué ha vivido antes<textarea data-personality-field="past" rows="3" maxlength="3000" placeholder="Experiencias importantes de su pasado…"></textarea></label>
+        <label>De dónde viene<textarea data-personality-field="origin" rows="3" maxlength="2500" placeholder="Lugar, cultura, familia, entorno…"></textarea></label>
+        <label>Por qué reacciona así ante los personajes<textarea data-personality-field="reactionToPlayers" rows="3" maxlength="3000" placeholder="Qué ve en los PJ y por qué les responde de esa manera…"></textarea></label>
+        <label>Contradicciones<textarea data-personality-field="contradictions" rows="3" maxlength="3000" placeholder="Choques internos, puntos débiles, rasgos que se contradicen…"></textarea></label>
+      </div></section>
+      <section class="personality-subsection"><h3>Cómo interpretarlo</h3><div class="personality-field-grid">
+        <label>Ancla emocional<textarea data-personality-field="emotionalAnchor" rows="3" maxlength="2500" placeholder="Alguna situación o emoción tuya que se parezca a esta escena…"></textarea></label>
+        <label>Entrada en escena<textarea data-personality-field="entrance" rows="3" maxlength="2500" placeholder="Cómo entra, qué presencia transmite, qué hace primero…"></textarea></label>
+        <label>Rango vocal<select data-personality-field="voiceRange"><option value="">Sin definir</option><option value="high">Agudo</option><option value="neutral">Neutral</option><option value="low">Grave</option></select></label>
+        <label>Acento / pronunciación<input data-personality-field="accent" maxlength="500" placeholder="Ej.: norteño suave, arrastra las erres…" /></label>
+        <label>Nivel cultural<input data-personality-field="culturalLevel" maxlength="500" placeholder="Formación, vocabulario, registro…" /></label>
+        <label>Expresiones habituales<textarea data-personality-field="expressions" rows="3" maxlength="2500" placeholder="Frases recurrentes, palabras que evita, muletillas…"></textarea></label>
+        <label>Expresión corporal<textarea data-personality-field="bodyLanguage" rows="3" maxlength="2500" placeholder="Postura, mirada, distancia, manos, movimientos…"></textarea></label>
+        <label>Tics<textarea data-personality-field="tics" rows="3" maxlength="2000" placeholder="Pequeños gestos o hábitos involuntarios…"></textarea></label>
+        <label>Obsesiones<textarea data-personality-field="obsessions" rows="3" maxlength="2500" placeholder="Temas, objetos, ideas o hábitos que no puede soltar…"></textarea></label>
+      </div></section>
+    </div></div>
+      </details>
+
       <section class="world-editor-section"><h3>Estadísticas</h3><div class="world-stat-edit-grid"><label>PG<input data-world-character-stat="hp" type="number" /></label><label>PG máx.<input data-world-character-stat="maxhp" type="number" /></label><label>CA<input data-world-character-stat="ac" type="number" /></label><label>Velocidad<input data-world-character-stat="speed" type="number" /></label><label>Iniciativa<input data-world-character-stat="initiative" type="number" /></label><label>Competencia<input data-world-character-stat="proficiency" type="number" /></label></div><div class="world-ability-edit-grid"><label>FUE<input data-world-character-stat="str" type="number" min="1" max="30" /></label><label>DES<input data-world-character-stat="dex" type="number" min="1" max="30" /></label><label>CON<input data-world-character-stat="con" type="number" min="1" max="30" /></label><label>INT<input data-world-character-stat="int" type="number" min="1" max="30" /></label><label>SAB<input data-world-character-stat="wis" type="number" min="1" max="30" /></label><label>CAR<input data-world-character-stat="cha" type="number" min="1" max="30" /></label></div></section>
       <section class="world-editor-section"><div class="atlas-sheet-text-grid"><label>Modificadores<textarea id="worldCharacterModifiers" rows="4" maxlength="5000"></textarea></label><label>Habilidades<textarea id="worldCharacterAbilities" rows="4" maxlength="5000"></textarea></label><label>Estilo de combate<textarea id="worldCharacterCombatStyle" rows="4" maxlength="5000"></textarea></label><label>Si los PJ no atacan<textarea id="worldCharacterNonAggression" rows="4" maxlength="5000"></textarea></label><label>Acciones<textarea id="worldCharacterActions" rows="5" maxlength="7000"></textarea></label><label>Reacciones<textarea id="worldCharacterReactions" rows="4" maxlength="5000"></textarea></label><label>Notas DM<textarea id="worldCharacterNotes" rows="5" maxlength="8000"></textarea></label></div></section>
       <div class="dialog-actions"><button type="button" class="button button--danger" id="worldCharacterDelete">Eliminar personaje</button><span class="spacer"></span><button type="button" class="button button--quiet world-character-cancel">Cancelar</button><button class="button" type="submit">Guardar personaje</button></div>
@@ -1323,10 +1468,10 @@
     <article class="dialog-card world-character-view-card"><div class="dialog-card__header"><div><h2 id="worldCharacterViewTitle">Personaje</h2><p id="worldCharacterViewSubtitle" class="dialog-intro"></p></div><div class="world-view-dialog-actions"><button id="worldCharacterViewEdit" class="icon-button" type="button" title="Editar" aria-label="Editar">✎</button><button type="button" class="icon-button world-character-view-close" aria-label="Cerrar">×</button></div></div><div id="worldCharacterViewBody"></div></article>
   </dialog>
 
-  <script src="app.js?v=2.12.6" defer></script>
-  <script src="history.js?v=2.12.6" defer></script>
-  <script src="world.js?v=2.12.6" defer></script>
-  <script src="atlas.js?v=2.12.6" defer></script>
-  <script src="dungeon.js?v=2.12.6" defer></script>
+  <script src="app.js?v=2.12.8" defer></script>
+  <script src="history.js?v=2.12.8" defer></script>
+  <script src="world.js?v=2.12.8" defer></script>
+  <script src="atlas.js?v=2.12.8" defer></script>
+  <script src="dungeon.js?v=2.12.8" defer></script>
 </body>
 </html>

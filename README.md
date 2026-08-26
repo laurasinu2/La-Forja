@@ -1,31 +1,30 @@
-# Versión 2.12.6 · Categorías editables, personajes y Bestiario compacto
+# Versión 2.12.8 · Personalidad e interpretación
 
-Base: v2.12.5.
+Base: v2.12.7.
 
-## Correcciones
+## Personalidad de personajes
 
-- La edición local de criaturas desde el panel lateral del Atlas vuelve a tener desplazamiento vertical completo.
-- Las categorías personalizadas del Bestiario se conservan al guardar, recargar, cerrar/abrir, exportar e importar la campaña.
-- También se conserva la categoría asignada a cada criatura.
+- NPC, comerciantes y personajes de organizaciones incorporan una sección plegable **🎭 Personalidad e interpretación** justo después de la descripción.
+- Incluye 20 rasgos seleccionables y campos de voz, conducta, apariencia, motivaciones, pasado, origen, reacción ante los PJ, contradicciones, ancla emocional, entrada en escena, rango vocal, acento, nivel cultural, expresiones, lenguaje corporal, tics y obsesiones.
+- La sección empieza cerrada. En vistas de lectura sólo se muestran los rasgos seleccionados y los campos con contenido.
+- Las fichas compartidas conservan una única personalidad: si varios marcadores usan la misma ficha privada o un personaje de Mundo, todos apuntan al mismo contenido.
 
-## Atlas · Ficha de Mundo
+## Criaturas
 
-- El selector antiguo Tipo/Ficha se sustituye visualmente por un selector jerárquico plegable.
-- Criaturas: aparecen **Todos**, las categorías personalizadas y **Sin categoría** cuando corresponde; cada grupo empieza cerrado y se despliega al pulsarlo.
-- Organizaciones: cada organización aparece como grupo plegable por su nombre. Dentro se puede elegir la propia organización o cualquiera de sus personajes.
-- Los personajes que no pertenecen a ninguna organización aparecen en un grupo independiente.
-- Un marcador puede enlazarse directamente a una criatura, una organización completa o un personaje de Mundo.
-- Las escenas usan el mismo selector para mantener un comportamiento coherente.
+- Las criaturas del Bestiario tienen **Cómo se comunica**.
+- Opcionalmente se puede activar **Usar personalidad completa** para criaturas inteligentes o relevantes.
+- Al abrir una criatura o personaje de Mundo desde Atlas, esta información aparece en el panel del propio Atlas.
+- La edición local de una criatura desde Atlas también permite personalizar localmente “Cómo se comunica” sin modificar el Bestiario.
 
-## Compatibilidad
+## Cuaderno y Atlas
 
-- No se modifica la lógica de ajustes locales por marcador introducida en v2.12.4.
-- No se cambian Historia, Cuaderno, Batalla ni la estructura jerárquica de las organizaciones.
+- Las fichas de PNJ/comerciante del Cuaderno usan la misma estructura de personalidad.
+- Las fichas internas de NPC/comerciante del Atlas mantienen el modo lectura limpio y el botón ✎; la personalidad queda plegada y los campos vacíos no aparecen.
+- La lectura de personajes se acerca visualmente al lenguaje del Cuaderno: bloques documentales, cabeceras claras y menos aspecto de formulario.
 
-## Cambios de v2.12.6
+## Persistencia y compatibilidad
 
-- Las categorías de criaturas creadas por el DM se pueden renombrar y eliminar desde la barra de categorías.
-- Eliminar una categoría no borra criaturas: las mueve a “Sin categoría”.
-- En las jerarquías de organizaciones cada personaje tiene acceso directo a editar su ficha (✎) y, por separado, su cargo/posición (↕).
-- La ficha visual del Bestiario prioriza la información a la izquierda y limita el retrato de la derecha a un tamaño compacto y adaptable.
-- En pantallas estrechas el retrato se apila sin forzar alturas grandes.
+- Los datos nuevos se normalizan y conservan al guardar, recargar, exportar e importar.
+- Se corrige también la persistencia general de color e imagen de fondo de las categorías de Criaturas de v2.12.7.
+- Los fondos de categoría se incluyen en las copias ZIP completas.
+- No se cambia la lógica de Historia, capítulos, Batalla ni jerarquías de organizaciones.

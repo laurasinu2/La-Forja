@@ -14,12 +14,14 @@
   let creatureDraft = null;
   let organisationDraft = null;
   let characterDraft = null;
+  let categoryDraft = null;
   let editingCreatureId = "";
   let editingOrganisationId = "";
   let editingCharacterId = "";
   let editingMemberId = "";
   let editingMemberOrganisationId = "";
   let viewingCharacterId = "";
+  let editingCreatureCategoryId = "";
   const ALL_CREATURES_CATEGORY = "__all";
 
   const STAT_KEYS = ["hp", "maxhp", "ac", "speed", "initiative", "proficiency", "str", "dex", "con", "int", "wis", "cha"];
@@ -30,10 +32,11 @@
     newCreature: $("#worldNewCreature"), newOrganisation: $("#worldNewOrganisation"), creatureSearch: $("#worldCreatureSearch"), organisationSearch: $("#worldOrganisationSearch"),
     creatureCategories: $("#worldCreatureCategories"), newCreatureCategory: $("#worldNewCreatureCategory"), editCreatureCategory: $("#worldEditCreatureCategory"), deleteCreatureCategory: $("#worldDeleteCreatureCategory"),
     creatureList: $("#worldCreatureList"), organisationList: $("#worldOrganisationList"), creatureDetail: $("#worldCreatureDetail"), organisationDetail: $("#worldOrganisationDetail"),
-    creatureDialog: $("#worldCreatureDialog"), creatureForm: $("#worldCreatureForm"), creatureDialogTitle: $("#worldCreatureDialogTitle"), creatureName: $("#worldCreatureName"), creatureType: $("#worldCreatureType"), creatureCategory: $("#worldCreatureCategory"), creatureTags: $("#worldCreatureTags"), creatureDescription: $("#worldCreatureDescription"), creatureModifiers: $("#worldCreatureModifiers"), creatureAbilities: $("#worldCreatureAbilities"), creatureCombatStyle: $("#worldCreatureCombatStyle"), creatureNonAggression: $("#worldCreatureNonAggression"), creatureActions: $("#worldCreatureActions"), creatureReactions: $("#worldCreatureReactions"), creaturePhotoPreview: $("#worldCreaturePhotoPreview"), creaturePhotoEmpty: $("#worldCreaturePhotoEmpty"), creaturePhotoInput: $("#worldCreaturePhotoInput"), creaturePhotoChoose: $("#worldCreaturePhotoChoose"), creaturePhotoRemove: $("#worldCreaturePhotoRemove"), creatureLootList: $("#worldCreatureLootList"), creatureLootName: $("#worldCreatureLootName"), creatureLootQty: $("#worldCreatureLootQty"), creatureLootNotes: $("#worldCreatureLootNotes"), creatureLootAdd: $("#worldCreatureLootAdd"), creatureDelete: $("#worldCreatureDelete"),
+    creatureCategoryDialog: $("#worldCreatureCategoryDialog"), creatureCategoryForm: $("#worldCreatureCategoryForm"), creatureCategoryDialogTitle: $("#worldCreatureCategoryDialogTitle"), creatureCategoryName: $("#worldCreatureCategoryName"), creatureCategoryColor: $("#worldCreatureCategoryColor"), creatureCategoryPhotoPreview: $("#worldCreatureCategoryPhotoPreview"), creatureCategoryPhotoEmpty: $("#worldCreatureCategoryPhotoEmpty"), creatureCategoryPhotoInput: $("#worldCreatureCategoryPhotoInput"), creatureCategoryPhotoChoose: $("#worldCreatureCategoryPhotoChoose"), creatureCategoryPhotoRemove: $("#worldCreatureCategoryPhotoRemove"),
+    creatureDialog: $("#worldCreatureDialog"), creatureForm: $("#worldCreatureForm"), creatureDialogTitle: $("#worldCreatureDialogTitle"), creatureName: $("#worldCreatureName"), creatureType: $("#worldCreatureType"), creatureCategory: $("#worldCreatureCategory"), creatureTags: $("#worldCreatureTags"), creatureDescription: $("#worldCreatureDescription"), creatureModifiers: $("#worldCreatureModifiers"), creatureAbilities: $("#worldCreatureAbilities"), creatureCombatStyle: $("#worldCreatureCombatStyle"), creatureNonAggression: $("#worldCreatureNonAggression"), creatureActions: $("#worldCreatureActions"), creatureReactions: $("#worldCreatureReactions"), creaturePhotoPreview: $("#worldCreaturePhotoPreview"), creaturePhotoEmpty: $("#worldCreaturePhotoEmpty"), creaturePhotoInput: $("#worldCreaturePhotoInput"), creaturePhotoChoose: $("#worldCreaturePhotoChoose"), creaturePhotoRemove: $("#worldCreaturePhotoRemove"), creatureLootList: $("#worldCreatureLootList"), creatureLootName: $("#worldCreatureLootName"), creatureLootQty: $("#worldCreatureLootQty"), creatureLootNotes: $("#worldCreatureLootNotes"), creatureLootAdd: $("#worldCreatureLootAdd"), creatureDelete: $("#worldCreatureDelete"), creatureCommunication: $("#worldCreatureCommunication"), creaturePersonalityFull: $("#worldCreaturePersonalityFull"), creaturePersonalityDetails: $("#worldCreaturePersonalityDetails"), creaturePersonalityFullFields: $("#worldCreaturePersonalityFullFields"),
     organisationDialog: $("#worldOrganisationDialog"), organisationForm: $("#worldOrganisationForm"), organisationDialogTitle: $("#worldOrganisationDialogTitle"), organisationName: $("#worldOrganisationName"), organisationHeadquarters: $("#worldOrganisationHeadquarters"), organisationDescription: $("#worldOrganisationDescription"), organisationGoals: $("#worldOrganisationGoals"), organisationAttitude: $("#worldOrganisationAttitude"), organisationNotes: $("#worldOrganisationNotes"), organisationPhotoPreview: $("#worldOrganisationPhotoPreview"), organisationPhotoEmpty: $("#worldOrganisationPhotoEmpty"), organisationPhotoInput: $("#worldOrganisationPhotoInput"), organisationPhotoChoose: $("#worldOrganisationPhotoChoose"), organisationPhotoRemove: $("#worldOrganisationPhotoRemove"), organisationDelete: $("#worldOrganisationDelete"),
     memberDialog: $("#worldMemberDialog"), memberForm: $("#worldMemberForm"), memberCharacter: $("#worldMemberCharacter"), memberNewNameWrap: $("#worldMemberNewNameWrap"), memberNewName: $("#worldMemberNewName"), memberRole: $("#worldMemberRole"), memberParent: $("#worldMemberParent"), memberRemove: $("#worldMemberRemove"),
-    characterDialog: $("#worldCharacterDialog"), characterForm: $("#worldCharacterForm"), characterDialogTitle: $("#worldCharacterDialogTitle"), characterName: $("#worldCharacterName"), characterType: $("#worldCharacterType"), characterDisposition: $("#worldCharacterDisposition"), characterDescription: $("#worldCharacterDescription"), characterModifiers: $("#worldCharacterModifiers"), characterAbilities: $("#worldCharacterAbilities"), characterCombatStyle: $("#worldCharacterCombatStyle"), characterNonAggression: $("#worldCharacterNonAggression"), characterActions: $("#worldCharacterActions"), characterReactions: $("#worldCharacterReactions"), characterNotes: $("#worldCharacterNotes"), characterPhotoPreview: $("#worldCharacterPhotoPreview"), characterPhotoEmpty: $("#worldCharacterPhotoEmpty"), characterPhotoInput: $("#worldCharacterPhotoInput"), characterPhotoChoose: $("#worldCharacterPhotoChoose"), characterPhotoRemove: $("#worldCharacterPhotoRemove"), characterDelete: $("#worldCharacterDelete"),
+    characterDialog: $("#worldCharacterDialog"), characterForm: $("#worldCharacterForm"), characterDialogTitle: $("#worldCharacterDialogTitle"), characterName: $("#worldCharacterName"), characterType: $("#worldCharacterType"), characterDisposition: $("#worldCharacterDisposition"), characterDescription: $("#worldCharacterDescription"), characterModifiers: $("#worldCharacterModifiers"), characterAbilities: $("#worldCharacterAbilities"), characterCombatStyle: $("#worldCharacterCombatStyle"), characterNonAggression: $("#worldCharacterNonAggression"), characterActions: $("#worldCharacterActions"), characterReactions: $("#worldCharacterReactions"), characterNotes: $("#worldCharacterNotes"), characterPhotoPreview: $("#worldCharacterPhotoPreview"), characterPhotoEmpty: $("#worldCharacterPhotoEmpty"), characterPhotoInput: $("#worldCharacterPhotoInput"), characterPhotoChoose: $("#worldCharacterPhotoChoose"), characterPhotoRemove: $("#worldCharacterPhotoRemove"), characterDelete: $("#worldCharacterDelete"), characterPersonalityDetails: $("#worldCharacterPersonalityDetails"),
     characterViewDialog: $("#worldCharacterViewDialog"), characterViewTitle: $("#worldCharacterViewTitle"), characterViewSubtitle: $("#worldCharacterViewSubtitle"), characterViewBody: $("#worldCharacterViewBody"), characterViewEdit: $("#worldCharacterViewEdit")
   };
 
@@ -45,7 +48,7 @@
     campaign.world.characters ||= [];
     campaign.world.organisations ||= [];
     campaign.world.creatureCategories ||= [];
-    campaign.world.creatureCategories = campaign.world.creatureCategories.filter(item => item && item.id && String(item.name || "").trim()).map(item => ({ ...item, name: String(item.name).trim().slice(0, 80) }));
+    campaign.world.creatureCategories = campaign.world.creatureCategories.filter(item => item && item.id && String(item.name || "").trim()).map(item => ({ ...item, name: String(item.name).trim().slice(0, 80), color: /^#[0-9a-fA-F]{3,8}$/.test(String(item.color || "").trim()) ? String(item.color).trim() : "#6b7f8f", imageId: String(item.imageId || "") }));
     campaign.world.creatures.forEach(item => { if (typeof item.categoryId !== "string") item.categoryId = ""; });
     const validCategoryIds = new Set(campaign.world.creatureCategories.map(item => item.id));
     if (campaign.world.selectedCreatureCategoryId !== ALL_CREATURES_CATEGORY && !validCategoryIds.has(campaign.world.selectedCreatureCategoryId)) campaign.world.selectedCreatureCategoryId = ALL_CREATURES_CATEGORY;
@@ -55,9 +58,11 @@
   function optionalNumber(value) { return value === "" || value === null || value === undefined || !Number.isFinite(Number(value)) ? "" : Number(value); }
   function blankStats() { return Object.fromEntries(STAT_KEYS.map(key => [key, ""])); }
   function blankCreature(name = "Nueva criatura", kind = "creature") {
-    return { id: app.uid(), kind, name, imageId: "", type: "", categoryId: "", tags: "", description: "", disposition: "neutral", stats: blankStats(), modifiers: "", abilities: "", combatStyle: "", nonAggression: "", actions: "", reactions: "", notes: "", loot: [], createdAt: app.now(), updatedAt: app.now() };
+    return { id: app.uid(), kind, name, imageId: "", type: "", categoryId: "", tags: "", description: "", disposition: "neutral", communication: "", personality: app.blankPersonality?.() || { traits: [], fullEnabled: false }, stats: blankStats(), modifiers: "", abilities: "", combatStyle: "", nonAggression: "", actions: "", reactions: "", notes: "", loot: [], createdAt: app.now(), updatedAt: app.now() };
   }
   function blankOrganisation() { return { id: app.uid(), name: "Nueva organización", imageId: "", description: "", headquarters: "", goals: "", attitude: "", notes: "", members: [], createdAt: app.now(), updatedAt: app.now() }; }
+  function blankCreatureCategory(name = "Nueva categoría") { return { id: app.uid(), name, color: "#6b7f8f", imageId: "", createdAt: app.now(), updatedAt: app.now() }; }
+  function categoryColorValue(category) { const value = String(category?.color || "").trim(); return /^#[0-9a-fA-F]{3,8}$/.test(value) ? value : "#6b7f8f"; }
   function creatureById(id) { return world().creatures.find(item => item.id === id) || null; }
   function characterById(id) { return world().characters.find(item => item.id === id) || null; }
   function organisationById(id) { return world().organisations.find(item => item.id === id) || null; }
@@ -92,6 +97,16 @@
     const url = await imageUrl(id).catch(() => "");
     if (!url) { img.hidden = true; if (empty) empty.hidden = false; return; }
     img.dataset.objectUrl = url; img.src = url; img.alt = alt; img.hidden = false; if (empty) empty.hidden = true;
+  }
+  async function setBackgroundImageElement(el, id) {
+    if (!el) return;
+    if (el.dataset.objectUrl) { URL.revokeObjectURL(el.dataset.objectUrl); delete el.dataset.objectUrl; }
+    el.style.backgroundImage = "";
+    if (!id) return;
+    const url = await imageUrl(id).catch(() => "");
+    if (!url || !el.isConnected) return;
+    el.dataset.objectUrl = url;
+    el.style.backgroundImage = `url("${url}")`;
   }
 
   function worldReferenceLabel(type, id) {
@@ -169,7 +184,8 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = `world-category-chip${w.selectedCreatureCategoryId === category.id ? " is-active" : ""}`;
-      button.innerHTML = `<span>${esc(category.name)}</span><small>${count}</small>`;
+      button.style.setProperty("--world-category-color", categoryColorValue(category));
+      button.innerHTML = `<span class="world-category-chip__swatch"></span><span>${esc(category.name)}</span><small>${count}</small>`;
       button.addEventListener("click", () => {
         w.selectedCreatureCategoryId = category.id;
         const current = creatureById(w.selectedCreatureId);
@@ -187,36 +203,49 @@
     if (els.deleteCreatureCategory) els.deleteCreatureCategory.hidden = !customSelected;
   }
 
-  function createCreatureCategory() {
-    const raw = prompt("Nombre de la nueva categoría de criaturas:");
-    const name = String(raw || "").trim().slice(0, 80);
-    if (!name) return;
-    const w = world();
-    const existing = w.creatureCategories.find(item => item.name.toLocaleLowerCase() === name.toLocaleLowerCase());
-    if (existing) { w.selectedCreatureCategoryId = existing.id; save(); renderCreatureCategories(); renderCreatureList(); renderCreatureDetail(); return; }
-    const category = { id: app.uid(), name, createdAt: app.now() };
-    w.creatureCategories.push(category);
-    w.selectedCreatureCategoryId = category.id;
-    w.selectedCreatureId = w.creatures.find(item => item.categoryId === category.id)?.id || "";
-    save(); renderCreatureCategories(); renderCreatureList(); renderCreatureDetail();
+  async function renderCreatureCategoryDraftPhoto() { await setImageElement(els.creatureCategoryPhotoPreview, els.creatureCategoryPhotoEmpty, categoryDraft?.imageId, categoryDraft?.name || 'Categoría'); if (els.creatureCategoryPhotoRemove) els.creatureCategoryPhotoRemove.hidden = !categoryDraft?.imageId; }
+
+  function openCreatureCategoryEditor(id = "") {
+    editingCreatureCategoryId = id;
+    categoryDraft = id ? app.clone(creatureCategoryById(id)) : blankCreatureCategory();
+    if (!categoryDraft) return;
+    els.creatureCategoryDialogTitle.textContent = id ? 'Editar categoría' : 'Nueva categoría';
+    els.creatureCategoryName.value = categoryDraft.name || '';
+    els.creatureCategoryColor.value = categoryColorValue(categoryDraft);
+    renderCreatureCategoryDraftPhoto();
+    els.creatureCategoryDialog.showModal();
+    setTimeout(() => els.creatureCategoryName.focus(), 0);
   }
 
+  function createCreatureCategory() { openCreatureCategoryEditor(); }
 
   function renameSelectedCreatureCategory() {
     const w = world();
     const category = creatureCategoryById(w.selectedCreatureCategoryId);
     if (!category) return;
-    const raw = prompt("Nuevo nombre de la categoría:", category.name);
-    if (raw === null) return;
-    const name = String(raw || "").trim().slice(0, 80);
-    if (!name || name === category.name) return;
-    const duplicate = w.creatureCategories.find(item => item.id !== category.id && item.name.toLocaleLowerCase() === name.toLocaleLowerCase());
-    if (duplicate) { alert("Ya existe una categoría con ese nombre."); return; }
-    category.name = name;
-    category.updatedAt = app.now();
+    openCreatureCategoryEditor(category.id);
+  }
+
+  function saveCreatureCategoryFromForm() {
+    if (!categoryDraft) return;
+    const name = String(els.creatureCategoryName.value || '').trim().slice(0, 80);
+    if (!name) { els.creatureCategoryName.focus(); return; }
+    const w = world();
+    const duplicate = w.creatureCategories.find(item => item.id !== editingCreatureCategoryId && item.name.toLocaleLowerCase() === name.toLocaleLowerCase());
+    if (duplicate) { alert('Ya existe una categoría con ese nombre.'); return; }
+    categoryDraft.name = name;
+    categoryDraft.color = categoryColorValue({ color: els.creatureCategoryColor.value });
+    categoryDraft.updatedAt = app.now();
+    const index = w.creatureCategories.findIndex(item => item.id === editingCreatureCategoryId);
+    if (index >= 0) w.creatureCategories[index] = categoryDraft;
+    else w.creatureCategories.push(categoryDraft);
+    w.selectedCreatureCategoryId = categoryDraft.id;
+    editingCreatureCategoryId = '';
+    categoryDraft = null;
+    els.creatureCategoryDialog.close();
     save();
-    renderCreatureCategories();
-    fillCreatureCategoryOptions(creatureDraft?.categoryId || "");
+    renderCreatureCategories(); renderCreatureList(); renderCreatureDetail();
+    fillCreatureCategoryOptions(creatureDraft?.categoryId || '');
   }
 
   function deleteSelectedCreatureCategory() {
@@ -251,11 +280,36 @@
       const p = document.createElement("p"); p.className = "panel__hint"; p.style.padding = "10px"; const category = creatureCategoryById(w.selectedCreatureCategoryId); p.textContent = query ? "No hay coincidencias." : (category ? `No hay criaturas en “${category.name}”.` : (w.creatures.length ? "No hay criaturas en esta vista." : "Aún no has creado criaturas.")); els.creatureList.append(p); return;
     }
     items.sort((a,b)=>a.name.localeCompare(b.name,"es")).forEach(item => {
-      const button = document.createElement("button"); button.type = "button"; button.className = `world-library-card${w.selectedCreatureId === item.id ? " is-active" : ""}`;
+      const category = creatureCategoryById(item.categoryId);
+      const button = document.createElement("button"); button.type = "button"; button.className = `world-library-card world-library-card--creature${w.selectedCreatureId === item.id ? " is-active" : ""}`;
+      button.style.setProperty("--world-category-color", categoryColorValue(category));
       const thumb = document.createElement("span"); thumb.className = "world-library-card__thumb"; thumb.textContent = "🐉";
-      const text = document.createElement("span"); text.className = "world-library-card__text"; text.innerHTML = `<strong>${esc(item.name)}</strong><small>${esc(item.type || item.tags || "Criatura")}</small>`;
+      const text = document.createElement("span"); text.className = "world-library-card__text"; text.innerHTML = `<strong>${esc(item.name)}</strong><small>${esc(item.type || item.tags || category?.name || "Criatura")}</small>`;
       button.append(thumb,text); button.addEventListener("click",()=>{ w.selectedCreatureId=item.id; save(); renderCreatureList(); renderCreatureDetail(); }); els.creatureList.append(button); asyncThumb(thumb,item.imageId,"🐉");
     });
+  }
+
+
+  const PERSONALITY_TRAITS = app.personalityTraits || [];
+  const PERSONALITY_VIEW_FIELDS = [
+    ["speech","Cómo habla"],["conduct","Qué hace / conducta habitual"],["appearance","Apariencia"],["wants","Qué quiere en realidad"],["past","Qué ha vivido antes"],["origin","De dónde viene"],["reactionToPlayers","Por qué reacciona así ante los personajes"],["contradictions","Contradicciones"],["emotionalAnchor","Ancla emocional"],["entrance","Entrada en escena"],["accent","Acento / pronunciación"],["culturalLevel","Nivel cultural"],["expressions","Expresiones habituales"],["bodyLanguage","Expresión corporal"],["tics","Tics"],["obsessions","Obsesiones"]
+  ];
+  const VOICE_LABELS = { high: "Agudo", neutral: "Neutral", low: "Grave" };
+  function normalisePersonality(raw) { return app.normalisePersonality?.(raw) || raw || {traits:[]}; }
+  function fillPersonalityEditor(root, raw) {
+    if (!root) return; const p=normalisePersonality(raw); const host=root.querySelector('[data-personality-traits]');
+    if(host) host.innerHTML=PERSONALITY_TRAITS.map(([value,label])=>`<label class="personality-trait"><input type="checkbox" value="${esc(value)}" ${p.traits?.includes(value)?'checked':''}><span>${esc(label)}</span></label>`).join('');
+    root.querySelectorAll('[data-personality-field]').forEach(control=>{const key=control.dataset.personalityField;control.value=key==='voiceRange'?(p.voiceRange||''):(p[key]||'');});
+  }
+  function readPersonalityEditor(root, previous) {
+    const p=normalisePersonality(previous); if(!root)return p; p.traits=[...root.querySelectorAll('[data-personality-traits] input:checked')].map(input=>input.value).slice(0,20); root.querySelectorAll('[data-personality-field]').forEach(control=>{p[control.dataset.personalityField]=control.value;}); return normalisePersonality(p);
+  }
+  function personalityViewHtml(raw) {
+    const p=normalisePersonality(raw); if(!app.personalityHasContent?.(p))return '';
+    const chips=(p.traits||[]).map(value=>{const label=PERSONALITY_TRAITS.find(item=>item[0]===value)?.[1]||value;return `<span class="personality-chip">${esc(label)}</span>`;}).join('');
+    const voice=p.voiceRange?`<div class="personality-read-field"><strong>Rango vocal</strong><p>${esc(VOICE_LABELS[p.voiceRange]||p.voiceRange)}</p></div>`:'';
+    const fields=PERSONALITY_VIEW_FIELDS.map(([key,label])=>String(p[key]||'').trim()?`<div class="personality-read-field"><strong>${esc(label)}</strong><p>${esc(p[key])}</p></div>`:'').join('');
+    return `<details class="personality-panel personality-read"><summary><span>🎭 Personalidad e interpretación</span><small>Desplegar</small></summary><div class="personality-panel__body">${chips?`<div class="personality-chip-row">${chips}</div>`:''}<div class="personality-read-grid">${fields}${voice}</div></div></details>`;
   }
 
   function statIsSet(value) { return value !== "" && value !== null && value !== undefined && Number.isFinite(Number(value)); }
@@ -277,9 +331,14 @@
     const w=world(); let item=creatureById(w.selectedCreatureId);
     if (item && !creatureInSelectedCategory(item)) item = null;
     if (!item) { const category=creatureCategoryById(w.selectedCreatureCategoryId); const title=category?`“${category.name}” está vacía`:"Bestiario vacío"; const text=category?"Crea una criatura o asigna una existente a esta categoría desde su edición.":"Crea una criatura y su ficha quedará disponible para reutilizarla desde cualquier marcador."; els.creatureDetail.innerHTML=emptyDetail("🐉",title,text,'<button class="button" type="button" data-world-empty-creature>+ Crear criatura</button>'); els.creatureDetail.querySelector('[data-world-empty-creature]')?.addEventListener('click',()=>openCreatureEditor()); return; }
-    els.creatureDetail.innerHTML=`<div class="world-sheet world-sheet--creature"><div class="world-creature-profile"><section class="world-creature-info"><div class="world-sheet__heading"><div><p class="world-creature-kicker">Bestiario</p><h2>${esc(item.name)}</h2><p class="world-sheet__meta">${esc([item.type,item.tags].filter(Boolean).join(" · ")||"Criatura")}</p></div><button class="icon-button" type="button" data-world-edit-creature title="Editar criatura" aria-label="Editar criatura">✎</button></div>${item.description?`<p class="world-sheet__description">${esc(item.description)}</p>`:""}<div class="world-creature-data">${personSheetHtml(item)}</div></section><aside class="world-creature-portrait" data-world-detail-image aria-label="Imagen de ${esc(item.name)}"><span>🐉</span></aside></div></div>`;
+    const category = creatureCategoryById(item.categoryId);
+    const themeColor = categoryColorValue(category);
+    const categoryLabel = category?.name || 'Sin categoría';
+    els.creatureDetail.innerHTML=`<div class="world-sheet world-sheet--creature" style="--world-category-color:${esc(themeColor)}"><div class="world-creature-compendium"><div class="world-creature-atmosphere" data-world-category-bg aria-hidden="true"></div><section class="world-creature-info"><div class="world-sheet__heading"><div><p class="world-creature-kicker">${esc(categoryLabel)}</p><h2>${esc(item.name)}</h2><p class="world-sheet__meta">${esc([item.type,item.tags].filter(Boolean).join(" · ")||"Criatura")}</p></div><button class="icon-button" type="button" data-world-edit-creature title="Editar criatura" aria-label="Editar criatura">✎</button></div>${item.description?`<p class="world-sheet__description">${esc(item.description)}</p>`:""}${item.communication?`<section class="world-info-section world-creature-communication"><h3>Cómo se comunica</h3><p>${esc(item.communication)}</p></section>`:""}${item.personality?.fullEnabled?personalityViewHtml(item.personality):""}<div class="world-creature-data">${personSheetHtml(item)}</div></section><aside class="world-creature-stage"><div class="world-creature-portrait" data-world-detail-image aria-label="Imagen de ${esc(item.name)}"><span>🐉</span></div></aside></div></div>`;
     els.creatureDetail.querySelector('[data-world-edit-creature]')?.addEventListener('click',()=>openCreatureEditor(item.id));
     const host=els.creatureDetail.querySelector('[data-world-detail-image]'); if(item.imageId) imageUrl(item.imageId).then(url=>{if(!url||!host?.isConnected)return;host.replaceChildren();const img=document.createElement('img');img.src=url;img.alt=item.name;host.append(img);}).catch(()=>{});
+    const bgHost = els.creatureDetail.querySelector('[data-world-category-bg]');
+    if (bgHost) setBackgroundImageElement(bgHost, category?.imageId || '');
   }
 
   function renderOrganisationList() {
@@ -347,8 +406,8 @@
 
   async function renderCreatureDraftPhoto() { await setImageElement(els.creaturePhotoPreview,els.creaturePhotoEmpty,creatureDraft?.imageId,creatureDraft?.name||'Criatura'); if(els.creaturePhotoRemove)els.creaturePhotoRemove.hidden=!creatureDraft?.imageId; }
   function renderCreatureLootEditor(){if(!els.creatureLootList||!creatureDraft)return;els.creatureLootList.replaceChildren();creatureDraft.loot ||= [];creatureDraft.loot.forEach(item=>{const row=document.createElement('div');row.className='world-loot-edit-row';row.innerHTML=`<input value="${esc(item.name)}" maxlength="160" aria-label="Objeto"><input type="number" min="1" value="${Number(item.quantity)||1}" aria-label="Cantidad"><input value="${esc(item.notes||'')}" maxlength="500" aria-label="Notas"><button type="button" class="mini-button" aria-label="Eliminar">×</button>`;const inputs=$$('input',row);inputs[0].addEventListener('input',()=>item.name=inputs[0].value);inputs[1].addEventListener('input',()=>item.quantity=Math.max(1,Number(inputs[1].value)||1));inputs[2].addEventListener('input',()=>item.notes=inputs[2].value);$('button',row).addEventListener('click',()=>{creatureDraft.loot=creatureDraft.loot.filter(x=>x.id!==item.id);renderCreatureLootEditor();});els.creatureLootList.append(row);});}
-  function openCreatureEditor(id=''){editingCreatureId=id;creatureDraft=id?app.clone(creatureById(id)):blankCreature();if(!creatureDraft)return;if(!id&&world().selectedCreatureCategoryId!==ALL_CREATURES_CATEGORY&&creatureCategoryById(world().selectedCreatureCategoryId))creatureDraft.categoryId=world().selectedCreatureCategoryId;els.creatureDialogTitle.textContent=id?'Editar criatura':'Nueva criatura';els.creatureName.value=creatureDraft.name;els.creatureType.value=creatureDraft.type||'';fillCreatureCategoryOptions(creatureDraft.categoryId||'');els.creatureTags.value=creatureDraft.tags||'';els.creatureDescription.value=creatureDraft.description||'';els.creatureModifiers.value=creatureDraft.modifiers||'';els.creatureAbilities.value=creatureDraft.abilities||'';els.creatureCombatStyle.value=creatureDraft.combatStyle||'';els.creatureNonAggression.value=creatureDraft.nonAggression||'';els.creatureActions.value=creatureDraft.actions||'';els.creatureReactions.value=creatureDraft.reactions||'';loadStatsInto('world-creature',creatureDraft.stats);els.creatureDelete.hidden=!id;renderCreatureLootEditor();renderCreatureDraftPhoto();els.creatureDialog.showModal();setTimeout(()=>els.creatureName.focus(),0);}
-  function saveCreatureFromForm(){if(!creatureDraft)return;creatureDraft.name=els.creatureName.value.trim().slice(0,120)||'Criatura sin nombre';creatureDraft.type=els.creatureType.value.trim().slice(0,100);creatureDraft.categoryId=creatureCategoryById(els.creatureCategory?.value)?.id||'';creatureDraft.tags=els.creatureTags.value.trim().slice(0,300);creatureDraft.description=els.creatureDescription.value.slice(0,8000);creatureDraft.modifiers=els.creatureModifiers.value.slice(0,5000);creatureDraft.abilities=els.creatureAbilities.value.slice(0,5000);creatureDraft.combatStyle=els.creatureCombatStyle.value.slice(0,5000);creatureDraft.nonAggression=els.creatureNonAggression.value.slice(0,5000);creatureDraft.actions=els.creatureActions.value.slice(0,7000);creatureDraft.reactions=els.creatureReactions.value.slice(0,5000);creatureDraft.stats=readStatsFrom('world-creature');creatureDraft.loot=(creatureDraft.loot||[]).filter(x=>String(x.name||'').trim());creatureDraft.updatedAt=app.now();const w=world();const index=w.creatures.findIndex(x=>x.id===editingCreatureId);if(index>=0)w.creatures[index]=creatureDraft;else w.creatures.push(creatureDraft);w.selectedCreatureId=creatureDraft.id;if(w.selectedCreatureCategoryId!==ALL_CREATURES_CATEGORY&&!creatureInSelectedCategory(creatureDraft)){const first=creaturesForSelectedCategory().filter(x=>x.id!==creatureDraft.id).slice().sort((a,b)=>a.name.localeCompare(b.name,'es'))[0];w.selectedCreatureId=first?.id||'';}editingCreatureId='';creatureDraft=null;els.creatureDialog.close();save();render();}
+  function openCreatureEditor(id=''){editingCreatureId=id;creatureDraft=id?app.clone(creatureById(id)):blankCreature();if(!creatureDraft)return;if(!id&&world().selectedCreatureCategoryId!==ALL_CREATURES_CATEGORY&&creatureCategoryById(world().selectedCreatureCategoryId))creatureDraft.categoryId=world().selectedCreatureCategoryId;els.creatureDialogTitle.textContent=id?'Editar criatura':'Nueva criatura';els.creatureName.value=creatureDraft.name;els.creatureType.value=creatureDraft.type||'';fillCreatureCategoryOptions(creatureDraft.categoryId||'');els.creatureTags.value=creatureDraft.tags||'';els.creatureDescription.value=creatureDraft.description||'';els.creatureCommunication.value=creatureDraft.communication||'';creatureDraft.personality=normalisePersonality(creatureDraft.personality);els.creaturePersonalityFull.checked=Boolean(creatureDraft.personality.fullEnabled);fillPersonalityEditor(els.creaturePersonalityFullFields,creatureDraft.personality);els.creaturePersonalityFullFields.hidden=!els.creaturePersonalityFull.checked;if(els.creaturePersonalityDetails)els.creaturePersonalityDetails.open=false;els.creatureModifiers.value=creatureDraft.modifiers||'';els.creatureAbilities.value=creatureDraft.abilities||'';els.creatureCombatStyle.value=creatureDraft.combatStyle||'';els.creatureNonAggression.value=creatureDraft.nonAggression||'';els.creatureActions.value=creatureDraft.actions||'';els.creatureReactions.value=creatureDraft.reactions||'';loadStatsInto('world-creature',creatureDraft.stats);els.creatureDelete.hidden=!id;renderCreatureLootEditor();renderCreatureDraftPhoto();els.creatureDialog.showModal();setTimeout(()=>els.creatureName.focus(),0);}
+  function saveCreatureFromForm(){if(!creatureDraft)return;creatureDraft.name=els.creatureName.value.trim().slice(0,120)||'Criatura sin nombre';creatureDraft.type=els.creatureType.value.trim().slice(0,100);creatureDraft.categoryId=creatureCategoryById(els.creatureCategory?.value)?.id||'';creatureDraft.tags=els.creatureTags.value.trim().slice(0,300);creatureDraft.description=els.creatureDescription.value.slice(0,8000);creatureDraft.communication=els.creatureCommunication.value.slice(0,3000);creatureDraft.personality=readPersonalityEditor(els.creaturePersonalityFullFields,creatureDraft.personality);creatureDraft.personality.fullEnabled=Boolean(els.creaturePersonalityFull.checked);creatureDraft.modifiers=els.creatureModifiers.value.slice(0,5000);creatureDraft.abilities=els.creatureAbilities.value.slice(0,5000);creatureDraft.combatStyle=els.creatureCombatStyle.value.slice(0,5000);creatureDraft.nonAggression=els.creatureNonAggression.value.slice(0,5000);creatureDraft.actions=els.creatureActions.value.slice(0,7000);creatureDraft.reactions=els.creatureReactions.value.slice(0,5000);creatureDraft.stats=readStatsFrom('world-creature');creatureDraft.loot=(creatureDraft.loot||[]).filter(x=>String(x.name||'').trim());creatureDraft.updatedAt=app.now();const w=world();const index=w.creatures.findIndex(x=>x.id===editingCreatureId);if(index>=0)w.creatures[index]=creatureDraft;else w.creatures.push(creatureDraft);w.selectedCreatureId=creatureDraft.id;if(w.selectedCreatureCategoryId!==ALL_CREATURES_CATEGORY&&!creatureInSelectedCategory(creatureDraft)){const first=creaturesForSelectedCategory().filter(x=>x.id!==creatureDraft.id).slice().sort((a,b)=>a.name.localeCompare(b.name,'es'))[0];w.selectedCreatureId=first?.id||'';}editingCreatureId='';creatureDraft=null;els.creatureDialog.close();save();render();}
 
   async function renderOrganisationDraftPhoto(){await setImageElement(els.organisationPhotoPreview,els.organisationPhotoEmpty,organisationDraft?.imageId,organisationDraft?.name||'Organización');if(els.organisationPhotoRemove)els.organisationPhotoRemove.hidden=!organisationDraft?.imageId;}
   function openOrganisationEditor(id=''){editingOrganisationId=id;organisationDraft=id?app.clone(organisationById(id)):blankOrganisation();if(!organisationDraft)return;els.organisationDialogTitle.textContent=id?'Editar organización':'Nueva organización';els.organisationName.value=organisationDraft.name;els.organisationHeadquarters.value=organisationDraft.headquarters||'';els.organisationDescription.value=organisationDraft.description||'';els.organisationGoals.value=organisationDraft.goals||'';els.organisationAttitude.value=organisationDraft.attitude||'';els.organisationNotes.value=organisationDraft.notes||'';els.organisationDelete.hidden=!id;renderOrganisationDraftPhoto();els.organisationDialog.showModal();setTimeout(()=>els.organisationName.focus(),0);}
@@ -360,11 +419,11 @@
   function saveMemberFromForm(){const org=organisationById(editingMemberOrganisationId);if(!org)return;let charId=els.memberCharacter.value;if(charId==='__new'){const name=els.memberNewName.value.trim();if(!name){els.memberNewName.focus();return;}const ch=blankCreature(name.slice(0,120),'character');world().characters.push(ch);charId=ch.id;}if(!characterById(charId))return;const patch={characterId:charId,role:els.memberRole.value.trim().slice(0,140),parentMemberId:els.memberParent.value||''};const existing=org.members.find(m=>m.id===editingMemberId);if(existing)Object.assign(existing,patch);else org.members.push({id:app.uid(),...patch});org.updatedAt=app.now();els.memberDialog.close();const createdNew=els.memberCharacter.value==='__new';editingMemberId='';editingMemberOrganisationId='';save();renderOrganisationDetail();renderOrganisationList();if(createdNew)openCharacterEditor(charId);}
 
   async function renderCharacterDraftPhoto(){await setImageElement(els.characterPhotoPreview,els.characterPhotoEmpty,characterDraft?.imageId,characterDraft?.name||'Personaje');if(els.characterPhotoRemove)els.characterPhotoRemove.hidden=!characterDraft?.imageId;}
-  function openCharacterEditor(id=''){const item=id?characterById(id):null;if(id&&!item)return;editingCharacterId=id;characterDraft=item?app.clone(item):blankCreature('Nuevo personaje','character');els.characterDialogTitle.textContent=id?'Editar personaje':'Nuevo personaje';els.characterName.value=characterDraft.name;els.characterType.value=characterDraft.type||'';els.characterDisposition.value=characterDraft.disposition||'neutral';els.characterDescription.value=characterDraft.description||'';els.characterModifiers.value=characterDraft.modifiers||'';els.characterAbilities.value=characterDraft.abilities||'';els.characterCombatStyle.value=characterDraft.combatStyle||'';els.characterNonAggression.value=characterDraft.nonAggression||'';els.characterActions.value=characterDraft.actions||'';els.characterReactions.value=characterDraft.reactions||'';els.characterNotes.value=characterDraft.notes||'';loadStatsInto('world-character',characterDraft.stats);els.characterDelete.hidden=!id;renderCharacterDraftPhoto();els.characterDialog.showModal();setTimeout(()=>els.characterName.focus(),0);}
-  function saveCharacterFromForm(){if(!characterDraft)return;characterDraft.name=els.characterName.value.trim().slice(0,120)||'Personaje sin nombre';characterDraft.type=els.characterType.value.trim().slice(0,100);characterDraft.disposition=['enemy','ally','neutral'].includes(els.characterDisposition.value)?els.characterDisposition.value:'neutral';characterDraft.description=els.characterDescription.value.slice(0,8000);characterDraft.modifiers=els.characterModifiers.value.slice(0,5000);characterDraft.abilities=els.characterAbilities.value.slice(0,5000);characterDraft.combatStyle=els.characterCombatStyle.value.slice(0,5000);characterDraft.nonAggression=els.characterNonAggression.value.slice(0,5000);characterDraft.actions=els.characterActions.value.slice(0,7000);characterDraft.reactions=els.characterReactions.value.slice(0,5000);characterDraft.notes=els.characterNotes.value.slice(0,8000);characterDraft.stats=readStatsFrom('world-character');characterDraft.updatedAt=app.now();const w=world();const index=w.characters.findIndex(x=>x.id===editingCharacterId);if(index>=0)w.characters[index]=characterDraft;else w.characters.push(characterDraft);const id=characterDraft.id;editingCharacterId='';characterDraft=null;els.characterDialog.close();save();render();if(viewingCharacterId===id)openCharacterView(id);}
+  function openCharacterEditor(id=''){const item=id?characterById(id):null;if(id&&!item)return;editingCharacterId=id;characterDraft=item?app.clone(item):blankCreature('Nuevo personaje','character');els.characterDialogTitle.textContent=id?'Editar personaje':'Nuevo personaje';els.characterName.value=characterDraft.name;els.characterType.value=characterDraft.type||'';els.characterDisposition.value=characterDraft.disposition||'neutral';els.characterDescription.value=characterDraft.description||'';characterDraft.personality=normalisePersonality(characterDraft.personality);fillPersonalityEditor(els.characterPersonalityDetails,characterDraft.personality);if(els.characterPersonalityDetails)els.characterPersonalityDetails.open=false;els.characterModifiers.value=characterDraft.modifiers||'';els.characterAbilities.value=characterDraft.abilities||'';els.characterCombatStyle.value=characterDraft.combatStyle||'';els.characterNonAggression.value=characterDraft.nonAggression||'';els.characterActions.value=characterDraft.actions||'';els.characterReactions.value=characterDraft.reactions||'';els.characterNotes.value=characterDraft.notes||'';loadStatsInto('world-character',characterDraft.stats);els.characterDelete.hidden=!id;renderCharacterDraftPhoto();els.characterDialog.showModal();setTimeout(()=>els.characterName.focus(),0);}
+  function saveCharacterFromForm(){if(!characterDraft)return;characterDraft.name=els.characterName.value.trim().slice(0,120)||'Personaje sin nombre';characterDraft.type=els.characterType.value.trim().slice(0,100);characterDraft.disposition=['enemy','ally','neutral'].includes(els.characterDisposition.value)?els.characterDisposition.value:'neutral';characterDraft.description=els.characterDescription.value.slice(0,8000);characterDraft.personality=readPersonalityEditor(els.characterPersonalityDetails,characterDraft.personality);characterDraft.modifiers=els.characterModifiers.value.slice(0,5000);characterDraft.abilities=els.characterAbilities.value.slice(0,5000);characterDraft.combatStyle=els.characterCombatStyle.value.slice(0,5000);characterDraft.nonAggression=els.characterNonAggression.value.slice(0,5000);characterDraft.actions=els.characterActions.value.slice(0,7000);characterDraft.reactions=els.characterReactions.value.slice(0,5000);characterDraft.notes=els.characterNotes.value.slice(0,8000);characterDraft.stats=readStatsFrom('world-character');characterDraft.updatedAt=app.now();const w=world();const index=w.characters.findIndex(x=>x.id===editingCharacterId);if(index>=0)w.characters[index]=characterDraft;else w.characters.push(characterDraft);const id=characterDraft.id;editingCharacterId='';characterDraft=null;els.characterDialog.close();save();render();if(viewingCharacterId===id)openCharacterView(id);}
 
   function characterOrganisations(id){return world().organisations.flatMap(org=>org.members.filter(m=>m.characterId===id).map(m=>({org,member:m})));}
-  function openCharacterView(id){const ch=characterById(id);if(!ch)return;viewingCharacterId=id;els.characterViewTitle.textContent=ch.name;const memberships=characterOrganisations(id);els.characterViewSubtitle.textContent=[ch.type,memberships.map(x=>`${x.org.name}${x.member.role?` · ${x.member.role}`:''}`).join(' / ')].filter(Boolean).join(' · ');els.characterViewBody.innerHTML=`<div class="world-sheet"><div class="world-sheet__hero"><div class="world-sheet__image" data-world-char-view-image><span>♙</span></div><div>${ch.description?`<p class="world-sheet__description">${esc(ch.description)}</p>`:'<p class="panel__hint">Sin descripción.</p>'}</div></div>${personSheetHtml(ch,{character:true})}</div>`;const host=els.characterViewBody.querySelector('[data-world-char-view-image]');if(ch.imageId)imageUrl(ch.imageId).then(url=>{if(!url||!host?.isConnected)return;host.replaceChildren();const img=document.createElement('img');img.src=url;img.alt=ch.name;host.append(img);}).catch(()=>{});if(!els.characterViewDialog.open)els.characterViewDialog.showModal();}
+  function openCharacterView(id){const ch=characterById(id);if(!ch)return;viewingCharacterId=id;els.characterViewTitle.textContent=ch.name;const memberships=characterOrganisations(id);els.characterViewSubtitle.textContent=[ch.type,memberships.map(x=>`${x.org.name}${x.member.role?` · ${x.member.role}`:''}`).join(' / ')].filter(Boolean).join(' · ');els.characterViewBody.innerHTML=`<div class="world-sheet world-sheet--character"><div class="world-sheet__hero"><div class="world-sheet__image" data-world-char-view-image><span>♙</span></div><section class="world-character-description"><h3>Descripción</h3>${ch.description?`<p>${esc(ch.description)}</p>`:'<p class="panel__hint">Sin descripción.</p>'}</section></div>${personalityViewHtml(ch.personality)}${personSheetHtml(ch,{character:true})}</div>`;const host=els.characterViewBody.querySelector('[data-world-char-view-image]');if(ch.imageId)imageUrl(ch.imageId).then(url=>{if(!url||!host?.isConnected)return;host.replaceChildren();const img=document.createElement('img');img.src=url;img.alt=ch.name;host.append(img);}).catch(()=>{});if(!els.characterViewDialog.open)els.characterViewDialog.showModal();}
 
   function clearAtlasRefs(type,id){for(const scene of state().atlas?.scenes||[]){if(scene.worldRefType===type&&scene.worldRefId===id){scene.worldRefType='';scene.worldRefId='';}for(const marker of scene.markers||[]){if(marker.worldRefType===type&&marker.worldRefId===id){marker.worldRefType='';marker.worldRefId='';}}}}
 
@@ -377,6 +436,9 @@
   function bind() {
     els.tabs.forEach(tab=>tab.addEventListener('click',()=>{section(tab.dataset.worldSection);save();render();}));
     els.newCreature?.addEventListener('click',()=>openCreatureEditor()); els.newCreatureCategory?.addEventListener('click',createCreatureCategory); els.editCreatureCategory?.addEventListener('click',renameSelectedCreatureCategory); els.deleteCreatureCategory?.addEventListener('click',deleteSelectedCreatureCategory); els.newOrganisation?.addEventListener('click',()=>openOrganisationEditor());
+    els.creatureCategoryForm?.addEventListener('submit',e=>{e.preventDefault();saveCreatureCategoryFromForm();}); $$('.world-category-close,.world-category-cancel').forEach(b=>b.addEventListener('click',()=>els.creatureCategoryDialog.close()));
+    els.creatureCategoryPhotoChoose?.addEventListener('click',()=>els.creatureCategoryPhotoInput.click()); els.creatureCategoryPhotoInput?.addEventListener('change',async()=>{const file=els.creatureCategoryPhotoInput.files?.[0];if(!file||!categoryDraft)return;categoryDraft.imageId=await putImage(file);els.creatureCategoryPhotoInput.value='';renderCreatureCategoryDraftPhoto();}); els.creatureCategoryPhotoRemove?.addEventListener('click',()=>{if(!categoryDraft)return;categoryDraft.imageId='';renderCreatureCategoryDraftPhoto();});
+    els.creaturePersonalityFull?.addEventListener('change',()=>{if(els.creaturePersonalityFullFields)els.creaturePersonalityFullFields.hidden=!els.creaturePersonalityFull.checked;});
     els.creatureSearch?.addEventListener('input',()=>{creatureSearch=els.creatureSearch.value;renderCreatureList();}); els.organisationSearch?.addEventListener('input',()=>{organisationSearch=els.organisationSearch.value;renderOrganisationList();});
     els.creatureForm?.addEventListener('submit',e=>{e.preventDefault();saveCreatureFromForm();}); $$('.world-creature-close,.world-creature-cancel').forEach(b=>b.addEventListener('click',()=>els.creatureDialog.close())); els.creatureDelete?.addEventListener('click',deleteCreature);
     els.creaturePhotoChoose?.addEventListener('click',()=>els.creaturePhotoInput.click()); els.creaturePhotoInput?.addEventListener('change',async()=>{const file=els.creaturePhotoInput.files?.[0];if(!file||!creatureDraft)return;creatureDraft.imageId=await putImage(file);els.creaturePhotoInput.value='';renderCreatureDraftPhoto();}); els.creaturePhotoRemove?.addEventListener('click',()=>{if(!creatureDraft)return;creatureDraft.imageId='';renderCreatureDraftPhoto();});

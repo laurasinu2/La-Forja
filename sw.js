@@ -1,13 +1,13 @@
-const CACHE = "forja-narrador-v2126-world-category-edit";
+const CACHE = "forja-narrador-v2128-personality-interpretation";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.12.6",
-  "./app.js?v=2.12.6",
-  "./history.js?v=2.12.6",
-  "./world.js?v=2.12.6",
-  "./atlas.js?v=2.12.6",
-  "./dungeon.js?v=2.12.6",
+  "./styles.css?v=2.12.8",
+  "./app.js?v=2.12.8",
+  "./history.js?v=2.12.8",
+  "./world.js?v=2.12.8",
+  "./atlas.js?v=2.12.8",
+  "./dungeon.js?v=2.12.8",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

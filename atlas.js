@@ -46,7 +46,7 @@
     atlasLayers: $("#atlasLayers"), atlasLayerCount: $("#atlasLayerCount"),
     atlasSceneDialog: $("#atlasSceneDialog"), atlasSceneForm: $("#atlasSceneForm"), atlasSceneDialogTitle: $("#atlasSceneDialogTitle"), atlasSceneName: $("#atlasSceneName"), atlasSceneParent: $("#atlasSceneParent"), atlasSceneDiscovered: $("#atlasSceneDiscovered"), atlasSceneUnlockEvent: $("#atlasSceneUnlockEvent"), atlasSceneWorldRefPicker: $("#atlasSceneWorldRefPicker"), atlasSceneWorldRefType: $("#atlasSceneWorldRefType"), atlasSceneWorldRefId: $("#atlasSceneWorldRefId"), atlasSceneCreateNotebookWrap: $("#atlasSceneCreateNotebookWrap"), atlasSceneCreateNotebook: $("#atlasSceneCreateNotebook"), atlasDeleteScene: $("#atlasDeleteScene"), atlasSceneSourceFieldset: $("#atlasSceneSourceFieldset"), atlasSceneEditDungeon: $("#atlasSceneEditDungeon"),
     atlasMarkerDialog: $("#atlasMarkerDialog"), atlasMarkerForm: $("#atlasMarkerForm"), atlasMarkerDialogTitle: $("#atlasMarkerDialogTitle"), atlasMarkerName: $("#atlasMarkerName"), atlasMarkerCategory: $("#atlasMarkerCategory"), atlasMarkerAlias: $("#atlasMarkerAlias"), atlasMarkerDisposition: $("#atlasMarkerDisposition"), atlasNpcFields: $("#atlasNpcFields"), atlasMarkerVisibility: $("#atlasMarkerVisibility"), atlasMarkerUnlockEvent: $("#atlasMarkerUnlockEvent"), atlasMarkerWorldRefPicker: $("#atlasMarkerWorldRefPicker"), atlasMarkerWorldRefType: $("#atlasMarkerWorldRefType"), atlasMarkerWorldRefId: $("#atlasMarkerWorldRefId"), atlasMarkerSize: $("#atlasMarkerSize"), atlasMarkerSizeValue: $("#atlasMarkerSizeValue"), atlasMarkerSizeUnit: $("#atlasMarkerSizeUnit"), atlasMarkerTargetScene: $("#atlasMarkerTargetScene"), atlasMarkerTargetTree: $("#atlasMarkerTargetTree"), atlasRelatedEntries: $("#atlasRelatedEntries"), atlasRelatedFieldset: $("#atlasRelatedFieldset"), atlasMarkerCreateNotebookWrap: $("#atlasMarkerCreateNotebookWrap"), atlasMarkerCreateNotebook: $("#atlasMarkerCreateNotebook"), atlasMarkerSheetModeWrap: $("#atlasMarkerSheetModeWrap"), atlasOrphanSheets: $("#atlasOrphanSheets"), atlasOrphanSheetList: $("#atlasOrphanSheetList"), atlasMarkerAutoDmSheet: $("#atlasMarkerAutoDmSheet"), atlasMarkerOpenSheet: $("#atlasMarkerOpenSheet"), atlasDeleteMarker: $("#atlasDeleteMarker"),
-    atlasInternalSheetDialog: $("#atlasInternalSheetDialog"), atlasInternalSheetForm: $("#atlasInternalSheetForm"), atlasInternalSheetEditToggle: $("#atlasInternalSheetEditToggle"), atlasInternalSheetTitle: $("#atlasInternalSheetTitle"), atlasInternalSheetKind: $("#atlasInternalSheetKind"), atlasSheetName: $("#atlasSheetName"), atlasSheetStatusWrap: $("#atlasSheetStatusWrap"), atlasSheetStatus: $("#atlasSheetStatus"), atlasSheetCreaturePhotoWrap: $("#atlasSheetCreaturePhotoWrap"), atlasSheetPhotoPreview: $("#atlasSheetPhotoPreview"), atlasSheetPhotoEmpty: $("#atlasSheetPhotoEmpty"), atlasSheetPhotoChoose: $("#atlasSheetPhotoChoose"), atlasSheetPhotoRemove: $("#atlasSheetPhotoRemove"), atlasSheetPhotoInput: $("#atlasSheetPhotoInput"), atlasSheetDescription: $("#atlasSheetDescription"), atlasCreatureSheetSection: $("#atlasCreatureSheetSection"), atlasCreatureModifiers: $("#atlasCreatureModifiers"), atlasCreatureAbilities: $("#atlasCreatureAbilities"), atlasCreatureCombatStyle: $("#atlasCreatureCombatStyle"), atlasCreatureNonAggression: $("#atlasCreatureNonAggression"), atlasCreatureActions: $("#atlasCreatureActions"), atlasCreatureReactions: $("#atlasCreatureReactions"), atlasMerchantSheetSection: $("#atlasMerchantSheetSection"), atlasMerchantItemsList: $("#atlasMerchantItemsList"), atlasMerchantItemName: $("#atlasMerchantItemName"), atlasMerchantItemPrice: $("#atlasMerchantItemPrice"), atlasMerchantItemCurrency: $("#atlasMerchantItemCurrency"), atlasMerchantItemDescription: $("#atlasMerchantItemDescription"), atlasMerchantItemAdd: $("#atlasMerchantItemAdd"), atlasSecretSheetSection: $("#atlasSecretSheetSection"), atlasSecretReveal: $("#atlasSecretReveal"), atlasSecretClues: $("#atlasSecretClues"), atlasSecretCheckType: $("#atlasSecretCheckType"), atlasSecretCheckDc: $("#atlasSecretCheckDc"), atlasSecretSuccess: $("#atlasSecretSuccess"), atlasSecretFailure: $("#atlasSecretFailure"), atlasSecretDiscovered: $("#atlasSecretDiscovered"), atlasMissionSheetSection: $("#atlasMissionSheetSection"), atlasMissionGiver: $("#atlasMissionGiver"), atlasMissionObjective: $("#atlasMissionObjective"), atlasMissionSecondary: $("#atlasMissionSecondary"), atlasMissionReward: $("#atlasMissionReward"), atlasMissionNotes: $("#atlasMissionNotes"), atlasMissionStages: $("#atlasMissionStages"), atlasMissionStageInput: $("#atlasMissionStageInput"), atlasMissionStageAdd: $("#atlasMissionStageAdd"), atlasContainerSheetSection: $("#atlasContainerSheetSection"), atlasContainerTitle: $("#atlasContainerTitle"), atlasContainerCp: $("#atlasContainerCp"), atlasContainerSp: $("#atlasContainerSp"), atlasContainerGp: $("#atlasContainerGp"), atlasContainerPp: $("#atlasContainerPp"), atlasContainerLocked: $("#atlasContainerLocked"), atlasContainerLockDc: $("#atlasContainerLockDc"), atlasContainerKey: $("#atlasContainerKey"), atlasContainerTrapped: $("#atlasContainerTrapped"), atlasContainerTrapCheck: $("#atlasContainerTrapCheck"), atlasContainerTrapDc: $("#atlasContainerTrapDc"), atlasContainerTrapEffect: $("#atlasContainerTrapEffect"), atlasContainerDisarmDc: $("#atlasContainerDisarmDc"), atlasLootSheetSection: $("#atlasLootSheetSection"), atlasSheetLootGroups: $("#atlasSheetLootGroups"), atlasLootName: $("#atlasLootName"), atlasLootQuantity: $("#atlasLootQuantity"), atlasLootCheckType: $("#atlasLootCheckType"), atlasLootCheckDc: $("#atlasLootCheckDc"), atlasLootNotes: $("#atlasLootNotes"), atlasLootAdd: $("#atlasLootAdd"), atlasLootSearchCheck: $("#atlasLootSearchCheck"), atlasLootSearchModifier: $("#atlasLootSearchModifier"), atlasLootSearchResult: $("#atlasLootSearchResult"), atlasLootSearchRoll: $("#atlasLootSearchRoll"), atlasLootSearchResultList: $("#atlasLootSearchResultList"),
+    atlasInternalSheetDialog: $("#atlasInternalSheetDialog"), atlasInternalSheetForm: $("#atlasInternalSheetForm"), atlasInternalSheetEditToggle: $("#atlasInternalSheetEditToggle"), atlasInternalSheetTitle: $("#atlasInternalSheetTitle"), atlasInternalSheetKind: $("#atlasInternalSheetKind"), atlasSheetName: $("#atlasSheetName"), atlasSheetStatusWrap: $("#atlasSheetStatusWrap"), atlasSheetStatus: $("#atlasSheetStatus"), atlasSheetCreaturePhotoWrap: $("#atlasSheetCreaturePhotoWrap"), atlasSheetPhotoPreview: $("#atlasSheetPhotoPreview"), atlasSheetPhotoEmpty: $("#atlasSheetPhotoEmpty"), atlasSheetPhotoChoose: $("#atlasSheetPhotoChoose"), atlasSheetPhotoRemove: $("#atlasSheetPhotoRemove"), atlasSheetPhotoInput: $("#atlasSheetPhotoInput"), atlasSheetDescription: $("#atlasSheetDescription"), atlasPersonalityDetails: $("#atlasPersonalityDetails"), atlasPersonalityCommunicationWrap: $("#atlasPersonalityCommunicationWrap"), atlasPersonalityCommunication: $("#atlasPersonalityCommunication"), atlasPersonalityFullToggleWrap: $("#atlasPersonalityFullToggleWrap"), atlasPersonalityFullToggle: $("#atlasPersonalityFullToggle"), atlasPersonalityFullFields: $("#atlasPersonalityFullFields"), atlasCreatureSheetSection: $("#atlasCreatureSheetSection"), atlasCreatureModifiers: $("#atlasCreatureModifiers"), atlasCreatureAbilities: $("#atlasCreatureAbilities"), atlasCreatureCombatStyle: $("#atlasCreatureCombatStyle"), atlasCreatureNonAggression: $("#atlasCreatureNonAggression"), atlasCreatureActions: $("#atlasCreatureActions"), atlasCreatureReactions: $("#atlasCreatureReactions"), atlasMerchantSheetSection: $("#atlasMerchantSheetSection"), atlasMerchantItemsList: $("#atlasMerchantItemsList"), atlasMerchantItemName: $("#atlasMerchantItemName"), atlasMerchantItemPrice: $("#atlasMerchantItemPrice"), atlasMerchantItemCurrency: $("#atlasMerchantItemCurrency"), atlasMerchantItemDescription: $("#atlasMerchantItemDescription"), atlasMerchantItemAdd: $("#atlasMerchantItemAdd"), atlasSecretSheetSection: $("#atlasSecretSheetSection"), atlasSecretReveal: $("#atlasSecretReveal"), atlasSecretClues: $("#atlasSecretClues"), atlasSecretCheckType: $("#atlasSecretCheckType"), atlasSecretCheckDc: $("#atlasSecretCheckDc"), atlasSecretSuccess: $("#atlasSecretSuccess"), atlasSecretFailure: $("#atlasSecretFailure"), atlasSecretDiscovered: $("#atlasSecretDiscovered"), atlasMissionSheetSection: $("#atlasMissionSheetSection"), atlasMissionGiver: $("#atlasMissionGiver"), atlasMissionObjective: $("#atlasMissionObjective"), atlasMissionSecondary: $("#atlasMissionSecondary"), atlasMissionReward: $("#atlasMissionReward"), atlasMissionNotes: $("#atlasMissionNotes"), atlasMissionStages: $("#atlasMissionStages"), atlasMissionStageInput: $("#atlasMissionStageInput"), atlasMissionStageAdd: $("#atlasMissionStageAdd"), atlasContainerSheetSection: $("#atlasContainerSheetSection"), atlasContainerTitle: $("#atlasContainerTitle"), atlasContainerCp: $("#atlasContainerCp"), atlasContainerSp: $("#atlasContainerSp"), atlasContainerGp: $("#atlasContainerGp"), atlasContainerPp: $("#atlasContainerPp"), atlasContainerLocked: $("#atlasContainerLocked"), atlasContainerLockDc: $("#atlasContainerLockDc"), atlasContainerKey: $("#atlasContainerKey"), atlasContainerTrapped: $("#atlasContainerTrapped"), atlasContainerTrapCheck: $("#atlasContainerTrapCheck"), atlasContainerTrapDc: $("#atlasContainerTrapDc"), atlasContainerTrapEffect: $("#atlasContainerTrapEffect"), atlasContainerDisarmDc: $("#atlasContainerDisarmDc"), atlasLootSheetSection: $("#atlasLootSheetSection"), atlasSheetLootGroups: $("#atlasSheetLootGroups"), atlasLootName: $("#atlasLootName"), atlasLootQuantity: $("#atlasLootQuantity"), atlasLootCheckType: $("#atlasLootCheckType"), atlasLootCheckDc: $("#atlasLootCheckDc"), atlasLootNotes: $("#atlasLootNotes"), atlasLootAdd: $("#atlasLootAdd"), atlasLootSearchCheck: $("#atlasLootSearchCheck"), atlasLootSearchModifier: $("#atlasLootSearchModifier"), atlasLootSearchResult: $("#atlasLootSearchResult"), atlasLootSearchRoll: $("#atlasLootSearchRoll"), atlasLootSearchResultList: $("#atlasLootSearchResultList"),
     atlasDmSheet: $("#atlasDmSheet"), atlasDmSheetResize: $("#atlasDmSheetResize"), atlasDmSheetTitle: $("#atlasDmSheetTitle"), atlasDmSheetSubtitle: $("#atlasDmSheetSubtitle"), atlasDmSheetEdit: $("#atlasDmSheetEdit"), atlasDmSheetClose: $("#atlasDmSheetClose"), atlasDmNpcDispositionBar: $("#atlasDmNpcDispositionBar"), atlasDmNpcDisposition: $("#atlasDmNpcDisposition"), atlasDmEntryPicker: $("#atlasDmEntryPicker"), atlasDmEntrySummary: $("#atlasDmEntrySummary"), atlasDmEntryTree: $("#atlasDmEntryTree"), atlasDmRelatedWrap: $("#atlasDmRelatedWrap"), atlasDmRelatedSelect: $("#atlasDmRelatedSelect"), atlasDmDetailHost: $("#atlasDmDetailHost"), detailPanel: $("#detailPanel"), detailPanelPlaceholder: $("#detailPanelPlaceholder"),
     atlasNotebookCreateDialog: $("#atlasNotebookCreateDialog"), atlasNotebookCreateForm: $("#atlasNotebookCreateForm"), atlasNotebookCreateName: $("#atlasNotebookCreateName"), atlasNotebookCreateType: $("#atlasNotebookCreateType"), atlasNotebookCreateSubtype: $("#atlasNotebookCreateSubtype"), atlasNotebookCreateChapter: $("#atlasNotebookCreateChapter"), atlasNotebookCreateParent: $("#atlasNotebookCreateParent"),
     atlasTextDialog: $("#atlasTextDialog"), atlasTextForm: $("#atlasTextForm"), atlasTextValue: $("#atlasTextValue"), atlasTextVisible: $("#atlasTextVisible"),
@@ -300,11 +300,13 @@
     ].join("");
     const loot = type === "creature" && Array.isArray(item.loot) && item.loot.length
       ? `<section class="atlas-world-sheet__section"><h4>Botín / recompensas</h4><p>${item.loot.map(part => `${app.escapeHtml(part.name)} ×${Math.max(1,Number(part.quantity)||1)}${part.notes ? ` · ${app.escapeHtml(part.notes)}` : ""}`).join("<br>")}</p></section>` : "";
-    return `${stats.length ? `<div class="atlas-world-sheet__stats">${stats.map(key => `<div class="atlas-world-sheet__stat"><small>${labels[key]}</small><strong>${app.escapeHtml(String(item.stats[key]))}</strong></div>`).join("")}</div>` : ""}${sections}${loot}`;
+    const communication = type === "creature" && String(item.communication || "").trim() ? worldPanelSection("Cómo se comunica", item.communication) : "";
+    const personality = (type === "character" || item.personality?.fullEnabled) ? atlasPersonalityViewHtml(item.personality) : "";
+    return `${communication}${personality}${stats.length ? `<div class="atlas-world-sheet__stats">${stats.map(key => `<div class="atlas-world-sheet__stat"><small>${labels[key]}</small><strong>${app.escapeHtml(String(item.stats[key]))}</strong></div>`).join("")}</div>` : ""}${sections}${loot}`;
   }
 
 
-  const WORLD_CREATURE_TEXT_FIELDS = ["description","modifiers","abilities","combatStyle","nonAggression","actions","reactions"];
+  const WORLD_CREATURE_TEXT_FIELDS = ["description","communication","modifiers","abilities","combatStyle","nonAggression","actions","reactions"];
   const WORLD_CREATURE_STAT_FIELDS = ["hp","maxhp","ac","speed","initiative","proficiency","str","dex","con","int","wis","cha"];
 
   function normaliseWorldCreatureOverrides(raw) {
@@ -342,7 +344,7 @@
   function worldInstanceEditorHtml(base, marker) {
     const item = mergedWorldCreature(base, marker);
     const labels = { hp: "PG", maxhp: "PG máx.", ac: "CA", speed: "Velocidad", initiative: "Iniciativa", proficiency: "Competencia", str: "FUE", dex: "DES", con: "CON", int: "INT", wis: "SAB", cha: "CAR" };
-    const textLabels = { description: "Descripción", modifiers: "Modificadores", abilities: "Habilidades", combatStyle: "Estilo de combate", nonAggression: "Si los PJ no atacan", actions: "Acciones", reactions: "Reacciones" };
+    const textLabels = { description: "Descripción", communication: "Cómo se comunica", modifiers: "Modificadores", abilities: "Habilidades", combatStyle: "Estilo de combate", nonAggression: "Si los PJ no atacan", actions: "Acciones", reactions: "Reacciones" };
     const local = hasWorldCreatureOverrides(marker);
     return `<form class="atlas-world-instance-editor" data-world-instance-form>
       <div class="atlas-world-instance-note"><strong>Edición local del Atlas</strong><span>Los cambios afectan sólo a este marcador. La ficha del Bestiario no se modifica.</span></div>
@@ -397,7 +399,7 @@
     } else if (context.type === "organisation") {
       body = `<div class="atlas-world-sheet"><div class="atlas-world-sheet__hero"><div><h3>${app.escapeHtml(displayItem.name || "Organización")}</h3>${displayItem.headquarters ? `<p class="atlas-world-sheet__meta">⌂ ${app.escapeHtml(displayItem.headquarters)}</p>` : ""}${displayItem.description ? `<p class="atlas-world-sheet__description">${app.escapeHtml(displayItem.description)}</p>` : ""}</div><div class="atlas-world-sheet__image" data-atlas-world-image><span>⚑</span></div></div>${worldPanelSection("Objetivos",displayItem.goals)}${worldPanelSection("Relación / actitud",displayItem.attitude)}${worldPanelSection("Notas DM",displayItem.notes)}</div>`;
     } else {
-      body = `<div class="atlas-world-sheet"><div class="atlas-world-sheet__hero"><div><h3>${app.escapeHtml(displayName)}</h3><p class="atlas-world-sheet__meta">${app.escapeHtml([displayItem.type,displayItem.tags].filter(Boolean).join(" · ") || (context.type === "creature" ? "Criatura" : "Personaje"))}${local ? " · ajustes locales" : ""}</p>${displayItem.description ? `<p class="atlas-world-sheet__description">${app.escapeHtml(displayItem.description)}</p>` : ""}</div><div class="atlas-world-sheet__image" data-atlas-world-image><span>${context.type === "creature" ? "◆" : "●"}</span></div></div>${worldPersonPanelHtml(displayItem,context.type)}</div>`;
+      body = `<div class="atlas-world-sheet atlas-world-sheet--${context.type}"><div class="atlas-world-sheet__hero"><div><h3>${app.escapeHtml(displayName)}</h3><p class="atlas-world-sheet__meta">${app.escapeHtml([displayItem.type,displayItem.tags].filter(Boolean).join(" · ") || (context.type === "creature" ? "Criatura" : "Personaje"))}${local ? " · ajustes locales" : ""}</p>${displayItem.description ? `<p class="atlas-world-sheet__description">${app.escapeHtml(displayItem.description)}</p>` : ""}</div><div class="atlas-world-sheet__image" data-atlas-world-image><span>${context.type === "creature" ? "◆" : "●"}</span></div></div>${worldPersonPanelHtml(displayItem,context.type)}</div>`;
     }
     els.atlasDmDetailHost.innerHTML = body;
     if (worldInstanceEditMode) {
@@ -593,7 +595,7 @@
   function normaliseStage(raw = {}) { return { id: String(raw.id || app.uid()), text: String(raw.text || "").slice(0, 500), done: Boolean(raw.done) }; }
   function defaultMarkerSheet(category, name, markerId = "") {
     return {
-      id: app.uid(), markerId, category, kind: markerSheetKind(category) || "creature", name: String(name || (category === "npc" ? "" : "Ficha")).slice(0, 100), imageId: "", description: "",
+      id: app.uid(), markerId, category, kind: markerSheetKind(category) || "creature", name: String(name || (category === "npc" ? "" : "Ficha")).slice(0, 100), imageId: "", description: "", communication: "", personality: app.blankPersonality?.() || {traits:[],fullEnabled:false},
       stats: emptySheetStats(), modifiers: "", abilities: "", combatStyle: "", nonAggression: "", actions: "", reactions: "",
       secret: { reveal: "", clues: "", checkType: "perception", dc: "", success: "", failure: "", discovered: false },
       mission: { status: "notStarted", giver: "", objective: "", secondary: "", reward: "", notes: "", stages: [] },
@@ -610,7 +612,7 @@
     return {
       ...base, ...raw,
       id: String(raw.id || base.id), markerId: String(raw.markerId || ""), category, kind: markerSheetKind(category) || String(raw.kind || base.kind),
-      name: String(raw.name || base.name).slice(0, 100), imageId: String(raw.imageId || ""), description: String(raw.description || "").slice(0, 8000), stats,
+      name: String(raw.name || base.name).slice(0, 100), imageId: String(raw.imageId || ""), description: String(raw.description || "").slice(0, 8000), communication: String(raw.communication || "").slice(0,3000), personality: app.normalisePersonality?.(raw.personality) || raw.personality || base.personality, stats,
       modifiers: String(raw.modifiers || "").slice(0, 5000), abilities: String(raw.abilities || "").slice(0, 5000), combatStyle: String(raw.combatStyle || "").slice(0, 5000), nonAggression: String(raw.nonAggression || "").slice(0, 5000), actions: String(raw.actions || "").slice(0, 7000), reactions: String(raw.reactions || "").slice(0, 5000),
       secret: { ...base.secret, ...(raw.secret || {}) }, mission: { ...base.mission, ...(raw.mission || {}), stages: Array.isArray(raw.mission?.stages) ? raw.mission.stages.map(normaliseStage).filter(stage => stage.text.trim()) : [] },
       container: { ...base.container, ...(raw.container || {}) }, loot: Array.isArray(raw.loot) ? raw.loot.map(normaliseLootItem).filter(item => item.name.trim()) : [],
@@ -2348,6 +2350,14 @@
     els.atlasMerchantItemName?.focus();
   }
 
+
+  const ATLAS_PERSONALITY_TRAITS = app.personalityTraits || [];
+  const ATLAS_PERSONALITY_FIELDS = [["speech","Cómo habla"],["conduct","Qué hace / conducta habitual"],["appearance","Apariencia"],["wants","Qué quiere en realidad"],["past","Qué ha vivido antes"],["origin","De dónde viene"],["reactionToPlayers","Por qué reacciona así ante los personajes"],["contradictions","Contradicciones"],["emotionalAnchor","Ancla emocional"],["entrance","Entrada en escena"],["accent","Acento / pronunciación"],["culturalLevel","Nivel cultural"],["expressions","Expresiones habituales"],["bodyLanguage","Expresión corporal"],["tics","Tics"],["obsessions","Obsesiones"]];
+  const ATLAS_VOICE_LABELS={high:"Agudo",neutral:"Neutral",low:"Grave"};
+  function fillAtlasPersonalityEditor(root, raw) { if(!root)return;const p=app.normalisePersonality?.(raw)||raw||{traits:[]};const host=root.querySelector('[data-personality-traits]');if(host)host.innerHTML=ATLAS_PERSONALITY_TRAITS.map(([value,label])=>`<label class="personality-trait"><input type="checkbox" value="${app.escapeHtml(value)}" ${(p.traits||[]).includes(value)?'checked':''}><span>${app.escapeHtml(label)}</span></label>`).join('');root.querySelectorAll('[data-personality-field]').forEach(control=>{const key=control.dataset.personalityField;control.value=key==='voiceRange'?(p.voiceRange||''):(p[key]||'');}); }
+  function readAtlasPersonalityEditor(root, raw) {const p=app.normalisePersonality?.(raw)||raw||{traits:[]};if(!root)return p;p.traits=[...root.querySelectorAll('[data-personality-traits] input:checked')].map(input=>input.value).slice(0,20);root.querySelectorAll('[data-personality-field]').forEach(control=>{p[control.dataset.personalityField]=control.value;});return app.normalisePersonality?.(p)||p;}
+  function atlasPersonalityViewHtml(raw){const p=app.normalisePersonality?.(raw)||raw||{traits:[]};if(!app.personalityHasContent?.(p))return'';const chips=(p.traits||[]).map(value=>`<span class="personality-chip">${app.escapeHtml(ATLAS_PERSONALITY_TRAITS.find(item=>item[0]===value)?.[1]||value)}</span>`).join('');const fields=ATLAS_PERSONALITY_FIELDS.map(([key,label])=>String(p[key]||'').trim()?`<div class="personality-read-field"><strong>${app.escapeHtml(label)}</strong><p>${app.escapeHtml(p[key])}</p></div>`:'').join('');const voice=p.voiceRange?`<div class="personality-read-field"><strong>Rango vocal</strong><p>${app.escapeHtml(ATLAS_VOICE_LABELS[p.voiceRange]||p.voiceRange)}</p></div>`:'';return `<details class="personality-panel personality-read"><summary><span>🎭 Personalidad e interpretación</span><small>Desplegar</small></summary><div class="personality-panel__body">${chips?`<div class="personality-chip-row">${chips}</div>`:''}<div class="personality-read-grid">${fields}${voice}</div></div></details>`;}
+
   function isControlBlank(control) {
     if (control.type === "checkbox" || control.type === "radio") return !control.checked;
     if (control.tagName === "SELECT") return !String(control.value || "").trim();
@@ -2361,6 +2371,11 @@
       const controls = [...label.querySelectorAll("input,textarea,select")].filter(control => !["atlasSheetPhotoInput"].includes(control.id));
       if (controls.length && controls.every(isControlBlank)) label.classList.add("view-hide");
     });
+    if (els.atlasPersonalityDetails && !els.atlasPersonalityDetails.hidden) {
+      const hasPersonality = app.personalityHasContent?.(sheet.personality);
+      const hasCommunication = String(sheet.communication || "").trim();
+      if (!hasPersonality && !hasCommunication) els.atlasPersonalityDetails.classList.add("view-hide");
+    }
     if (!sheet.imageId) els.atlasSheetCreaturePhotoWrap?.classList.add("view-hide");
     if (!(sheet.loot || []).length) els.atlasLootSheetSection?.classList.add("view-hide");
     if (sheet.category === "merchant" && !(sheet.vendorItems || []).length) els.atlasMerchantSheetSection?.classList.add("view-hide");
@@ -2408,11 +2423,25 @@
   function loadInternalSheetForm() {
     const sheet = internalSheetDraft; if (!sheet) return;
     const kind = sheet.kind;
+    if (els.atlasInternalSheetForm) els.atlasInternalSheetForm.dataset.sheetCategory = sheet.category || "";
     const category = categoryMeta(sheet.category);
     els.atlasInternalSheetTitle.textContent = sheet.name || "Ficha del Atlas";
     els.atlasInternalSheetKind.textContent = `${category.icon} ${category.label} · ficha privada del DM`;
     els.atlasSheetName.value = sheet.name || "";
     els.atlasSheetDescription.value = sheet.description || "";
+    sheet.personality = app.normalisePersonality?.(sheet.personality) || sheet.personality || {traits:[],fullEnabled:false};
+    if (els.atlasPersonalityDetails) {
+      const isPerson = sheet.category === "npc" || sheet.category === "merchant";
+      const isCreaturePersonality = sheet.category === "creature";
+      els.atlasPersonalityDetails.hidden = !(isPerson || isCreaturePersonality);
+      els.atlasPersonalityDetails.open = false;
+      if (els.atlasPersonalityCommunicationWrap) els.atlasPersonalityCommunicationWrap.hidden = !isCreaturePersonality;
+      if (els.atlasPersonalityFullToggleWrap) els.atlasPersonalityFullToggleWrap.hidden = !isCreaturePersonality;
+      if (els.atlasPersonalityCommunication) els.atlasPersonalityCommunication.value = sheet.communication || "";
+      if (els.atlasPersonalityFullToggle) els.atlasPersonalityFullToggle.checked = isPerson ? true : Boolean(sheet.personality.fullEnabled);
+      if (els.atlasPersonalityFullFields) els.atlasPersonalityFullFields.hidden = isCreaturePersonality && !sheet.personality.fullEnabled;
+      fillAtlasPersonalityEditor(els.atlasPersonalityFullFields, sheet.personality);
+    }
     els.atlasCreatureSheetSection.hidden = kind !== "creature";
     els.atlasSheetCreaturePhotoWrap.hidden = kind !== "creature";
     if (els.atlasMerchantSheetSection) els.atlasMerchantSheetSection.hidden = sheet.category !== "merchant";
@@ -2446,6 +2475,11 @@
     const sheet = internalSheetDraft; if (!sheet) return null;
     sheet.name = els.atlasSheetName.value.trim() || (sheet.category === "npc" ? "" : "Ficha");
     sheet.description = els.atlasSheetDescription.value.trim();
+    if (sheet.category === "npc" || sheet.category === "merchant" || sheet.category === "creature") {
+      sheet.communication = sheet.category === "creature" ? String(els.atlasPersonalityCommunication?.value || "").slice(0,3000) : "";
+      sheet.personality = readAtlasPersonalityEditor(els.atlasPersonalityFullFields, sheet.personality);
+      sheet.personality.fullEnabled = sheet.category === "creature" ? Boolean(els.atlasPersonalityFullToggle?.checked) : true;
+    }
     if (sheet.kind === "creature") {
       $$('[data-sheet-stat]', els.atlasCreatureSheetSection).forEach(input => { sheet.stats[input.dataset.sheetStat] = normaliseOptionalNumber(input.value); });
       sheet.modifiers = els.atlasCreatureModifiers.value.trim(); sheet.abilities = els.atlasCreatureAbilities.value.trim(); sheet.combatStyle = els.atlasCreatureCombatStyle.value.trim(); sheet.nonAggression = els.atlasCreatureNonAggression.value.trim(); sheet.actions = els.atlasCreatureActions.value.trim(); sheet.reactions = els.atlasCreatureReactions.value.trim();
@@ -3298,7 +3332,8 @@
       ...(campaign.atlas?.markerSheets?.map(sheet => sheet.imageId).filter(Boolean) || []),
       ...(campaign.world?.creatures?.map(item => item.imageId).filter(Boolean) || []),
       ...(campaign.world?.characters?.map(item => item.imageId).filter(Boolean) || []),
-      ...(campaign.world?.organisations?.map(item => item.imageId).filter(Boolean) || [])
+      ...(campaign.world?.organisations?.map(item => item.imageId).filter(Boolean) || []),
+      ...(campaign.world?.creatureCategories?.map(item => item.imageId).filter(Boolean) || [])
     ]));
     const records = (await getAllImages()).filter(record => ids.has(record.id));
     const index = records.map(record => ({ id: record.id, name: record.name, type: record.type, path: `media/${record.id}` }));
@@ -3685,6 +3720,7 @@
       finally { els.atlasSheetPhotoInput.value = ""; }
     });
     els.atlasSheetPhotoRemove?.addEventListener("click", () => { if (!internalSheetDraft) return; internalSheetDraft.imageId = ""; renderInternalSheetPhoto(); });
+    els.atlasPersonalityFullToggle?.addEventListener("change", () => { if (els.atlasPersonalityFullFields) els.atlasPersonalityFullFields.hidden = !els.atlasPersonalityFullToggle.checked; });
     els.atlasMissionStageAdd?.addEventListener("click", () => {
       if (!internalSheetDraft || internalSheetDraft.kind !== "mission") return;
       const value = els.atlasMissionStageInput.value.trim(); if (!value) return;

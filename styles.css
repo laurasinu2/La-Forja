@@ -3429,3 +3429,81 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
   .world-library--creatures .world-creature-portrait::before{inset:auto 0 0 0!important;width:auto!important;height:20%!important;background:linear-gradient(0deg,#0c1114 0%,rgba(12,17,20,.7) 35%,transparent 100%)!important}
   .world-library--creatures .world-creature-info{order:2;padding:18px 14px 22px!important}
 }
+
+
+/* v2.12.7 — Mundo / Criaturas compendio visual */
+.world-category-chip{position:relative;border-color:color-mix(in srgb,var(--world-category-color,#6b7f8f) 38%,var(--line-soft,var(--border,#344047)));background:color-mix(in srgb,var(--world-category-color,#6b7f8f) 10%, transparent);}
+.world-category-chip:hover{background:color-mix(in srgb,var(--world-category-color,#6b7f8f) 14%, var(--surface-2,#1b2227));}
+.world-category-chip.is-active{border-color:var(--world-category-color,#6b7f8f);background:color-mix(in srgb,var(--world-category-color,#6b7f8f) 18%, transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--world-category-color,#6b7f8f) 75%, white 0%);}
+.world-category-chip__swatch{width:10px;height:10px;border-radius:50%;background:var(--world-category-color,#6b7f8f);box-shadow:0 0 0 1px rgba(255,255,255,.15) inset;flex:0 0 auto}
+.world-library--creatures{grid-template-columns:minmax(240px,300px) minmax(0,1fr)}
+.world-library--creatures .world-rail{background:linear-gradient(180deg,#0d1216 0%,#12181d 100%)}
+.world-library--creatures .world-card-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px;padding:10px}
+.world-library--creatures .world-library-card--creature{grid-template-columns:1fr;gap:6px;align-content:start;padding:7px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border-color:color-mix(in srgb,var(--world-category-color,#6b7f8f) 24%,var(--line-soft,var(--border,#344047)));min-height:118px}
+.world-library--creatures .world-library-card--creature:hover,.world-library--creatures .world-library-card--creature.is-active{background:linear-gradient(180deg,color-mix(in srgb,var(--world-category-color,#6b7f8f) 10%, rgba(255,255,255,.03)),rgba(255,255,255,.02));border-color:color-mix(in srgb,var(--world-category-color,#6b7f8f) 56%,var(--line-soft,var(--border,#344047)));box-shadow:0 0 0 1px color-mix(in srgb,var(--world-category-color,#6b7f8f) 35%, transparent)}
+.world-library--creatures .world-library-card--creature .world-library-card__thumb{width:100%;height:72px;border-radius:8px;background:rgba(255,255,255,.035)}
+.world-library--creatures .world-library-card--creature .world-library-card__thumb img{object-fit:contain;background:transparent}
+.world-library--creatures .world-library-card--creature .world-library-card__text strong,.world-library--creatures .world-library-card--creature .world-library-card__text small{text-align:center}
+.world-library--creatures .world-library-card--creature .world-library-card__text strong{font-size:12px}
+.world-library--creatures .world-library-card--creature .world-library-card__text small{font-size:10px;white-space:normal;line-height:1.25}
+.world-library--creatures .world-detail{padding:0;overflow:auto;background:#091015}
+.world-sheet--creature{max-width:none}
+.world-creature-compendium{position:relative;display:grid;grid-template-columns:minmax(360px,1fr) minmax(280px,44%);min-height:100%;background:radial-gradient(circle at 82% 26%, color-mix(in srgb,var(--world-category-color,#6b7f8f) 20%, transparent) 0%, transparent 44%),linear-gradient(180deg,#071018 0%,#091117 100%);overflow:hidden;isolation:isolate}
+.world-creature-atmosphere{position:absolute;inset:0;background-position:center right;background-size:cover;opacity:.12;filter:saturate(.8) blur(1px);z-index:0}
+.world-creature-atmosphere::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#081019 0%,rgba(8,16,25,.92) 27%,rgba(8,16,25,.72) 52%,rgba(8,16,25,.38) 72%,rgba(8,16,25,.14) 100%)}
+.world-creature-info,.world-creature-stage{position:relative;z-index:1}
+.world-creature-info{padding:24px 22px 28px;min-width:0}
+.world-creature-kicker{margin:0 0 8px;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--world-category-color,#95a8b6);font-weight:800}
+.world-creature-info h2{margin:0;font-size:clamp(1.9rem,2.8vw,3rem);line-height:1;color:color-mix(in srgb,var(--world-category-color,#6b7f8f) 62%, white 38%)}
+.world-creature-info .world-sheet__meta{margin-top:.45rem}
+.world-creature-info .world-sheet__description{max-width:60ch;margin:1rem 0 0}
+.world-creature-stage{display:flex;align-items:flex-end;justify-content:center;min-height:420px;padding:18px 18px 0}
+.world-creature-portrait{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;min-height:280px;background:none;border:0;overflow:visible}
+.world-creature-portrait img{width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 22px rgba(0,0,0,.45))}
+.world-creature-data .world-sheet__stats{margin-top:18px}
+.world-creature-data .world-sheet__stats,.world-creature-data .world-sheet__abilities{background:rgba(6,11,15,.36);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.06)}
+.world-creature-data .world-sheet__sections{margin-top:12px}
+.world-creature-data .world-info-section{padding:12px 0 0;border-top:1px solid rgba(255,255,255,.08)}
+.world-creature-data .world-info-section h3{color:color-mix(in srgb,var(--world-category-color,#6b7f8f) 54%, white 46%);letter-spacing:.04em;text-transform:uppercase}
+#worldCreatureCategoryDialog .world-editor-photo>img,#worldCreatureCategoryDialog .world-editor-photo>div:first-of-type{aspect-ratio:16/10;object-fit:cover}
+@media (max-width: 1100px){
+  .world-library--creatures{grid-template-columns:1fr}
+  .world-library--creatures .world-card-list{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
+  .world-creature-compendium{grid-template-columns:1fr;min-height:0}
+  .world-creature-stage{order:1;min-height:260px;padding:14px 14px 0}
+  .world-creature-info{order:2;padding:18px 16px 22px}
+  .world-creature-atmosphere::after{background:linear-gradient(0deg,#081019 0%,rgba(8,16,25,.9) 24%,rgba(8,16,25,.5) 48%,rgba(8,16,25,.12) 100%)}
+}
+@media (max-width: 700px){
+  .world-creature-info h2{font-size:clamp(1.6rem,8vw,2.2rem)}
+  .world-library--creatures .world-card-list{grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:7px;padding:8px}
+  .world-library--creatures .world-library-card--creature{min-height:106px;padding:6px}
+  .world-library--creatures .world-library-card--creature .world-library-card__thumb{height:64px}
+}
+
+
+/* v2.12.8 — Personalidad e interpretación */
+.personality-panel{border:1px solid var(--line,var(--border,#354149));border-radius:8px;overflow:hidden;background:var(--surface,#171d21);margin:10px 0}
+.personality-panel>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px;padding:9px 12px;cursor:pointer;background:var(--surface-2,#20272c);border-left:3px solid var(--accent,#dc741f);font:700 15px/1.2 Georgia,serif}
+.personality-panel>summary::-webkit-details-marker{display:none}.personality-panel>summary::after{content:"›";font:700 20px/1 sans-serif;color:var(--accent,#dc741f);transition:transform .15s ease}.personality-panel[open]>summary::after{transform:rotate(90deg)}
+.personality-panel>summary small{margin-left:auto;color:var(--muted,#91a0a8);font:500 10px/1.2 system-ui,sans-serif}
+.personality-panel__body{display:grid;gap:14px;padding:14px;background:linear-gradient(180deg,rgba(255,255,255,.015),transparent)}
+.personality-subsection{display:grid;gap:9px}.personality-subsection+.personality-subsection{padding-top:12px;border-top:1px solid var(--line-soft,var(--line,#344047))}.personality-subsection h3{margin:0;color:var(--accent-2,#e9a45e);font:700 15px/1.2 Georgia,serif}
+.personality-trait-grid{display:flex;flex-wrap:wrap;gap:6px}.personality-trait{position:relative;cursor:pointer}.personality-trait input{position:absolute;opacity:0;pointer-events:none}.personality-trait span,.personality-chip{display:inline-flex;align-items:center;min-height:29px;padding:5px 9px;border:1px solid var(--line-soft,var(--line,#344047));border-radius:999px;background:rgba(255,255,255,.025);font-size:12px}.personality-trait input:checked+span{border-color:var(--accent,#dc741f);background:var(--accent-soft,rgba(220,116,31,.15));color:var(--text,#f3f4f4);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent,#dc741f) 55%,transparent)}
+.personality-field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.personality-field-grid label,.personality-communication label{display:grid;gap:5px;min-width:0;font-size:11px;font-weight:700;color:var(--muted,#91a0a8)}.personality-field-grid textarea,.personality-field-grid input,.personality-field-grid select,.personality-communication textarea{width:100%;min-width:0}
+.personality-chip-row{display:flex;flex-wrap:wrap;gap:6px}.personality-chip{border-color:color-mix(in srgb,var(--accent,#dc741f) 45%,var(--line-soft));background:var(--accent-soft,rgba(220,116,31,.12));color:var(--text)}
+.personality-read-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.personality-read-field{padding:9px 10px;border-left:2px solid color-mix(in srgb,var(--accent,#dc741f) 65%,transparent);background:rgba(255,255,255,.018)}.personality-read-field strong{display:block;margin-bottom:4px;color:var(--accent-2,#e9a45e);font-size:11px;text-transform:uppercase;letter-spacing:.03em}.personality-read-field p{margin:0;white-space:pre-wrap;line-height:1.48}
+.atlas-internal-sheet-card.is-view-mode .personality-trait input{display:none}.atlas-internal-sheet-card.is-view-mode .personality-trait{cursor:default}.atlas-internal-sheet-card.is-view-mode .personality-field-grid textarea,.atlas-internal-sheet-card.is-view-mode .personality-field-grid input,.atlas-internal-sheet-card.is-view-mode .personality-field-grid select{opacity:1;color:var(--text)}
+.world-editor-section.personality-panel{padding-top:0;border-top:0}.world-editor-section.personality-panel>summary{margin:0}
+.world-creature-communication{margin-top:14px}
+@media(max-width:760px){.personality-field-grid,.personality-read-grid{grid-template-columns:1fr}.personality-panel__body{padding:11px}.personality-panel>summary{padding:8px 10px}.personality-panel>summary small{display:none}}
+
+
+/* v2.12.8 — lectura de personajes con lenguaje visual del Cuaderno */
+.atlas-sheet-description-field{display:grid;gap:6px}.atlas-sheet-description-field>span{font-weight:700}
+#atlasInternalSheetForm.is-view-mode[data-sheet-category="npc"] .atlas-sheet-top-grid,#atlasInternalSheetForm.is-view-mode[data-sheet-category="merchant"] .atlas-sheet-top-grid{display:none}
+#atlasInternalSheetForm.is-view-mode[data-sheet-category="npc"] .atlas-sheet-description-field,#atlasInternalSheetForm.is-view-mode[data-sheet-category="merchant"] .atlas-sheet-description-field{display:block;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--paper);color:#221d17}
+#atlasInternalSheetForm.is-view-mode[data-sheet-category="npc"] .atlas-sheet-description-field>span,#atlasInternalSheetForm.is-view-mode[data-sheet-category="merchant"] .atlas-sheet-description-field>span{display:block;padding:8px 10px;background:var(--surface-2);color:var(--text);font:700 16px/1 Georgia,serif;border-bottom:1px solid var(--line)}
+#atlasInternalSheetForm.is-view-mode[data-sheet-category="npc"] .atlas-sheet-description-field textarea,#atlasInternalSheetForm.is-view-mode[data-sheet-category="merchant"] .atlas-sheet-description-field textarea{padding:14px!important;min-height:80px!important;color:#221d17!important;-webkit-text-fill-color:#221d17!important;line-height:1.55;background:var(--paper)!important}
+.world-sheet--character .world-sheet__hero{align-items:stretch}.world-character-description{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper);color:#221d17}.world-character-description h3{margin:0;padding:8px 10px;background:var(--surface-2);color:var(--text);font:700 16px/1 Georgia,serif}.world-character-description p{margin:0;padding:14px;white-space:pre-wrap;line-height:1.55}.world-sheet--character>.world-sheet__stats{margin-top:14px}.world-character-view-card .world-info-section{border:1px solid var(--line-soft);border-radius:7px;padding:0;overflow:hidden;background:rgba(255,255,255,.015)}.world-character-view-card .world-info-section h3{margin:0;padding:8px 10px;background:var(--surface-2);font:700 14px/1.1 Georgia,serif;color:var(--text)}.world-character-view-card .world-info-section p,.world-character-view-card .world-loot-view{padding:10px 12px}.atlas-world-sheet--character .atlas-world-sheet__description{padding:12px;border:1px solid var(--line-soft);border-radius:7px;background:var(--paper);color:#221d17;line-height:1.55}
+.atlas-sheet-section.personality-panel{display:block;padding:0;gap:0}

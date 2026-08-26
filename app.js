@@ -94,6 +94,50 @@
     ["int", "INT"], ["wis", "SAB"], ["cha", "CAR"]
   ];
 
+
+  const PERSONALITY_TRAITS = [
+    ["amable", "Amable"],
+    ["alegre", "Alegre"],
+    ["inocente", "Inocente"],
+    ["reservado", "Reservado"],
+    ["desconfiado", "Desconfiado"],
+    ["agresivo", "Agresivo"],
+    ["orgulloso", "Orgulloso"],
+    ["vanidoso", "Vanidoso"],
+    ["ambicioso", "Ambicioso"],
+    ["cobarde", "Cobarde"],
+    ["valiente", "Valiente"],
+    ["sarcastico", "Sarcástico"],
+    ["manipulador", "Manipulador"],
+    ["compasivo", "Compasivo"],
+    ["impulsivo", "Impulsivo"],
+    ["calculador", "Calculador"],
+    ["supersticioso", "Supersticioso"],
+    ["leal", "Leal"],
+    ["cruel", "Cruel"],
+    ["excentrico", "Excéntrico"]
+  ];
+  const PERSONALITY_FIELDS = ["speech","conduct","appearance","wants","past","origin","reactionToPlayers","contradictions","emotionalAnchor","entrance","accent","culturalLevel","expressions","bodyLanguage","tics","obsessions"];
+
+  function blankPersonality() {
+    return { traits: [], speech: "", conduct: "", appearance: "", wants: "", past: "", origin: "", reactionToPlayers: "", contradictions: "", emotionalAnchor: "", entrance: "", voiceRange: "", accent: "", culturalLevel: "", expressions: "", bodyLanguage: "", tics: "", obsessions: "", fullEnabled: false };
+  }
+
+  function normalisePersonality(raw = {}) {
+    const out = blankPersonality();
+    const allowed = new Set(PERSONALITY_TRAITS.map(item => item[0]));
+    out.traits = Array.isArray(raw?.traits) ? [...new Set(raw.traits.map(value => String(value)).filter(value => allowed.has(value)))].slice(0, 20) : [];
+    PERSONALITY_FIELDS.forEach(key => { out[key] = String(raw?.[key] || "").slice(0, key === "past" || key === "reactionToPlayers" || key === "contradictions" ? 3000 : 2500); });
+    out.voiceRange = ["high","neutral","low"].includes(String(raw?.voiceRange || "")) ? String(raw.voiceRange) : "";
+    out.fullEnabled = Boolean(raw?.fullEnabled);
+    return out;
+  }
+
+  function personalityHasContent(raw = {}) {
+    const p = normalisePersonality(raw);
+    return Boolean(p.traits.length || p.voiceRange || PERSONALITY_FIELDS.some(key => String(p[key] || "").trim()));
+  }
+
   const GAME_MONTHS = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
@@ -576,6 +620,7 @@
       name: String(raw.name || (kind === "character" ? "Personaje sin nombre" : "Criatura sin nombre")).slice(0, 120),
       imageId: String(raw.imageId || ""), type: String(raw.type || "").slice(0, 100), categoryId: String(raw.categoryId || ""), tags: String(raw.tags || "").slice(0, 300),
       description: String(raw.description || "").slice(0, 8000), disposition: ["enemy","ally","neutral"].includes(raw.disposition) ? raw.disposition : "neutral",
+      communication: String(raw.communication || "").slice(0, 3000), personality: normalisePersonality(raw.personality),
       stats: normaliseWorldStats(raw.stats), modifiers: String(raw.modifiers || "").slice(0, 5000), abilities: String(raw.abilities || "").slice(0, 5000),
       combatStyle: String(raw.combatStyle || "").slice(0, 5000), nonAggression: String(raw.nonAggression || "").slice(0, 5000), actions: String(raw.actions || "").slice(0, 7000), reactions: String(raw.reactions || "").slice(0, 5000),
       notes: String(raw.notes || "").slice(0, 8000), loot, createdAt: raw.createdAt || now(), updatedAt: raw.updatedAt || now()
@@ -587,6 +632,8 @@
     const creatureCategories = Array.isArray(raw.creatureCategories) ? raw.creatureCategories.map(item => ({
       id: String(item?.id || uid()),
       name: String(item?.name || "").trim().slice(0, 80),
+      color: /^#[0-9a-fA-F]{3,8}$/.test(String(item?.color || "")) ? String(item.color) : "#6b7f8f",
+      imageId: String(item?.imageId || ""), updatedAt: item?.updatedAt || item?.createdAt || now(),
       createdAt: item?.createdAt || now()
     })).filter(item => item.name) : [];
     const creatureCategoryIds = new Set(creatureCategories.map(item => item.id));
@@ -662,6 +709,7 @@
     const stages = Array.isArray(raw.mission?.stages) ? raw.mission.stages.map(stage => ({ id: String(stage?.id || uid()), text: String(stage?.text || "").slice(0, 500), done: Boolean(stage?.done) })).filter(stage => stage.text.trim()) : [];
     return {
       id: String(raw.id || uid()), markerId: String(raw.markerId || ""), category: (["enemy", "ally"].includes(String(raw.category || "")) ? "npc" : String(raw.category || "npc")).slice(0, 60), kind: String(raw.kind || "creature").slice(0, 30), name: String(raw.name || (["enemy", "ally", "npc"].includes(String(raw.category || "npc")) ? "" : "Ficha")).slice(0, 100), imageId: String(raw.imageId || ""), description: String(raw.description || "").slice(0, 8000),
+      communication: String(raw.communication || "").slice(0, 3000), personality: normalisePersonality(raw.personality),
       stats, modifiers: String(raw.modifiers || "").slice(0, 5000), abilities: String(raw.abilities || "").slice(0, 5000), combatStyle: String(raw.combatStyle || "").slice(0, 5000), nonAggression: String(raw.nonAggression || "").slice(0, 5000), actions: String(raw.actions || "").slice(0, 7000), reactions: String(raw.reactions || "").slice(0, 5000),
       secret: { reveal: String(raw.secret?.reveal || "").slice(0, 5000), clues: String(raw.secret?.clues || "").slice(0, 5000), checkType: String(raw.secret?.checkType || "perception").slice(0, 40), dc: optionalNumber(raw.secret?.dc), success: String(raw.secret?.success || "").slice(0, 5000), failure: String(raw.secret?.failure || "").slice(0, 5000), discovered: Boolean(raw.secret?.discovered) },
       mission: { status: ["notStarted", "active", "completed", "failed"].includes(raw.mission?.status) ? raw.mission.status : "notStarted", giver: String(raw.mission?.giver || "").slice(0, 200), objective: String(raw.mission?.objective || "").slice(0, 500), secondary: String(raw.mission?.secondary || "").slice(0, 5000), reward: String(raw.mission?.reward || "").slice(0, 5000), notes: String(raw.mission?.notes || "").slice(0, 5000), stages },
@@ -818,7 +866,7 @@
     return {
       id: uid(), type, name, parentId, subtype: subtype || defaultSubtype(type), chapterId: "",
       descriptionHtml, descriptionMarkdown: htmlToMarkdown(descriptionHtml), status: defaultStatus(type), collapsed: true, order: 0,
-      consumables: [], journal: [], connections: [], vendorItems: [], obtainableItems: [],
+      consumables: [], journal: [], connections: [], vendorItems: [], obtainableItems: [], communication: "", personality: blankPersonality(),
       thingDetails: type === "things" ? defaultThingDetails() : null,
       stats: type === "creatures" ? defaultStats() : null,
       createdAt: now(), updatedAt: now()
@@ -1005,6 +1053,8 @@
         vendorItems: Array.isArray(original.vendorItems)
           ? original.vendorItems.map(normaliseVendorItem)
           : [],
+        communication: String(original.communication || "").slice(0, 3000),
+        personality: normalisePersonality(original.personality),
         thingDetails: type === "things"
           ? normaliseThingDetails(original.thingDetails || {}, original)
           : null,
@@ -1223,6 +1273,7 @@
   let mindmapLayout = null;
   let suppressMindmapNodeClick = false;
   let activeCollectionType = state.entries.find(entry => entry.id === state.selectedId)?.type || "locations";
+  let personalityRenderedEntryId = "";
 
   const els = {
     notebookView: $("#notebookView"), historyView: $("#historyView"), worldView: $("#worldView"), calendarView: $("#calendarView"), mindmapView: $("#mindmapView"), diceView: $("#diceView"), atlasView: $("#atlasView"), dungeonView: $("#dungeonView"), viewTabs: $$(".view-tab"),
@@ -1232,7 +1283,7 @@
     globalSearch: $("#globalSearch"), clearSearch: $("#clearSearch"),
     editor: $("#editor"), emptyState: $("#emptyState"), entrySubtype: $("#entrySubtype"), entryStatus: $("#entryStatus"), entryChapter: $("#entryChapter"),
     entryName: $("#entryName"), entryHeadingIcon: $("#entryHeadingIcon"), entryDescription: $("#entryDescription"), descriptionPreview: $("#descriptionPreview"),
-    saveState: $("#saveState"), creaturePanel: $("#creaturePanel"),
+    saveState: $("#saveState"), creaturePanel: $("#creaturePanel"), entryPersonalityPanel: $("#entryPersonalityPanel"), entryCommunicationPanel: $("#entryCommunicationPanel"), entryCommunication: $("#entryCommunication"),
     vendorPanel: $("#vendorPanel"), vendorItemsList: $("#vendorItemsList"), vendorItemForm: $("#vendorItemForm"),
     vendorItemName: $("#vendorItemName"), vendorItemPriceAmount: $("#vendorItemPriceAmount"), vendorItemCurrency: $("#vendorItemCurrency"), vendorItemCoin: $("#vendorItemCoin"), vendorItemDescription: $("#vendorItemDescription"),
     carryItemsPanel: $("#carryItemsPanel"), consumableForm: $("#consumableForm"), consumableInput: $("#consumableInput"), consumablesList: $("#consumablesList"),
@@ -1783,6 +1834,46 @@
     renderColumns();
   }
 
+
+  function fillPersonalityEditor(root, raw) {
+    if (!root) return;
+    const p = normalisePersonality(raw);
+    const traitsHost = root.querySelector("[data-personality-traits]");
+    if (traitsHost) traitsHost.innerHTML = PERSONALITY_TRAITS.map(([value,label]) => `<label class="personality-trait"><input type="checkbox" value="${escapeHtml(value)}" ${p.traits.includes(value) ? "checked" : ""}><span>${escapeHtml(label)}</span></label>`).join("");
+    root.querySelectorAll("[data-personality-field]").forEach(control => { const key=control.dataset.personalityField; control.value = key === "voiceRange" ? p.voiceRange : (p[key] || ""); });
+  }
+
+  function readPersonalityEditor(root, previous = {}) {
+    const p = normalisePersonality(previous);
+    if (!root) return p;
+    p.traits = [...root.querySelectorAll("[data-personality-traits] input:checked")].map(input => input.value).slice(0,20);
+    root.querySelectorAll("[data-personality-field]").forEach(control => { p[control.dataset.personalityField] = control.value; });
+    return normalisePersonality(p);
+  }
+
+  function renderEntryPersonality(entry) {
+    const personSubtypes = new Set(["player","friendly","vendor","neutral","hostile"]);
+    const creatureSubtypes = new Set(["beast","other"]);
+    const showPersonality = entry.type === "creatures" && personSubtypes.has(entry.subtype);
+    const showCommunication = entry.type === "creatures" && creatureSubtypes.has(entry.subtype);
+    if (els.entryPersonalityPanel) els.entryPersonalityPanel.hidden = !showPersonality;
+    if (els.entryCommunicationPanel) els.entryCommunicationPanel.hidden = !showCommunication;
+    entry.personality = normalisePersonality(entry.personality);
+    entry.communication = String(entry.communication || "");
+    if (personalityRenderedEntryId !== entry.id) {
+      if (els.entryPersonalityPanel) els.entryPersonalityPanel.open = false;
+      if (els.entryCommunicationPanel) els.entryCommunicationPanel.open = false;
+      personalityRenderedEntryId = entry.id;
+    }
+    if (showPersonality) fillPersonalityEditor(els.entryPersonalityPanel, entry.personality);
+    if (showCommunication && els.entryCommunication && document.activeElement !== els.entryCommunication) els.entryCommunication.value = entry.communication;
+  }
+
+  function syncEntryPersonality() {
+    const entry = selectedEntry(); if (!entry || !els.entryPersonalityPanel || els.entryPersonalityPanel.hidden) return;
+    entry.personality = readPersonalityEditor(els.entryPersonalityPanel, entry.personality); entry.updatedAt = now(); saveState();
+  }
+
   function renderEditor() {
     const entry = selectedEntry();
     els.emptyState.hidden = Boolean(entry);
@@ -1805,6 +1896,7 @@
       els.descriptionPreview.innerHTML = markdownToHtml(entry.descriptionMarkdown);
     }
 
+    renderEntryPersonality(entry);
     els.creaturePanel.hidden = entry.type !== "creatures";
     if (entry.type === "creatures") renderCreatureStats(entry);
     const isSeller = isSalesEntry(entry);
@@ -3636,6 +3728,8 @@
     els.descriptionPreview.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openMarkdownEditor(); } });
     els.entryDescription.addEventListener("input", syncDescription);
     els.entryDescription.addEventListener("blur", closeMarkdownEditor);
+    els.entryPersonalityPanel?.addEventListener("input", syncEntryPersonality);
+    els.entryCommunication?.addEventListener("input", () => { const entry=selectedEntry(); if (!entry) return; entry.communication=els.entryCommunication.value.slice(0,3000); entry.updatedAt=now(); saveState(); });
     els.entryStatus.addEventListener("change", () => {
       updateSelected({ status: els.entryStatus.value });
       renderColumns();
@@ -3651,6 +3745,7 @@
         const isSeller = isSalesEntry(entry);
         els.vendorPanel.hidden = !isSeller;
         if (isSeller) renderVendorItems(entry);
+        renderEntryPersonality(entry);
         renderMindMap();
       }
     });
@@ -4216,6 +4311,10 @@
     renderEditor,
     createNotebookEntry: createNotebookEntryFromExternal,
     chapterOptionsHtml,
+    personalityTraits: PERSONALITY_TRAITS,
+    blankPersonality,
+    normalisePersonality,
+    personalityHasContent,
     exportJson: exportData,
     normaliseProfile,
     normaliseCampaign,
