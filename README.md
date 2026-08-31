@@ -1,4 +1,4 @@
-# La Forja del Narrador · v2.14.0
+# La Forja del Narrador · v2.14.1
 
 Versión de consolidación basada en v2.13.0.
 
@@ -35,3 +35,12 @@ Versión de consolidación basada en v2.13.0.
 
 - Conserva campañas y datos de las versiones v2.13.0 y anteriores.
 - No elimina la lógica existente de Historia, Mundo, Atlas, Personalidad, Batalla ni proyección LAN.
+
+
+## v2.14.1 — optimización de interfaz
+- Diario e Historia compactados; ayuda trasladada a tooltip.
+- Cuaderno recupera la ficha lateral en escritorio.
+- Mundo y Atlas usan cabeceras y controles más densos.
+- Referencias de Misiones reorganizadas como árboles plegados.
+- Laterales de Atlas redimensionables.
+- Editor de marcadores conserva asociación/creación de fichas del Cuaderno de forma visible.

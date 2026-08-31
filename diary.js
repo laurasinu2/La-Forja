@@ -270,7 +270,33 @@
   }
   function checkedValues(host){return $$('input[type="checkbox"]:checked',host).map(i=>i.value);}
 
-  function renderReferenceChecklist(host,items,selected,emptyText){const set=new Set(selected||[]);host.replaceChildren();if(!items.length){host.innerHTML=`<p class="panel__hint">${esc(emptyText)}</p>`;return;}items.forEach(x=>{const l=document.createElement('label');l.className='mission-ref-choice';l.innerHTML=`<input type="checkbox" value="${esc(x.id)}" ${set.has(x.id)?"checked":""}/><span>${esc(x.label)}</span>`;host.append(l);});}
+  function missionRefChoice(id,label,selectedSet,subtitle="") {
+    const row=document.createElement('label');row.className='mission-ref-choice';
+    const input=document.createElement('input');input.type='checkbox';input.value=id;input.checked=selectedSet.has(id);
+    const copy=document.createElement('span');copy.textContent=label;
+    if(subtitle){const small=document.createElement('small');small.textContent=subtitle;copy.append(small);}
+    row.append(input,copy);return row;
+  }
+  function missionRefGroup(title,count){const details=document.createElement('details');details.className='mission-ref-tree-group';details.open=false;const summary=document.createElement('summary');const name=document.createElement('span');name.textContent=title;const small=document.createElement('small');small.textContent=`${count} elemento${count===1?'':'s'}`;summary.append(name,small);const body=document.createElement('div');body.className='mission-ref-tree-group__body';details.append(summary,body);return {details,body};}
+  function renderSceneReferenceTree(host,selectedSet){
+    const scenes=allAtlasScenes();if(!scenes.length)return false;const known=new Set(scenes.map(x=>x.id));const byParent=new Map();scenes.forEach(scene=>{const parent=known.has(scene.parentSceneId)?scene.parentSceneId:'';if(!byParent.has(parent))byParent.set(parent,[]);byParent.get(parent).push(scene);});
+    const walk=(scene,depth=0)=>{const kids=(byParent.get(scene.id)||[]).sort((a,b)=>a.name.localeCompare(b.name,'es'));if(!kids.length){const row=missionRefChoice(scene.id,scene.name,selectedSet);row.style.marginLeft=`${depth*9}px`;return row;}const group=missionRefGroup(scene.name,kids.length);group.details.classList.add('mission-ref-tree-branch');group.details.style.marginLeft=`${depth*7}px`;group.body.append(missionRefChoice(scene.id,'Esta escena',selectedSet));kids.forEach(child=>group.body.append(walk(child,depth+1)));return group.details;};
+    (byParent.get('')||[]).sort((a,b)=>a.name.localeCompare(b.name,'es')).forEach(scene=>host.append(walk(scene)));return true;
+  }
+  function renderMarkerReferenceTree(host,selectedSet){
+    const groups=allAtlasScenes().map(scene=>({scene,items:(scene.markers||[])})).filter(group=>group.items.length);if(!groups.length)return false;groups.sort((a,b)=>a.scene.name.localeCompare(b.scene.name,'es')).forEach(({scene,items})=>{const group=missionRefGroup(`⌖ ${scene.name}`,items.length);items.slice().sort((a,b)=>(a.name||a.alias||'').localeCompare(b.name||b.alias||'','es')).forEach(marker=>group.body.append(missionRefChoice(marker.id,marker.name||marker.alias||'Marcador',selectedSet,marker.category||'')));host.append(group.details);});return true;
+  }
+  function renderHistoryReferenceTree(host,selectedSet){
+    const events=state().history?.events||[];if(!events.length)return false;chapters().forEach(chapter=>{const items=events.filter(e=>e.chapterId===chapter.id);if(!items.length)return;const ids=new Set(items.map(e=>e.id));const children=new Map();items.forEach(event=>{const parent=(event.requirementIds||[]).find(id=>ids.has(id))||'';if(!children.has(parent))children.set(parent,[]);children.get(parent).push(event);});const chapterGroup=missionRefGroup(`⌁ ${chapter.title}`,items.length);const walk=(event,depth=0)=>{const kids=(children.get(event.id)||[]).filter(x=>x.id!==event.id);if(!kids.length){const row=missionRefChoice(event.id,event.title,selectedSet,event.status||'');row.style.marginLeft=`${depth*9}px`;return row;}const group=missionRefGroup(event.title,kids.length);group.details.classList.add('mission-ref-tree-branch');group.body.append(missionRefChoice(event.id,'Este suceso',selectedSet,event.status||''));kids.forEach(child=>group.body.append(walk(child,depth+1)));return group.details;};(children.get('')||[]).forEach(root=>chapterGroup.body.append(walk(root)));host.append(chapterGroup.details);});return host.childElementCount>0;
+  }
+  function renderReferenceChecklist(host,items,selected,emptyText){
+    const set=new Set(selected||[]);host.replaceChildren();let rendered=false;
+    if(host===els.sceneRefs)rendered=renderSceneReferenceTree(host,set);
+    else if(host===els.markerRefs)rendered=renderMarkerReferenceTree(host,set);
+    else if(host===els.historyRefs)rendered=renderHistoryReferenceTree(host,set);
+    else if(items?.length){items.forEach(x=>host.append(missionRefChoice(x.id,x.label,set)));rendered=true;}
+    if(!rendered)host.innerHTML=`<p class="mission-ref-tree-empty">${esc(emptyText)}</p>`;
+  }
   function atlasSceneOptions(){return allAtlasScenes().map(s=>({id:s.id,label:s.name}));}
   function atlasMarkerOptions(){return allAtlasScenes().flatMap(s=>(s.markers||[]).map(m=>({id:m.id,label:`${s.name} → ${m.name||m.alias||"Marcador"}`})));}
   function historyOptions(){return (state().history?.events||[]).map(e=>({id:e.id,label:`${chapterName(e.chapterId)} → ${e.title}`}));}

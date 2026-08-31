@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.14.0" />
+  <link rel="stylesheet" href="styles.css?v=2.14.1" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -409,23 +409,17 @@
 
     <main class="history-view diary-view" id="historyView" hidden>
       <section class="diary-shell">
-        <header class="diary-header"><div><p class="session-kicker">DIARIO</p><h1>Diario de campaña</h1><p>Planifica lo que puede ocurrir y lleva el registro de misiones, hitos y recados.</p></div><nav class="diary-tabs" aria-label="Secciones del Diario"><button class="diary-tab is-active" type="button" data-diary-section="history">⌁ Historia</button><button class="diary-tab" type="button" data-diary-section="missions">⚑ Misiones</button></nav></header>
-        <section id="diaryHistorySection" class="diary-section">
-      <section class="history-shell">
-        <header class="history-toolbar">
-          <div class="history-toolbar__intro">
-            <h1>Historia</h1>
-            <p>Organiza la campaña por capítulos. Cada nodo desbloquea a sus hijos y puede revelar contenido del Atlas.</p>
-          </div>
-          <div class="history-toolbar__actions">
-            <button id="historyNewChapter" class="button button--quiet" type="button">+ Capítulo</button>
-            <button id="historyNewEvent" class="button" type="button">+ Nodo</button>
-          </div>
+        <header class="diary-header">
+          <div class="diary-title"><span class="diary-title__icon" aria-hidden="true">▣</span><span class="session-kicker">DIARIO</span><strong>Diario de campaña</strong></div>
+          <div class="diary-header__tools"><nav class="diary-tabs" aria-label="Secciones del Diario"><button class="diary-tab is-active" type="button" data-diary-section="history">⌁ Historia</button><button class="diary-tab" type="button" data-diary-section="missions">⚑ Misiones</button></nav><button class="diary-help" type="button" aria-label="Ayuda de Historia y Misiones" data-tooltip="Historia: diseña los posibles sucesos de la campaña por capítulos. · Misiones: registra principales, secundarias, tareas, hitos y requisitos.">?</button></div>
         </header>
-
+        <section id="diaryHistorySection" class="diary-section">
+      <section class="history-shell history-shell--diary">
         <nav class="history-chapters" aria-label="Capítulos de la historia">
           <div id="historyChapterTabs" class="history-chapter-tabs"></div>
           <div class="history-chapter-actions">
+            <button id="historyNewChapter" class="button button--quiet" type="button">+ Capítulo</button>
+            <button id="historyNewEvent" class="button" type="button">+ Nodo</button>
             <button id="historyRenameChapter" class="icon-button" type="button" title="Renombrar capítulo" aria-label="Renombrar capítulo">✎</button>
             <button id="historyDeleteChapter" class="icon-button" type="button" title="Eliminar capítulo" aria-label="Eliminar capítulo">×</button>
           </div>
@@ -726,6 +720,7 @@
             <div id="atlasSceneTree" class="atlas-scene-tree"></div>
             <button id="atlasCustomCategory" class="button button--quiet atlas-sidebar__footer" type="button">+ Categoría de marcador</button>
           </aside>
+          <div id="atlasScenesResize" class="atlas-sidebar-resizer atlas-sidebar-resizer--left" role="separator" aria-orientation="vertical" aria-label="Cambiar ancho de Escenas" title="Arrastra para cambiar el ancho de Escenas"></div>
 
           <section id="atlasMapViewport" class="atlas-map-viewport">
             <div id="atlasEmptyMap" class="atlas-empty-map">
@@ -741,6 +736,7 @@
               <div id="atlasDraft" class="atlas-draft" hidden></div>
             </div>
           </section>
+          <div id="atlasLayersResize" class="atlas-sidebar-resizer atlas-sidebar-resizer--right" role="separator" aria-orientation="vertical" aria-label="Cambiar ancho de Capas" title="Arrastra para cambiar el ancho de Capas"></div>
 
           <aside class="atlas-sidebar atlas-layers-sidebar">
             <div class="atlas-sidebar__heading"><h2>Capas y puntos</h2><span id="atlasLayerCount">0</span></div>
@@ -1387,7 +1383,7 @@
         <details><summary>◐ Requisitos para continuar</summary><div><label>Condición<select id="missionContinueMode"><option value="all">Todos</option><option value="any">Cualquiera</option></select></label><div id="missionContinueRequirements" class="mission-requirement-picker"></div></div></details>
         <details><summary>✓ Requisitos para completar</summary><div><label>Condición<select id="missionCompleteMode"><option value="all">Todos</option><option value="any">Cualquiera</option></select></label><div id="missionCompleteRequirements" class="mission-requirement-picker"></div></div></details>
       </div>
-      <details class="mission-editor-references"><summary>⌖ Referencias de campaña</summary><div class="mission-reference-editor"><label>Escenas del Atlas<div id="missionSceneRefs" class="mission-ref-checklist"></div></label><label>Marcadores del Atlas<div id="missionMarkerRefs" class="mission-ref-checklist"></div></label><label>Sucesos de Historia<div id="missionHistoryRefs" class="mission-ref-checklist"></div></label></div></details>
+      <details class="mission-editor-references"><summary>⌖ Referencias de campaña</summary><div class="mission-reference-editor"><section class="mission-reference-row"><strong>⌖ Escenas del Atlas</strong><div id="missionSceneRefs" class="mission-ref-checklist"></div></section><section class="mission-reference-row"><strong>📍 Marcadores del Atlas</strong><div id="missionMarkerRefs" class="mission-ref-checklist"></div></section><section class="mission-reference-row"><strong>⌁ Sucesos de Historia</strong><div id="missionHistoryRefs" class="mission-ref-checklist"></div></section></div></details>
       <div class="form-grid"><label>Recompensa / resultado<textarea id="missionReward" rows="3" maxlength="4000"></textarea></label><label>Notas DM<textarea id="missionNotes" rows="3" maxlength="8000"></textarea></label></div>
       <div class="dialog-actions"><button id="missionDeleteBtn" type="button" class="button button--danger" hidden>Eliminar</button><button id="missionDuplicateBtn" type="button" class="button button--quiet" hidden>⧉ Duplicar</button><span class="spacer"></span><button type="button" class="button button--quiet mission-dialog-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
     </form>
@@ -1536,12 +1532,12 @@
     <article class="dialog-card world-character-view-card"><div class="dialog-card__header"><div><h2 id="worldCharacterViewTitle">Personaje</h2><p id="worldCharacterViewSubtitle" class="dialog-intro"></p></div><div class="world-view-dialog-actions"><button id="worldCharacterViewEdit" class="icon-button" type="button" title="Editar" aria-label="Editar">✎</button><button type="button" class="icon-button world-character-view-close" aria-label="Cerrar">×</button></div></div><div id="worldCharacterViewBody"></div></article>
   </dialog>
 
-  <script src="app.js?v=2.14.0" defer></script>
-  <script src="history.js?v=2.14.0" defer></script>
-  <script src="diary.js?v=2.14.0" defer></script>
-  <script src="workspace.js?v=2.14.0" defer></script>
-  <script src="world.js?v=2.14.0" defer></script>
-  <script src="atlas.js?v=2.14.0" defer></script>
-  <script src="dungeon.js?v=2.14.0" defer></script>
+  <script src="app.js?v=2.14.1" defer></script>
+  <script src="history.js?v=2.14.1" defer></script>
+  <script src="diary.js?v=2.14.1" defer></script>
+  <script src="workspace.js?v=2.14.1" defer></script>
+  <script src="world.js?v=2.14.1" defer></script>
+  <script src="atlas.js?v=2.14.1" defer></script>
+  <script src="dungeon.js?v=2.14.1" defer></script>
 </body>
 </html>

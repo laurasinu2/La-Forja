@@ -40,7 +40,7 @@
     atlasUploadImage: $("#atlasUploadImage"), atlasRotateLeft: $("#atlasRotateLeft"), atlasRotateRight: $("#atlasRotateRight"), atlasEditDungeon: $("#atlasEditDungeon"), atlasEmptyUpload: $("#atlasEmptyUpload"), atlasEmptyCreateMap: $("#atlasEmptyCreateMap"), atlasImageInput: $("#atlasImageInput"), atlasNewScene: $("#atlasNewScene"),
     atlasShowScene: $("#atlasShowScene"), atlasOpenProjection: $("#atlasOpenProjection"), atlasWorldRefBtn: $("#atlasWorldRefBtn"), atlasDmSheetBtn: $("#atlasDmSheetBtn"), atlasTools: $("#atlasTools"), atlasZoomOut: $("#atlasZoomOut"), atlasZoomReset: $("#atlasZoomReset"), atlasZoomIn: $("#atlasZoomIn"), atlasBrushSize: $("#atlasBrushSize"), atlasBrushValue: $("#atlasBrushValue"),
     atlasResetFog: $("#atlasResetFog"), atlasRevealAllFog: $("#atlasRevealAllFog"), atlasPlayerMode: $("#atlasPlayerMode"), atlasBattleBtn: $("#atlasBattleBtn"), atlasCloseMerchant: $("#atlasCloseMerchant"), atlasSceneTree: $("#atlasSceneTree"), atlasSceneMenu: $("#atlasSceneMenu"), atlasCustomCategory: $("#atlasCustomCategory"),
-    atlasLayout: $("#atlasLayout"), atlasBattlePanel: $("#atlasBattlePanel"), atlasBattleCards: $("#atlasBattleCards"), atlasBattleEdit: $("#atlasBattleEdit"), atlasBattleClose: $("#atlasBattleClose"),
+    atlasLayout: $("#atlasLayout"), atlasScenesResize: $("#atlasScenesResize"), atlasLayersResize: $("#atlasLayersResize"), atlasBattlePanel: $("#atlasBattlePanel"), atlasBattleCards: $("#atlasBattleCards"), atlasBattleEdit: $("#atlasBattleEdit"), atlasBattleClose: $("#atlasBattleClose"),
     atlasMapViewport: $("#atlasMapViewport"), atlasEmptyMap: $("#atlasEmptyMap"), atlasMapStage: $("#atlasMapStage"), atlasBackground: $("#atlasBackground"),
     atlasObjectLayer: $("#atlasObjectLayer"), atlasMarkerLayer: $("#atlasMarkerLayer"), atlasFogCanvas: $("#atlasFogCanvas"), atlasDmZoneLayer: $("#atlasDmZoneLayer"), atlasDraft: $("#atlasDraft"),
     atlasLayers: $("#atlasLayers"), atlasLayerCount: $("#atlasLayerCount"),
@@ -59,6 +59,9 @@
   const imageUrls = new Map();
   let renderToken = 0;
   let currentTool = "select";
+  const ATLAS_SCENES_WIDTH_KEY = "forja-atlas-scenes-width-v1";
+  const ATLAS_LAYERS_WIDTH_KEY = "forja-atlas-layers-width-v1";
+  let atlasSidebarResize = null;
   let currentTransform = { x: 0, y: 0, scale: 1 };
   let drawState = null;
   let markerDrag = null;
@@ -1792,6 +1795,31 @@
     walk("", 0);
   }
 
+  function readSidebarWidth(key, fallback) { try { const raw=localStorage.getItem(key); if(raw===null||raw==="")return fallback; const n=Number(raw); return Number.isFinite(n)?n:fallback; } catch (_) { return fallback; } }
+  function applyAtlasSidebarWidths() {
+    if (!els.atlasLayout) return;
+    if (window.innerWidth <= 960) { els.atlasLayout.style.removeProperty("--atlas-scenes-width"); els.atlasLayout.style.removeProperty("--atlas-layers-width"); return; }
+    const max=Math.max(220,Math.min(500,window.innerWidth*0.34));
+    const left=Math.max(150,Math.min(max,readSidebarWidth(ATLAS_SCENES_WIDTH_KEY,220)));
+    const right=Math.max(165,Math.min(max,readSidebarWidth(ATLAS_LAYERS_WIDTH_KEY,260)));
+    els.atlasLayout.style.setProperty("--atlas-scenes-width",`${left}px`); els.atlasLayout.style.setProperty("--atlas-layers-width",`${right}px`);
+  }
+  function beginAtlasSidebarResize(event, side) {
+    if (!els.atlasLayout || window.innerWidth <= 960 || els.atlasLayout.classList.contains("is-battle-open")) return;
+    atlasSidebarResize={side,pointerId:event.pointerId}; event.currentTarget?.setPointerCapture?.(event.pointerId); event.currentTarget?.classList.add("is-dragging"); event.preventDefault();
+  }
+  function moveAtlasSidebarResize(event) {
+    if (!atlasSidebarResize || !els.atlasLayout || event.pointerId!==atlasSidebarResize.pointerId) return;
+    const rect=els.atlasLayout.getBoundingClientRect(); const max=Math.max(220,Math.min(500,rect.width*0.38));
+    const width=atlasSidebarResize.side==="left" ? event.clientX-rect.left : rect.right-event.clientX; const clamped=Math.max(atlasSidebarResize.side==="left"?150:165,Math.min(max,width));
+    const prop=atlasSidebarResize.side==="left"?"--atlas-scenes-width":"--atlas-layers-width"; els.atlasLayout.style.setProperty(prop,`${clamped}px`);
+    if (currentScene()?.imageId) requestAnimationFrame(()=>{fitAtlasStage(currentScene()); resizeFogCanvas(currentScene());}); event.preventDefault();
+  }
+  function endAtlasSidebarResize(event) {
+    if (!atlasSidebarResize || event.pointerId!==atlasSidebarResize.pointerId) return; const side=atlasSidebarResize.side; atlasSidebarResize=null; els.atlasScenesResize?.classList.remove("is-dragging"); els.atlasLayersResize?.classList.remove("is-dragging");
+    const raw=getComputedStyle(els.atlasLayout).getPropertyValue(side==="left"?"--atlas-scenes-width":"--atlas-layers-width"); const width=parseFloat(raw); if(Number.isFinite(width)){try{localStorage.setItem(side==="left"?ATLAS_SCENES_WIDTH_KEY:ATLAS_LAYERS_WIDTH_KEY,String(width));}catch(_){}}
+  }
+
   function checkedRelatedIds() {
     return new Set($$('input[type="checkbox"]:checked', els.atlasRelatedEntries).map(input => input.value));
   }
@@ -1812,9 +1840,10 @@
         relatedPickerCollapsed.set(type, collapsed);
       }
       expandSelectedAncestors(selectedSet, entries, "parentId", collapsed);
-      const group = document.createElement("section");
-      const heading = document.createElement("h3");
-      heading.textContent = `${meta.icon} ${meta.label}`;
+      const group = document.createElement("details"); group.className = "atlas-related-group"; group.open = false;
+      const heading = document.createElement("summary");
+      const title = document.createElement("span"); title.textContent = `${meta.icon} ${meta.label}`;
+      const counter = document.createElement("small"); counter.textContent = `${entries.length}`; heading.append(title,counter);
       const list = document.createElement("div");
       list.className = "atlas-related-list";
       const rerender = () => renderRelatedEntries(checkedRelatedIds());
@@ -2578,7 +2607,7 @@
     const isNpc = els.atlasMarkerCategory?.value === "npc";
     if (els.atlasNpcFields) els.atlasNpcFields.hidden = !isNpc;
     if (els.atlasMarkerName) els.atlasMarkerName.required = !isNpc;
-    if (els.atlasMarkerCreateNotebookWrap) els.atlasMarkerCreateNotebookWrap.hidden = isNpc || Boolean(markerDialogScene()?.markers.find(item => item.id === editingMarkerId)?.relatedEntryIds?.length);
+    if (els.atlasMarkerCreateNotebookWrap) els.atlasMarkerCreateNotebookWrap.hidden = isNpc;
     if (isNpc && els.atlasMarkerCreateNotebook) els.atlasMarkerCreateNotebook.checked = false;
     const scene = markerDialogScene();
     if (els.atlasMarkerSizeUnit) els.atlasMarkerSizeUnit.textContent = scene?.mapProject?.widthCells ? "m" : "u";
@@ -2644,7 +2673,7 @@
     if (els.atlasMarkerAutoDmSheet) els.atlasMarkerAutoDmSheet.checked = Boolean(marker?.autoOpenDmSheet);
     els.atlasDeleteMarker.hidden = !marker; if (els.atlasDuplicateMarker) els.atlasDuplicateMarker.hidden = !marker;
     renderMarkerSheetMode(marker);
-    if (els.atlasMarkerCreateNotebookWrap) els.atlasMarkerCreateNotebookWrap.hidden = els.atlasMarkerCategory.value === "npc" || Boolean(marker?.relatedEntryIds?.length);
+    if (els.atlasMarkerCreateNotebookWrap) els.atlasMarkerCreateNotebookWrap.hidden = els.atlasMarkerCategory.value === "npc";
     $$(".atlas-marker-section", els.atlasMarkerForm).forEach((section,index)=>{ section.open = index === 0; });
     els.atlasMarkerDialog.showModal();
     setTimeout(() => (els.atlasMarkerCategory.value === "npc" ? els.atlasMarkerAlias : els.atlasMarkerName)?.focus(), 0);
@@ -2703,7 +2732,7 @@
     if (patch.visibility === "discovered" && targetSceneId) { const target = sceneById(targetSceneId); if (target) target.discovered = true; }
     els.atlasMarkerDialog.close(); selectTool("select"); save({ render: true });
     document.dispatchEvent(new CustomEvent("forja:historychange"));
-    if (createNotebook && !(marker.relatedEntryIds || []).length) setTimeout(() => openNotebookCreateDialog({ kind: "marker", sceneId: scene.id, markerId: marker.id, name: marker.name || marker.alias || category.label, categoryId: marker.category }), 0);
+    if (createNotebook) setTimeout(() => openNotebookCreateDialog({ kind: "marker", sceneId: scene.id, markerId: marker.id, name: marker.name || marker.alias || category.label, categoryId: marker.category }), 0);
   }
 
   function duplicateMarker() {
@@ -3949,6 +3978,12 @@
     els.atlasBattleEnd?.addEventListener("click", endBattle);
     $$(".atlas-battle-dialog-close,.atlas-battle-dialog-cancel").forEach(button => button.addEventListener("click", () => els.atlasBattleDialog?.close?.()));
 
+    els.atlasScenesResize?.addEventListener("pointerdown", event => beginAtlasSidebarResize(event,"left"), { passive:false });
+    els.atlasLayersResize?.addEventListener("pointerdown", event => beginAtlasSidebarResize(event,"right"), { passive:false });
+    window.addEventListener("pointermove", moveAtlasSidebarResize, { passive:false });
+    window.addEventListener("pointerup", endAtlasSidebarResize, { passive:false });
+    window.addEventListener("pointercancel", endAtlasSidebarResize, { passive:false });
+
     els.playerMapViewport?.addEventListener("pointerdown", onPlayerPointerDown, { passive: false });
     els.playerMapViewport?.addEventListener("pointermove", onPlayerPointerMove, { passive: false });
     els.playerMapViewport?.addEventListener("pointerup", onPlayerPointerEnd, { passive: false });
@@ -3973,6 +4008,7 @@
       if (state().view === "atlas" && currentScene()?.imageId) { fitAtlasStage(currentScene()); resizeFogCanvas(currentScene()); }
       if (currentRole === "player") { const scene = playerSceneById(playerSceneId); if (scene) fitPlayerStage(scene); }
       applyStoredDmSheetWidth();
+      applyAtlasSidebarWidths();
     });
     document.addEventListener("forja:historychange", () => {
       if (currentRole === "dm") renderAtlas();
@@ -3985,6 +4021,7 @@
     });
   }
 
+  applyAtlasSidebarWidths();
   applyStoredDmSheetWidth();
 
   window.ForjaAtlas = { render: renderAtlas, publish: publishProjection, getScene: sceneById, currentScene, sceneIsUnlocked, markerIsUnlocked, setScene, openSceneDialog, openMarkerDialog: (sceneId, markerId) => openMarkerDialog(markerId, null, sceneId), setSceneImageFromBlob, imageUrl, openDmSheet, closeDmSheet, openDiaryPanel, refreshDiaryPanel };

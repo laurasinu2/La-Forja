@@ -3574,3 +3574,100 @@ details.dungeon-sidebar__section[open] > summary { margin-bottom: 8px; border-bo
   .diary-header{padding:10px}.diary-header h1{font-size:20px}.diary-header>div>p:not(.session-kicker){display:none}.diary-tabs{width:100%}.diary-tab{flex:1}.missions-toolbar{align-items:stretch;flex-direction:column;padding:8px}.missions-toolbar__filters{display:grid;grid-template-columns:1fr 1fr}.missions-toolbar__filters label:first-child{grid-column:1/-1}.missions-toolbar select{min-width:0;width:100%}.missions-toolbar__actions .button{flex:1}.missions-workspace{height:calc(100% - 122px);grid-template-columns:1fr;grid-template-rows:150px minmax(0,1fr)}.missions-library{border-right:0;border-bottom:1px solid var(--line)}.mission-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));align-content:start}.mission-list-chapter{grid-column:1/-1;padding:6px}.mission-detail{padding:8px}.mission-sheet__hero{padding:13px}.mission-sheet__hero h2{font-size:24px}.mission-route-flow{display:grid;grid-template-columns:1fr}.mission-route-arrow{transform:rotate(90deg);text-align:center}.mission-route-group{min-width:0}.mission-state-actions .button{flex:1 1 130px}.mission-milestone{grid-template-columns:30px minmax(0,1fr)}.mission-milestone:not(:last-child)::after{left:14px}.mission-milestone__rail span{width:24px;height:24px}.mission-template-grid{grid-template-columns:1fr}.atlas-marker-dialog-card{width:calc(100vw - 10px);max-height:calc(100vh - 10px)}.atlas-marker-section>summary>small{max-width:42vw}.session-shell{padding:8px}.session-card__heading{align-items:flex-start}.session-recent-grid{grid-template-columns:1fr 1fr}.session-quick-nav button{flex:1 1 110px}.global-finder-card{width:calc(100vw - 10px)}
 }
 @media (max-width:430px){.missions-toolbar__filters{grid-template-columns:1fr}.missions-toolbar__filters label:first-child{grid-column:auto}.session-recent-grid{grid-template-columns:1fr}.mission-sheet__hero-actions .button{flex:1}.atlas-marker-section>summary{padding:9px 8px}.atlas-marker-section__body{padding-inline:8px}}
+
+/* v2.14.1 — compactación global y recuperación de espacio útil */
+:root{--compact-control-h:28px}
+.button{min-height:var(--compact-control-h);padding:4px 8px;font-size:11px;border-radius:5px}
+.button--projection{min-height:30px}
+.icon-button{width:30px;height:30px;font-size:15px;border-radius:6px}
+.mini-button{width:26px;height:26px;font-size:13px}
+input,select,textarea{padding:6px 8px}
+select,input:not([type="checkbox"]):not([type="radio"]):not([type="range"]){min-height:30px}
+
+/* Barra superior: nunca debe solaparse. */
+.app-shell{grid-template-rows:50px minmax(0,1fr)}
+.topbar{grid-template-columns:auto minmax(0,1fr) auto;gap:7px;padding:0 8px;min-width:0}
+.brand{gap:7px}.brand__icon{width:34px;height:34px}.brand strong{font-size:16px}.brand small{font-size:10px;margin-top:0}
+.view-tabs{justify-self:center;max-width:100%;min-width:0;gap:1px;padding:2px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.view-tabs::-webkit-scrollbar{display:none}
+.view-tab{min-height:28px;padding:4px 8px;gap:4px;font-size:11px;border-radius:5px;flex:0 0 auto}
+.topbar__actions{gap:3px}.campaign-switcher{grid-template-columns:auto minmax(110px,170px);gap:4px;font-size:10px}.campaign-switcher select{height:30px;min-height:30px;padding-block:3px}.topbar__actions .icon-button{width:30px;height:30px;font-size:14px}
+@media(max-width:1550px){.brand small{display:none}.campaign-switcher>span{display:none}.campaign-switcher{grid-template-columns:minmax(100px,145px)}.view-tab{padding-inline:6px}}
+@media(max-width:1260px){.brand strong{display:none}.brand__icon{width:30px;height:30px}.view-tab{font-size:10px;padding-inline:5px}}
+@media(max-width:1080px){.view-tab__label{display:none}.view-tab{width:29px;min-width:29px;font-size:14px;padding:3px}.campaign-switcher{grid-template-columns:minmax(90px,125px)}}
+
+/* Cuaderno: en escritorio recupera la ficha lateral. */
+@media(min-width:1360px){
+  .workspace{height:100%;display:grid;grid-template-columns:minmax(620px,44%) minmax(0,1fr);grid-template-rows:minmax(0,1fr);overflow:hidden}
+  .collections{height:100%;border-right:1px solid var(--line);border-bottom:0;grid-template-rows:38px minmax(0,1fr)}
+  .columns{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));overflow:hidden}
+  .collection-column{display:grid;width:auto;height:auto;min-width:0;border-right:1px solid var(--line)}
+  .collection-column:last-child{border-right:0}.collection-tabs{display:none}
+  .detail{height:100%;min-height:0;overflow:auto}
+}
+.collections__toolbar{padding:4px 6px}.collections__toolbar input{height:29px;min-height:29px}
+.collection-column__header{min-height:36px;padding:5px 7px}.collection-title{font-size:14px}.collection-icon{font-size:14px}.add-item{flex-basis:25px;min-width:25px;width:25px;height:25px;font-size:15px}
+.collection-items{padding-top:4px}
+
+/* Diario: una única cabecera compacta y el mapa ocupa el espacio. */
+.diary-header{min-height:40px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 8px;border-bottom:1px solid var(--line);background:var(--surface)}
+.diary-title{display:flex;align-items:center;gap:7px;min-width:0}.diary-title__icon{width:27px;height:27px;display:grid;place-items:center;border-radius:5px;background:var(--surface-2);color:var(--accent-2)}.diary-title .session-kicker{margin:0!important;font-size:8px!important}.diary-title strong{font:700 14px Georgia,serif;white-space:nowrap}.diary-header__tools{display:flex;align-items:center;gap:5px}.diary-tabs{gap:3px}.diary-tab{min-height:28px;padding:4px 9px;border-radius:5px;font-size:11px}.diary-help{position:relative;width:27px;height:27px;border:1px solid var(--line);border-radius:5px;background:var(--surface-2);color:var(--muted);font-weight:800}
+.diary-help::after{content:attr(data-tooltip);position:absolute;z-index:80;top:calc(100% + 7px);right:0;width:min(390px,80vw);padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:#101519;color:var(--text);font-size:10px;line-height:1.4;text-align:left;font-weight:500;box-shadow:var(--shadow);opacity:0;visibility:hidden;transform:translateY(-3px);transition:.12s;pointer-events:none}.diary-help:hover::after,.diary-help:focus-visible::after{opacity:1;visibility:visible;transform:none}
+.diary-section>.history-shell{padding-top:4px}.history-shell--diary{height:100%;min-height:0;grid-template-rows:auto minmax(0,1fr);gap:4px;padding:4px;max-width:none}
+.history-chapters{min-height:36px;gap:4px;padding:3px 5px;border-radius:6px}.history-chapter-tabs{gap:4px}.history-chapter-tab{min-height:29px;padding:4px 8px;border-radius:5px;gap:5px}.history-chapter-tab span{font-size:10.5px}.history-chapter-tab small{min-width:18px;height:18px;font-size:8px}.history-chapter-actions{gap:3px;align-items:center}.history-chapter-actions .button{min-height:27px}.history-chapter-actions .icon-button{width:27px;height:27px}
+.history-workspace{grid-template-columns:minmax(0,1fr) clamp(275px,24vw,390px);gap:5px}.history-map-panel,.history-detail{border-radius:6px}.history-map-toolbar{min-height:35px;padding:4px 7px}.history-map-toolbar .button{min-height:25px;padding:3px 6px;font-size:9px}.history-detail{padding:8px}.history-detail__top h2{font-size:17px}.history-panel{padding:8px;margin-top:7px}.history-field{gap:3px;margin-bottom:6px}
+@media(max-width:850px){.history-workspace{grid-template-columns:1fr;grid-template-rows:minmax(430px,65vh) auto}.history-detail{max-height:none}.diary-title strong{display:none}}
+
+/* Misiones: filtros densos; nada de cabeceras redundantes. */
+#diaryMissionsSection{display:flex;flex-direction:column;min-height:0}.missions-toolbar{flex:0 0 auto;align-items:center;gap:7px;padding:4px 7px;min-height:38px}.missions-toolbar__filters,.missions-toolbar__actions{gap:5px;align-items:center}.missions-toolbar label{display:flex;align-items:center;gap:4px;font-size:9px}.missions-toolbar select{min-width:115px;height:28px;min-height:28px;padding:3px 6px;font-size:10px}.missions-workspace{flex:1;height:auto;min-height:0;grid-template-columns:minmax(205px,260px) minmax(0,1fr)}.mission-list{padding:5px;gap:2px}.mission-list-chapter{padding:7px 6px 2px}.mission-list-item{grid-template-columns:24px minmax(0,1fr);gap:5px;padding:5px}.mission-list-item__type{font-size:15px}.mission-detail{padding:7px}.mission-sheet{gap:7px}.mission-sheet__hero{padding:10px 12px}.mission-sheet__hero h2{font-size:clamp(20px,2.2vw,29px);margin-bottom:4px}.mission-document{padding:9px 11px}.mission-route,.mission-links,.mission-milestones{padding:8px}.mission-milestones{gap:6px}.mission-milestone__content{padding:7px 8px}.mission-state-actions{padding:5px}
+
+/* Editor de misión: referencias legibles como árboles y siempre plegadas. */
+.mission-reference-editor{display:grid;grid-template-columns:1fr;gap:6px}.mission-reference-editor>label{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px;align-items:start;padding:6px;border:1px solid var(--line-soft);border-radius:6px;color:var(--text);font-size:10px}.mission-ref-checklist{max-height:210px;margin:0;display:grid;gap:3px}.mission-ref-tree-group{border:1px solid var(--line-soft);border-radius:5px;background:rgba(255,255,255,.015)}.mission-ref-tree-group>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;padding:5px 7px;font-size:10px;font-weight:750}.mission-ref-tree-group>summary small{color:var(--muted);font-size:8px}.mission-ref-tree-group__body{display:grid;gap:2px;padding:3px 5px 5px;border-top:1px solid var(--line-soft)}.mission-ref-choice{min-height:27px;padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.025);font-size:10px}.mission-ref-choice:last-child{border-bottom:0}.mission-ref-choice input{width:14px;height:14px;padding:0}.mission-ref-tree-branch{margin-left:10px;border-left:1px solid var(--line-soft);padding-left:5px}.mission-ref-tree-empty{padding:6px;color:var(--muted);font-size:10px}
+@media(max-width:700px){.mission-reference-editor>label{grid-template-columns:1fr}.missions-toolbar label{display:grid;gap:2px}}
+
+/* Mundo: menos aire, misma ficha visual. */
+.world-shell{padding:7px 9px 10px;gap:6px}.world-toolbar{align-items:center;min-height:34px}.world-toolbar h1{font-size:18px}.world-toolbar p{display:none}.world-toolbar__actions{gap:4px}.world-tabs{padding-bottom:4px;gap:3px}.world-tab{padding:5px 8px;border-radius:5px;font-size:11px}.world-creature-categories{gap:4px}.world-category-strip{gap:4px}.world-category-chip{min-height:27px;padding:3px 7px;font-size:10px}.world-category-add{min-height:27px}.world-category-selected-actions .icon-button{width:27px;height:27px;min-width:27px}.world-library{gap:6px;min-height:0}.world-rail__toolbar{padding:5px}.world-card-list{padding:5px}.world-detail{border-radius:6px}.world-creature-info{padding:15px 14px 18px!important}.world-creature-info h2{font-size:clamp(1.5rem,2vw,2.1rem)!important}.world-creature-stage{min-height:300px!important}
+
+/* Atlas: cabeceras compactas y máximo mapa visible. */
+.atlas-view{padding:5px}.atlas-shell{border-radius:7px}.atlas-toolbar{gap:7px;padding:5px 7px}.atlas-toolbar h1{margin-top:1px;font-size:17px}.atlas-toolbar__actions{gap:3px}.atlas-navline{gap:4px}.atlas-breadcrumbs{font-size:10px}.atlas-toolbar .icon-button{width:28px;height:28px}.atlas-controlbar{gap:5px;padding:3px 5px}.atlas-tools{padding:2px}.atlas-tools button{width:27px;height:27px}.atlas-tools__separator{height:19px}.atlas-reset-fog{min-height:28px;padding:3px 7px;font-size:10px}.atlas-mode-control,.atlas-brush-control{font-size:10px;gap:4px}.atlas-mode-control select{height:28px;min-height:28px}.atlas-zoom-controls .button{min-width:28px!important;min-height:28px!important;padding:3px 6px!important;font-size:11px!important}.atlas-sidebar__heading{min-height:32px;padding:4px 6px}.atlas-sidebar__heading h2{font-size:13px}.atlas-scene-tree,.atlas-layers{padding:4px}.atlas-scene-row__open{padding:4px 3px;font-size:11px}.atlas-layer{padding:4px}.atlas-sidebar__footer{margin:5px 6px 6px}.atlas-toolbar__actions .button{white-space:nowrap}
+.atlas-marker-dialog-card{width:min(760px,calc(100vw - 16px));max-height:calc(100vh - 16px)}.atlas-marker-section{margin:3px 0}.atlas-marker-section>summary{min-height:29px;padding:4px 7px;font-size:10.5px}.atlas-marker-section>summary::before{font-size:15px}.atlas-marker-section>summary>small{font-size:9px}.atlas-marker-section__body{padding:4px 7px 7px}.atlas-related-fieldset{max-height:280px}.atlas-related-entries{grid-template-columns:1fr;gap:5px}.atlas-related-entries>section{border:1px solid var(--line-soft);border-radius:5px;padding:4px}.atlas-related-entries h3{margin:0 0 3px;font-size:10px}.atlas-related-tree-row label{font-size:10px}
+
+/* Barras laterales del Atlas redimensionables en escritorio. */
+@media(min-width:961px){
+ .atlas-layout{position:relative;grid-template-columns:var(--atlas-scenes-width,220px) minmax(0,1fr) var(--atlas-layers-width,260px)}
+ .atlas-sidebar-resizer{position:absolute;z-index:18;top:0;bottom:0;width:7px;cursor:col-resize;touch-action:none;background:transparent}
+ .atlas-sidebar-resizer::after{content:"";position:absolute;top:0;bottom:0;left:3px;width:1px;background:transparent;transition:.12s}
+ .atlas-sidebar-resizer:hover::after,.atlas-sidebar-resizer.is-dragging::after{background:var(--accent)}
+ .atlas-sidebar-resizer--left{left:calc(var(--atlas-scenes-width,220px) - 3px)}
+ .atlas-sidebar-resizer--right{right:calc(var(--atlas-layers-width,260px) - 3px)}
+ .atlas-layout.is-battle-open .atlas-sidebar-resizer{display:none}
+}
+@media(max-width:960px){.atlas-sidebar-resizer{display:none}}
+
+/* No sacrificar mapa por botones a anchos medios. */
+@media(max-width:1280px) and (min-width:961px){.atlas-layout{grid-template-columns:var(--atlas-scenes-width,180px) minmax(0,1fr) var(--atlas-layers-width,200px)}}
+
+/* Cabeceras de diálogos y formularios más discretas. */
+.dialog-card__header{padding-block:7px}.dialog-card__header h2{font-size:17px}.dialog-intro{font-size:10px}.form-grid{gap:6px}
+.atlas-related-group{border:1px solid var(--line-soft);border-radius:5px;background:rgba(255,255,255,.012);overflow:hidden}.atlas-related-group>summary{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:5px 6px;cursor:pointer;font-size:10px;font-weight:750}.atlas-related-group>summary small{min-width:18px;height:18px;display:grid;place-items:center;border-radius:999px;background:var(--surface-3);color:var(--muted);font-size:8px}.atlas-related-group .atlas-related-list{padding:3px;border-top:1px solid var(--line-soft)}
+@media(max-width:700px){
+ .app-shell{grid-template-rows:78px minmax(0,1fr)}
+ .topbar{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:34px 34px;gap:2px 5px;padding:3px 5px}
+ .brand{grid-column:1;grid-row:1}.brand strong{display:block;font-size:13px}.brand__icon{width:27px;height:27px}
+ .topbar__actions{grid-column:2;grid-row:1}.campaign-switcher{display:none}.topbar__actions .legacy-transfer-button,.topbar__actions #helpBtn{display:none!important}.topbar__actions .icon-button{width:27px;height:27px;font-size:12px}
+ .view-tabs{grid-column:1/-1;grid-row:2;width:100%;justify-self:stretch;justify-content:center}.view-tab{flex:1 1 0;width:auto;min-width:0}.view-tab__label{display:none}
+ .diary-header{min-height:36px}.diary-title__icon{display:none}.diary-title .session-kicker{display:none}.diary-title strong{display:block;font-size:12px}.diary-header__tools{margin-left:auto}.diary-tabs{width:auto}.diary-tab{flex:0 0 auto;padding-inline:7px}
+ .world-shell{padding:5px}.world-toolbar{min-height:31px}.world-toolbar h1{font-size:15px}
+ .atlas-toolbar{padding:4px}.atlas-toolbar__identity{width:100%;display:flex;align-items:center;gap:5px}.atlas-toolbar h1{font-size:15px;flex:1}.atlas-toolbar__actions{gap:2px}.atlas-toolbar__actions .button{min-height:27px!important;padding:3px 5px!important;font-size:9px!important;flex:0 1 auto!important}.atlas-controlbar{padding:3px;gap:3px}.atlas-tools button{width:26px;height:26px}
+}
+.diary-view{padding:0!important}
+.diary-header{flex-direction:row!important}
+.missions-toolbar{flex-direction:row}
+@media(max-width:700px){.missions-toolbar{flex-direction:column;align-items:stretch}.missions-toolbar__filters{width:100%}.missions-toolbar__actions{width:100%}}
+/* Resto de vistas: misma densidad compacta. */
+.session-shell{padding:8px 10px;max-width:1600px}.session-toolbar{min-height:38px;align-items:center;flex-direction:row;gap:8px;margin-bottom:7px}.session-toolbar h1{font-size:18px}.session-toolbar>div>p:not(.session-kicker){display:none}.session-toolbar .session-kicker{font-size:8px!important}.session-quick-nav{gap:3px}.session-quick-nav button{min-height:27px;padding:4px 7px;border-radius:5px;font-size:10px}.session-grid{gap:6px}.session-card{border-radius:6px}.session-card__heading{padding:6px 8px}.session-card__heading h2{font-size:14px}.session-card__body{padding:9px}.session-list{padding:4px}.session-list-item,.session-recent-item{padding:5px}.session-day strong{font-size:27px}
+.calendar-view{padding:7px}.calendar-toolbar{gap:7px;padding-bottom:6px}.calendar-toolbar h1{font-size:20px}.campaign-calendar-toolbar{grid-template-columns:minmax(150px,1fr) auto minmax(260px,1fr)}.calendar-toolbar__nav,.calendar-toolbar__actions{gap:4px}.calendar-heading{gap:2px}.calendar-campaign-day{font-size:9px}.calendar-weekdays{min-height:25px;font-size:9px}
+.dice-view{padding:7px}.dice-shell{gap:7px}.dice-toolbar{padding:7px 9px}.dice-toolbar h1{font-size:20px}.dice-toolbar p{display:none}.dice-grid{gap:7px}
+@media(max-width:1000px){.session-toolbar{flex-direction:row}.session-quick-nav{justify-content:flex-end}.campaign-calendar-toolbar{grid-template-columns:auto minmax(180px,1fr)}}
+@media(max-width:700px){.session-toolbar{flex-direction:column;align-items:stretch}.session-quick-nav{justify-content:flex-start}.calendar-view,.dice-view{padding:4px}}
+.mission-reference-editor>.mission-reference-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px;align-items:start;padding:6px;border:1px solid var(--line-soft);border-radius:6px;color:var(--text);font-size:10px}.mission-reference-row>strong{padding:5px 3px;color:var(--accent-2);font-size:10px}.mission-reference-editor>label{display:none!important}@media(max-width:700px){.mission-reference-editor>.mission-reference-row{grid-template-columns:1fr}.mission-reference-row>strong{padding-bottom:1px}}
