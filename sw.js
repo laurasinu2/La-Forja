@@ -1,13 +1,15 @@
-const CACHE = "forja-narrador-v2130-atlas-rotate-background";
+const CACHE = "forja-narrador-v2140-diary-missions-session";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=2.13.0",
-  "./app.js?v=2.13.0",
-  "./history.js?v=2.13.0",
-  "./world.js?v=2.13.0",
-  "./atlas.js?v=2.13.0",
-  "./dungeon.js?v=2.13.0",
+  "./styles.css?v=2.14.0",
+  "./app.js?v=2.14.0",
+  "./history.js?v=2.14.0",
+  "./diary.js?v=2.14.0",
+  "./workspace.js?v=2.14.0",
+  "./world.js?v=2.14.0",
+  "./atlas.js?v=2.14.0",
+  "./dungeon.js?v=2.14.0",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/statues/gladiador.png",

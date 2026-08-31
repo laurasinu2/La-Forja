@@ -15,7 +15,7 @@
     view: $("#historyView"), newEvent: $("#historyNewEvent"), emptyNewEvent: $("#historyEmptyNewEvent"), newChapter: $("#historyNewChapter"), renameChapter: $("#historyRenameChapter"), deleteChapter: $("#historyDeleteChapter"),
     chapterTabs: $("#historyChapterTabs"), chapterTitle: $("#historyChapterTitle"), chapterStats: $("#historyChapterStats"), mapViewport: $("#historyMapViewport"), mapStage: $("#historyMapStage"), nodeLayer: $("#historyNodeLayer"), edgeLayer: $("#historyEdgeLayer"), mapEmpty: $("#historyMapEmpty"), autoLayout: $("#historyAutoLayout"), centerSelection: $("#historyCenterSelection"),
     empty: $("#historyEmpty"), editor: $("#historyEditor"), statusBadge: $("#historyStatusBadge"), title: $("#historyEventTitle"), nodeType: $("#historyNodeType"), description: $("#historyEventDescription"), requirementMode: $("#historyRequirementMode"), requirements: $("#historyRequirements"), addChild: $("#historyAddChild"),
-    markProgress: $("#historyMarkProgress"), markOccurred: $("#historyMarkOccurred"), discard: $("#historyDiscard"), resetStatus: $("#historyResetStatus"), deleteEvent: $("#historyDeleteEvent"), unlocks: $("#historyUnlocks"), latentAtlas: $("#historyLatentAtlas"),
+    markProgress: $("#historyMarkProgress"), markOccurred: $("#historyMarkOccurred"), discard: $("#historyDiscard"), resetStatus: $("#historyResetStatus"), deleteEvent: $("#historyDeleteEvent"), duplicateEvent: $("#historyDuplicateEvent"), unlocks: $("#historyUnlocks"), latentAtlas: $("#historyLatentAtlas"),
     entrySelect: $("#historyLinkEntrySelect"), sceneSelect: $("#historyLinkSceneSelect"), markerSelect: $("#historyLinkMarkerSelect"), addEntry: $("#historyAddEntryLink"), addScene: $("#historyAddSceneLink"), addMarker: $("#historyAddMarkerLink"), campaignLinks: $("#historyCampaignLinks"),
     entryTree: $("#historyEntryReferenceTree"), sceneTree: $("#historySceneReferenceTree"), markerTree: $("#historyMarkerReferenceTree"), moveChapter: $("#historyMoveChapter"), moveNodeChapter: $("#historyMoveNodeChapter"),
     moveLeft: $("#historyMoveLeft"), moveUp: $("#historyMoveUp"), moveDown: $("#historyMoveDown"), moveRight: $("#historyMoveRight")
@@ -308,6 +308,7 @@
     history().events = history().events.filter(event => event.chapterId !== chapter.id); history().events.forEach(event => { event.requirementIds = event.requirementIds.filter(id => !linkedIds.has(id)); });
     (campaign().atlas?.scenes || []).forEach(scene => { if (linkedIds.has(scene.unlockEventId)) scene.unlockEventId = ""; (scene.markers || []).forEach(marker => { if (linkedIds.has(marker.unlockEventId)) marker.unlockEventId = ""; }); });
     (campaign().entries || []).forEach(entry => { if (entry.chapterId === chapter.id) entry.chapterId = ""; });
+    (campaign().diary?.missions || []).forEach(mission => { if (mission.chapterId === chapter.id) mission.chapterId = ""; });
     if (campaign().notebookChapterFilter === chapter.id) campaign().notebookChapterFilter = "all";
     history().chapters = history().chapters.filter(item => item.id !== chapter.id); history().chapters.forEach((item, index) => item.order = index); history().selectedChapterId = history().chapters[0]?.id || ""; history().selectedEventId = chapterEvents(history().selectedChapterId)[0]?.id || ""; refreshUnlocks(); notifyStructuralChange(); render();
   }
@@ -332,6 +333,15 @@
     if (!confirm(`¿Eliminar el nodo “${event.title}”?${linkedScenes.length + linkedMarkers.length ? "\n\nEl contenido del Atlas que dependía de este nodo pasará a ser visible para el DM." : ""}`)) return;
     history().events = history().events.filter(candidate => candidate.id !== event.id); history().events.forEach(candidate => { candidate.requirementIds = candidate.requirementIds.filter(id => id !== event.id); }); linkedScenes.forEach(scene => scene.unlockEventId = ""); linkedMarkers.forEach(marker => marker.unlockEventId = ""); history().selectedEventId = chapterEvents(event.chapterId)[0]?.id || ""; refreshUnlocks(); notifyStructuralChange(); render();
   }
+  function duplicateSelected() {
+    const source = selectedEvent(); if (!source) return;
+    const copy = app.clone(source); copy.id = app.uid(); copy.title = `${source.title} (copia)`; copy.status = requirementsMet(source) ? "available" : "locked"; copy.x = clampPosition(source.x + 42, STAGE_W - NODE_W - 24); copy.y = clampPosition(source.y + 42, STAGE_H - NODE_H - 24); copy.createdAt = app.now(); copy.updatedAt = app.now();
+    history().events.push(copy); history().selectedEventId = copy.id; notifyStructuralChange(); render(); centerOnEvent(copy);
+  }
+  function selectEvent(id) {
+    const event = eventById(id); if (!event) return false; history().selectedEventId = event.id; history().selectedChapterId = event.chapterId; app.saveState(); render(); centerOnEvent(event); return true;
+  }
+
   function autoLayout() {
     const list = chapterEvents(); if (!list.length) return; const ids = new Set(list.map(event => event.id)); const depthCache = new Map();
     const depthOf = (event, visiting = new Set()) => { if (depthCache.has(event.id)) return depthCache.get(event.id); if (visiting.has(event.id)) return 0; const next = new Set(visiting); next.add(event.id); const parents = event.requirementIds.map(eventById).filter(parent => parent && ids.has(parent.id)); const depth = parents.length ? 1 + Math.max(...parents.map(parent => depthOf(parent, next))) : 0; depthCache.set(event.id, depth); return depth; };
@@ -347,13 +357,13 @@
   els.description.addEventListener("input", () => { const event = selectedEvent(); if (!event) return; event.description = els.description.value.slice(0,6000); event.updatedAt = app.now(); app.saveState(); });
   els.requirementMode.addEventListener("change", () => { const event = selectedEvent(); if (!event) return; event.requirementMode = els.requirementMode.value === "any" ? "any" : "all"; event.updatedAt = app.now(); refreshUnlocks(); notifyStructuralChange(); render(); });
   els.moveNodeChapter?.addEventListener("click", moveSelectedToChapter);
-  els.markProgress.addEventListener("click", () => setStatus("inProgress")); els.markOccurred.addEventListener("click", () => setStatus("occurred")); els.discard.addEventListener("click", () => setStatus("discarded")); els.resetStatus.addEventListener("click", () => { const event = selectedEvent(); if (!event) return; event.status = requirementsMet(event) ? "available" : "locked"; event.updatedAt = app.now(); refreshUnlocks(); notifyStructuralChange(); render(); }); els.deleteEvent.addEventListener("click", deleteSelected);
+  els.markProgress.addEventListener("click", () => setStatus("inProgress")); els.markOccurred.addEventListener("click", () => setStatus("occurred")); els.discard.addEventListener("click", () => setStatus("discarded")); els.resetStatus.addEventListener("click", () => { const event = selectedEvent(); if (!event) return; event.status = requirementsMet(event) ? "available" : "locked"; event.updatedAt = app.now(); refreshUnlocks(); notifyStructuralChange(); render(); }); els.deleteEvent.addEventListener("click", deleteSelected); els.duplicateEvent?.addEventListener("click", duplicateSelected);
   els.addEntry.addEventListener("click", () => addLink("linkedEntryIds", els.entrySelect)); els.addScene.addEventListener("click", () => addLink("linkedSceneIds", els.sceneSelect)); els.addMarker.addEventListener("click", () => addLink("linkedMarkerRefs", els.markerSelect));
   els.autoLayout.addEventListener("click", autoLayout); els.centerSelection.addEventListener("click", () => centerOnEvent());
   els.moveLeft.addEventListener("click", () => nudge(-24,0)); els.moveRight.addEventListener("click", () => nudge(24,0)); els.moveUp.addEventListener("click", () => nudge(0,-24)); els.moveDown.addEventListener("click", () => nudge(0,24));
   els.nodeLayer.addEventListener("pointermove", moveDrag); els.nodeLayer.addEventListener("pointerup", endDrag); els.nodeLayer.addEventListener("pointercancel", endDrag);
   els.mapViewport.addEventListener("pointerdown", startPan); els.mapViewport.addEventListener("pointermove", movePan); els.mapViewport.addEventListener("pointerup", endPan); els.mapViewport.addEventListener("pointercancel", endPan);
   document.addEventListener("forja:campaignchange", render); document.addEventListener("forja:historychange", () => { if (campaign().view === "history") render(); });
-  window.ForjaHistory = { render, refreshUnlocks, requirementsMet, eventById, chapterById };
+  window.ForjaHistory = { render, refreshUnlocks, requirementsMet, eventById, chapterById, selectEvent, duplicateSelected };
   render();
 })();

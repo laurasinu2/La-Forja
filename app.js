@@ -897,11 +897,43 @@
     });
   }
 
+  function defaultDiaryState() { return { selectedSection: "history", selectedMissionId: "", chapterFilter: "all", typeFilter: "all", statusFilter: "open", missions: [] }; }
+  function defaultSessionState() { return { lastView: "notebook", pinnedMissionIds: [], note: "" }; }
+  function defaultTrashState() { return []; }
+  function normaliseRequirementList(value) { return Array.isArray(value) ? [...new Set(value.map(String).filter(Boolean))].slice(0, 200) : []; }
+  function normaliseMilestone(raw = {}) {
+    return {
+      ...raw, id: raw.id || uid(), title: String(raw.title || "Hito").slice(0, 180), description: String(raw.description || "").slice(0, 8000),
+      status: ["pending","active","completed","failed","info"].includes(raw.status) ? raw.status : "pending", optional: Boolean(raw.optional), secret: Boolean(raw.secret),
+      requirements: normaliseRequirementList(raw.requirements), requirementMode: raw.requirementMode === "any" ? "any" : "all",
+      atlasSceneId: String(raw.atlasSceneId || ""), atlasMarkerId: String(raw.atlasMarkerId || ""), historyEventId: String(raw.historyEventId || ""), notebookEntryId: String(raw.notebookEntryId || ""),
+      infoText: String(raw.infoText || "No tienes suficiente información para comprender todavía qué significa esto.").slice(0, 3000),
+      createdAt: raw.createdAt || now(), updatedAt: raw.updatedAt || now()
+    };
+  }
+  function normaliseMission(raw = {}) {
+    return {
+      ...raw, id: raw.id || uid(), title: String(raw.title || "Misión").slice(0, 180), type: ["main","secondary","task"].includes(raw.type) ? raw.type : "secondary",
+      chapterId: String(raw.chapterId || ""), status: ["undiscovered","available","active","info","completed","failed"].includes(raw.status) ? raw.status : "undiscovered",
+      description: String(raw.description || "").slice(0, 12000), playerText: String(raw.playerText || "").slice(0, 8000), infoText: String(raw.infoText || "No tienes suficiente información para entenderlo todavía.").slice(0, 3000),
+      allowEarlyDiscovery: raw.allowEarlyDiscovery !== false, appearRequirements: normaliseRequirementList(raw.appearRequirements), continueRequirements: normaliseRequirementList(raw.continueRequirements), completeRequirements: normaliseRequirementList(raw.completeRequirements),
+      appearMode: raw.appearMode === "any" ? "any" : "all", continueMode: raw.continueMode === "any" ? "any" : "all", completeMode: raw.completeMode === "any" ? "any" : "all",
+      milestones: Array.isArray(raw.milestones) ? raw.milestones.map(normaliseMilestone) : [],
+      entryId: String(raw.entryId || ""), atlasSceneIds: normaliseRequirementList(raw.atlasSceneIds), atlasMarkerIds: normaliseRequirementList(raw.atlasMarkerIds), historyEventIds: normaliseRequirementList(raw.historyEventIds),
+      reward: String(raw.reward || "").slice(0, 4000), notes: String(raw.notes || "").slice(0, 8000), createdAt: raw.createdAt || now(), updatedAt: raw.updatedAt || now()
+    };
+  }
+  function normaliseDiaryState(raw) {
+    const base = defaultDiaryState();
+    if (!raw || typeof raw !== "object") return base;
+    return { ...base, ...raw, selectedSection: raw.selectedSection === "missions" ? "missions" : "history", selectedMissionId: String(raw.selectedMissionId || ""), chapterFilter: String(raw.chapterFilter || "all"), typeFilter: ["all","main","secondary","task"].includes(raw.typeFilter) ? raw.typeFilter : "all", statusFilter: ["all","open","completed","info"].includes(raw.statusFilter) ? raw.statusFilter : "open", missions: Array.isArray(raw.missions) ? raw.missions.map(normaliseMission) : [] };
+  }
+
   function blankCampaign(name = "Nueva campaña") {
     return {
       id: uid(), version: 7, campaignName: name,
       view: "notebook", selectedId: null, search: "", notebookChapterFilter: "all",
-      gameCalendar: defaultGameCalendar(), calendarEvents: [], entries: [], history: defaultHistoryState(),
+      gameCalendar: defaultGameCalendar(), calendarEvents: [], entries: [], history: defaultHistoryState(), diary: defaultDiaryState(), session: defaultSessionState(), trash: defaultTrashState(),
       mindmapLocationFilter: "", mindmapLayoutVersion: MINDMAP_LAYOUT_VERSION, mindmapLayouts: {}, dice: defaultDiceState(),
       atlas: defaultAtlasState(), world: defaultWorldState(), auth: { passwordHash: "", passwordSalt: "", updatedAt: "" }, entriesCreated: 0,
       createdAt: now(), updatedAt: now()
@@ -1110,7 +1142,10 @@
       daysPerMonth: 30
     });
     const history = normaliseHistoryState(raw.history);
+    const diary = normaliseDiaryState(raw.diary);
     const historyChapterIds = new Set(history.chapters.map(chapter => chapter.id));
+    diary.missions.forEach(mission => { if (!historyChapterIds.has(mission.chapterId)) mission.chapterId = ""; });
+    if (!diary.missions.some(mission => mission.id === diary.selectedMissionId)) diary.selectedMissionId = diary.missions[0]?.id || "";
     entries.forEach(entry => { if (!historyChapterIds.has(entry.chapterId)) entry.chapterId = ""; });
     const historyEventIds = new Set(history.events.map(event => event.id));
 
@@ -1118,7 +1153,7 @@
       id: raw.id || uid(),
       version: 7,
       campaignName: String(raw.campaignName || fallbackName),
-      view: ["notebook", "history", "world", "calendar", "mindmap", "dice", "atlas"].includes(raw.view) ? raw.view : (raw.view === "dungeon" ? "atlas" : "notebook"),
+      view: ["notebook", "history", "world", "calendar", "mindmap", "dice", "atlas", "session"].includes(raw.view) ? raw.view : (raw.view === "dungeon" ? "atlas" : "notebook"),
       selectedId: ids.has(raw.selectedId) ? raw.selectedId : entries[0]?.id || null,
       search: String(raw.search || ""),
       notebookChapterFilter: raw.notebookChapterFilter === "none" || historyChapterIds.has(String(raw.notebookChapterFilter || "")) ? String(raw.notebookChapterFilter) : "all",
@@ -1132,6 +1167,9 @@
         : {},
       dice: normaliseDiceState(raw.dice),
       history,
+      diary,
+      session: { ...defaultSessionState(), ...(raw.session && typeof raw.session === "object" ? raw.session : {}) },
+      trash: Array.isArray(raw.trash) ? raw.trash.slice(-40).map(item => ({ ...item, id: item.id || uid(), kind: String(item.kind || "unknown"), label: String(item.label || "Elemento eliminado"), deletedAt: item.deletedAt || now() })) : [],
       world: normaliseWorldState(raw.world),
       atlas: normaliseAtlasState(raw.atlas, ids, historyEventIds),
       auth: {
@@ -1276,7 +1314,7 @@
   let personalityRenderedEntryId = "";
 
   const els = {
-    notebookView: $("#notebookView"), historyView: $("#historyView"), worldView: $("#worldView"), calendarView: $("#calendarView"), mindmapView: $("#mindmapView"), diceView: $("#diceView"), atlasView: $("#atlasView"), dungeonView: $("#dungeonView"), viewTabs: $$(".view-tab"),
+    notebookView: $("#notebookView"), historyView: $("#historyView"), worldView: $("#worldView"), calendarView: $("#calendarView"), mindmapView: $("#mindmapView"), diceView: $("#diceView"), atlasView: $("#atlasView"), dungeonView: $("#dungeonView"), sessionView: $("#sessionView"), viewTabs: $$(".view-tab"),
     campaignSelect: $("#campaignSelect"), campaignManagerBtn: $("#campaignManagerBtn"),
     campaignDialog: $("#campaignDialog"), newCampaignForm: $("#newCampaignForm"), newCampaignName: $("#newCampaignName"), campaignList: $("#campaignList"),
     columns: $("#columns"), collectionTabs: $("#collectionTabs"), notebookChapterFilter: $("#notebookChapterFilter"), collectionsPanel: $("#collectionsPanel"), connectionModeBanner: $("#connectionModeBanner"), selectionModeText: $("#selectionModeText"), cancelConnectionBanner: $("#cancelConnectionBanner"),
@@ -1316,6 +1354,7 @@
   };
 
   function saveState(immediate = false) {
+    window.ForjaWorkspace?.captureBeforeSave?.(state);
     profile.activeCampaignId = state.id;
     state.updatedAt = now();
     els.saveState?.classList.add("is-saving");
@@ -1428,6 +1467,11 @@
     if (rerender) render();
   }
 
+  function syncDiaryMissionFromNotebookEntry(entry, fields = {}) {
+    if (!entry?.diaryMissionId || !window.ForjaDiary?.syncFromNotebookEntry) return;
+    window.ForjaDiary.syncFromNotebookEntry(entry, fields);
+  }
+
   function render() {
     document.documentElement.dataset.theme = profile.theme || "dark";
     els.globalSearch.value = state.search || "";
@@ -1436,6 +1480,7 @@
     renderColumns();
     renderEditor();
     window.ForjaHistory?.render?.();
+    window.ForjaDiary?.render?.();
     window.ForjaWorld?.render?.();
     renderCalendar();
     renderMindMap();
@@ -1568,6 +1613,7 @@
     els.diceView.hidden = state.view !== "dice";
     if (els.atlasView) els.atlasView.hidden = state.view !== "atlas";
     if (els.dungeonView) els.dungeonView.hidden = state.view !== "dungeon";
+    if (els.sessionView) els.sessionView.hidden = state.view !== "session";
     els.viewTabs.forEach(tab => tab.classList.toggle("is-active", tab.dataset.view === state.view));
   }
 
@@ -2466,12 +2512,14 @@
     entry.name = name;
     entry.updatedAt = now();
     saveState();
+    syncDiaryMissionFromNotebookEntry(entry, { name: true });
     render();
   }
 
   function duplicateEntry(id) {
     const source = state.entries.find(candidate => candidate.id === id);
     if (!source) return;
+    if (source.diaryMissionId && window.ForjaDiary?.duplicateMission) { window.ForjaDiary.duplicateMission(source.diaryMissionId); return; }
     const copy = clone(source);
     copy.id = uid();
     copy.name = `${source.name} (copia)`;
@@ -2519,10 +2567,12 @@
   function deleteEntry(id) {
     const entry = state.entries.find(candidate => candidate.id === id);
     if (!entry) return;
+    if (entry.diaryMissionId && window.ForjaDiary?.deleteMission) { window.ForjaDiary.deleteMission(entry.diaryMissionId); return; }
     const descendants = descendantsOf(id);
     const extra = descendants.length ? ` También se eliminarán ${descendants.length} entradas hijas.` : "";
     if (!confirm(`¿Eliminar “${entry.name}”?${extra}`)) return;
     const ids = new Set([id, ...descendants]);
+    window.ForjaWorkspace?.pushTrash?.("notebookEntry", entry.name, { entries: clone(state.entries.filter(candidate => ids.has(candidate.id))) });
     state.entries = state.entries.filter(candidate => !ids.has(candidate.id));
     state.entries.forEach(candidate => {
       candidate.connections = (candidate.connections || []).filter(connection => !ids.has(connection.targetId));
@@ -3660,6 +3710,7 @@
     entry.descriptionHtml = markdownToHtml(entry.descriptionMarkdown);
     entry.updatedAt = now();
     saveState();
+    syncDiaryMissionFromNotebookEntry(entry, { description: true });
   }
 
   function bindEvents() {
@@ -3668,7 +3719,7 @@
       state.view = tab.dataset.view;
       saveState();
       renderView();
-      if (state.view === "history") window.ForjaHistory?.render?.();
+      if (state.view === "history") { window.ForjaHistory?.render?.(); window.ForjaDiary?.render?.(); }
       if (state.view === "world") window.ForjaWorld?.render?.();
       if (state.view === "calendar") renderCalendar();
       if (state.view === "mindmap") {
@@ -3713,12 +3764,14 @@
       const entry = selectedEntry();
       if (!entry) return;
       const changedIds = moveEntryBranchToChapter(entry.id, els.entryChapter.value || "");
+      changedIds.forEach(id => { const changedEntry = state.entries.find(candidate => candidate.id === id); if (changedEntry) syncDiaryMissionFromNotebookEntry(changedEntry, { chapter: true }); });
       renderColumns();
       document.dispatchEvent(new CustomEvent("forja:entrychapterchange", { detail: { entryId: entry.id, changedEntryIds: changedIds } }));
     });
 
     els.entryName.addEventListener("input", () => {
       updateSelected({ name: els.entryName.value });
+      const syncedEntry = selectedEntry(); if (syncedEntry) syncDiaryMissionFromNotebookEntry(syncedEntry, { name: true });
       renderColumns();
       const entry = selectedEntry();
       if (entry) renderConnections(entry);
@@ -3732,12 +3785,14 @@
     els.entryCommunication?.addEventListener("input", () => { const entry=selectedEntry(); if (!entry) return; entry.communication=els.entryCommunication.value.slice(0,3000); entry.updatedAt=now(); saveState(); });
     els.entryStatus.addEventListener("change", () => {
       updateSelected({ status: els.entryStatus.value });
+      const syncedEntry = selectedEntry(); if (syncedEntry) syncDiaryMissionFromNotebookEntry(syncedEntry, { status: true });
       renderColumns();
       renderMindMap();
       document.dispatchEvent(new CustomEvent("forja:entrystatuschange", { detail: { entryId: selectedEntry()?.id || "" } }));
     });
     els.entrySubtype.addEventListener("change", () => {
       updateSelected({ subtype: els.entrySubtype.value });
+      const syncedEntry = selectedEntry(); if (syncedEntry) syncDiaryMissionFromNotebookEntry(syncedEntry, { subtype: true });
       renderColumns();
       const entry = selectedEntry();
       if (entry) {
@@ -4318,6 +4373,8 @@
     exportJson: exportData,
     normaliseProfile,
     normaliseCampaign,
+    normaliseDiaryState,
+    normaliseMission,
     replaceProfile(data) {
       profile = normaliseProfile(data);
       state = profile.campaigns.find(campaign => campaign.id === profile.activeCampaignId) || profile.campaigns[0];
@@ -4327,14 +4384,15 @@
       document.dispatchEvent(new CustomEvent("forja:campaignchange", { detail: { campaignId: state.id } }));
     },
     setView(view) {
-      if (!["notebook", "history", "world", "calendar", "mindmap", "dice", "atlas", "dungeon"].includes(view)) return;
+      if (!["notebook", "history", "world", "calendar", "mindmap", "dice", "atlas", "dungeon", "session"].includes(view)) return;
       state.view = view;
       saveState();
       renderView();
-      if (view === "history") window.ForjaHistory?.render?.();
+      if (view === "history") { window.ForjaHistory?.render?.(); window.ForjaDiary?.render?.(); }
       if (view === "world") window.ForjaWorld?.render?.();
       if (view === "atlas") window.ForjaAtlas?.render?.();
       if (view === "dungeon") window.ForjaDungeon?.render?.();
+      if (view === "session") window.ForjaWorkspace?.renderSession?.();
     },
     uid,
     now,
