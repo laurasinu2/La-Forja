@@ -8,7 +8,7 @@
   <title>La Forja del Narrador</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=2.14.1" />
+  <link rel="stylesheet" href="styles.css?v=2.14.2" />
 </head>
 <body>
   <section id="accessGate" class="access-gate" hidden aria-labelledby="accessGateTitle">
@@ -1480,12 +1480,31 @@
 
   <dialog id="worldMemberDialog">
     <form id="worldMemberForm" class="dialog-card world-member-dialog">
-      <div class="dialog-card__header"><div><h2>Persona de la organización</h2><p class="dialog-intro">Reutiliza un personaje existente o crea uno nuevo.</p></div><button type="button" class="icon-button world-member-close" aria-label="Cerrar">×</button></div>
+      <div class="dialog-card__header"><div><h2>Persona de la organización</h2><p class="dialog-intro">Colócala en una fila de la jerarquía y define de quién depende.</p></div><button type="button" class="icon-button world-member-close" aria-label="Cerrar">×</button></div>
       <label>Personaje<select id="worldMemberCharacter"><option value="__new">+ Crear personaje nuevo</option></select></label>
       <label id="worldMemberNewNameWrap">Nombre del nuevo personaje<input id="worldMemberNewName" maxlength="120" /></label>
       <label>Cargo / función<input id="worldMemberRole" maxlength="140" placeholder="Ej.: Gran maestre, capitana, agente…" /></label>
-      <label>Depende de<select id="worldMemberParent"><option value="">— Nivel superior —</option></select></label>
+      <div class="form-grid">
+        <label>Nivel / fila<select id="worldMemberLevel"></select></label>
+        <label>Dependencia<select id="worldMemberDependencyMode"><option value="none">Sin dependencia</option><option value="previous-level">Toda la fila superior</option><option value="members">Personas concretas de niveles superiores</option></select></label>
+      </div>
+      <label id="worldMemberNewLevelWrap" hidden>Nombre del nuevo nivel <small>(opcional)</small><input id="worldMemberNewLevelName" maxlength="100" placeholder="Ej.: Consejo superior, Guardianes…" /></label>
+      <fieldset id="worldMemberDependencyMembers" class="world-member-dependency-list" hidden><legend>Personas de las que depende</legend><div id="worldMemberDependencyChoices"></div></fieldset>
       <div class="dialog-actions"><button id="worldMemberRemove" type="button" class="button button--danger" hidden>Quitar de organización</button><span class="spacer"></span><button type="button" class="button button--quiet world-member-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="worldOrganisationObjectDialog">
+    <form id="worldOrganisationObjectForm" class="dialog-card world-member-dialog">
+      <div class="dialog-card__header"><div><h2>Objeto característico</h2><p class="dialog-intro">Vincula una ficha de Elementos del Cuaderno o crea una nueva.</p></div><button type="button" class="icon-button world-org-object-close" aria-label="Cerrar">×</button></div>
+      <label>Ficha del Cuaderno<select id="worldOrganisationObjectEntry"><option value="__new">+ Crear objeto nuevo</option></select></label>
+      <div id="worldOrganisationObjectNewFields">
+        <label>Nombre del nuevo objeto<input id="worldOrganisationObjectNewName" maxlength="100" placeholder="Ej.: Medallón del Eclipse" /></label>
+        <label>Capítulo<select id="worldOrganisationObjectChapter"></select></label>
+      </div>
+      <label>Relación con la organización<select id="worldOrganisationObjectRelation"><option value="symbol">Símbolo / insignia</option><option value="standard">Equipo estándar</option><option value="relic">Reliquia</option><option value="rank">Objeto de rango</option><option value="uniform">Uniforme / vestimenta</option><option value="document">Documento</option><option value="currency">Moneda / ficha</option><option value="secret">Objeto secreto</option><option value="other">Otro</option></select></label>
+      <label>Notas<textarea id="worldOrganisationObjectNotes" rows="4" maxlength="2000" placeholder="Quién lo usa, qué significa, cómo reconocerlo…"></textarea></label>
+      <div class="dialog-actions"><button id="worldOrganisationObjectRemove" type="button" class="button button--danger" hidden>Quitar de organización</button><span class="spacer"></span><button type="button" class="button button--quiet world-org-object-cancel">Cancelar</button><button class="button" type="submit">Guardar</button></div>
     </form>
   </dialog>
 
@@ -1532,12 +1551,12 @@
     <article class="dialog-card world-character-view-card"><div class="dialog-card__header"><div><h2 id="worldCharacterViewTitle">Personaje</h2><p id="worldCharacterViewSubtitle" class="dialog-intro"></p></div><div class="world-view-dialog-actions"><button id="worldCharacterViewEdit" class="icon-button" type="button" title="Editar" aria-label="Editar">✎</button><button type="button" class="icon-button world-character-view-close" aria-label="Cerrar">×</button></div></div><div id="worldCharacterViewBody"></div></article>
   </dialog>
 
-  <script src="app.js?v=2.14.1" defer></script>
-  <script src="history.js?v=2.14.1" defer></script>
-  <script src="diary.js?v=2.14.1" defer></script>
-  <script src="workspace.js?v=2.14.1" defer></script>
-  <script src="world.js?v=2.14.1" defer></script>
-  <script src="atlas.js?v=2.14.1" defer></script>
-  <script src="dungeon.js?v=2.14.1" defer></script>
+  <script src="app.js?v=2.14.2" defer></script>
+  <script src="history.js?v=2.14.2" defer></script>
+  <script src="diary.js?v=2.14.2" defer></script>
+  <script src="workspace.js?v=2.14.2" defer></script>
+  <script src="world.js?v=2.14.2" defer></script>
+  <script src="atlas.js?v=2.14.2" defer></script>
+  <script src="dungeon.js?v=2.14.2" defer></script>
 </body>
 </html>

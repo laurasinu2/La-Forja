@@ -3671,3 +3671,66 @@ select,input:not([type="checkbox"]):not([type="radio"]):not([type="range"]){min-
 @media(max-width:1000px){.session-toolbar{flex-direction:row}.session-quick-nav{justify-content:flex-end}.campaign-calendar-toolbar{grid-template-columns:auto minmax(180px,1fr)}}
 @media(max-width:700px){.session-toolbar{flex-direction:column;align-items:stretch}.session-quick-nav{justify-content:flex-start}.calendar-view,.dice-view{padding:4px}}
 .mission-reference-editor>.mission-reference-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px;align-items:start;padding:6px;border:1px solid var(--line-soft);border-radius:6px;color:var(--text);font-size:10px}.mission-reference-row>strong{padding:5px 3px;color:var(--accent-2);font-size:10px}.mission-reference-editor>label{display:none!important}@media(max-width:700px){.mission-reference-editor>.mission-reference-row{grid-template-columns:1fr}.mission-reference-row>strong{padding-bottom:1px}}
+
+/* v2.14.2 — Organizaciones por niveles y objetos característicos */
+.world-organisation-main{min-width:0;display:flex;flex-direction:column;background:var(--bg)}
+.world-organisation-tabs{display:flex;gap:3px;padding:6px 8px;border-bottom:1px solid var(--line-soft);background:var(--surface-2)}
+.world-organisation-tabs button{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:4px 9px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font-size:10.5px;font-weight:750;cursor:pointer}
+.world-organisation-tabs button:hover{background:var(--surface-3);color:var(--text)}
+.world-organisation-tabs button.is-active{border-color:var(--accent);background:var(--accent-soft);color:var(--text)}
+.world-organisation-tabs small{min-width:18px;padding:1px 5px;border-radius:999px;background:rgba(255,255,255,.055);font-size:8px;text-align:center}
+.world-organisation-panel{flex:1;min-height:0;padding:12px 12px 20px!important;overflow:auto}
+.world-hierarchy-heading__actions{display:flex;gap:4px;flex-wrap:wrap}
+.world-hierarchy--levels{min-height:300px;padding:12px 8px 22px;overflow:auto}
+.world-hierarchy-canvas{position:relative;min-width:100%;width:max-content;margin:0 auto}
+.world-hierarchy-levels{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:44px;min-width:100%;width:max-content;padding:4px 14px 18px}
+.world-hierarchy-level{display:grid;gap:7px;justify-items:center;min-width:100%}
+.world-hierarchy-level__header{display:flex;align-items:center;justify-content:center;gap:7px;min-height:25px;color:var(--muted);font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.world-hierarchy-level__header strong{color:var(--accent-2);font-size:10px}
+.world-hierarchy-level__actions{display:flex;gap:1px;opacity:.72}
+.world-hierarchy-level__actions button,.world-org-object-card__actions button{width:23px;height:23px;padding:0;border:0;border-radius:4px;background:transparent;color:var(--muted);cursor:pointer}
+.world-hierarchy-level__actions button:hover,.world-org-object-card__actions button:hover{background:rgba(255,255,255,.06);color:var(--text)}
+.world-hierarchy-level__actions button:disabled{opacity:.25;cursor:default}
+.world-hierarchy-level__members{display:flex;align-items:stretch;justify-content:center;gap:12px;min-width:max-content}
+.world-hierarchy-level__empty{min-width:150px;padding:9px 16px;border:1px dashed var(--line-soft);border-radius:6px;color:var(--muted);font-size:10px;text-align:center}
+.world-hierarchy--levels .world-member-node{position:relative;z-index:2;min-width:170px;max-width:235px;width:auto;margin:0;padding:7px 8px;background:#1b2328;border:1px solid #39464d;border-radius:7px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.world-hierarchy--levels .world-member-node__avatar{width:38px;height:38px;border-radius:6px}
+.world-hierarchy--levels .world-member-node__main strong,.world-hierarchy--levels .world-member-node__main small{max-width:150px}
+.world-member-dependency-label{margin-top:2px!important;color:#778890!important;font-size:8px!important}
+.world-hierarchy-lines{position:absolute;z-index:0;left:0;top:0;overflow:visible;pointer-events:none}
+.world-hierarchy-line{fill:none;stroke:#53636c;stroke-width:1.15;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.world-hierarchy-empty{min-height:250px!important}
+
+.world-member-dependency-list{margin:3px 0;padding:7px;border:1px solid var(--line-soft);border-radius:6px;max-height:250px;overflow:auto}
+.world-member-dependency-list legend{padding:0 5px;color:var(--muted);font-size:10px;font-weight:750}
+#worldMemberDependencyChoices{display:grid;gap:6px}
+.world-member-dependency-group{display:grid;gap:3px;padding:5px;border:1px solid var(--line-soft);border-radius:5px;background:rgba(255,255,255,.015)}
+.world-member-dependency-group>strong{font-size:9px;color:var(--accent-2);letter-spacing:.07em;text-transform:uppercase}
+.world-member-dependency-choice{display:flex!important;flex-direction:row!important;align-items:center;gap:6px!important;min-height:27px;padding:3px 5px;border-radius:4px;color:var(--text)!important;font-size:10px!important;cursor:pointer}
+.world-member-dependency-choice:hover{background:rgba(255,255,255,.045)}
+.world-member-dependency-choice input{width:14px;height:14px;min-width:14px;padding:0}
+
+.world-org-object-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:7px;margin-top:10px}
+.world-org-object-card{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:8px;align-items:start;padding:8px;border:1px solid var(--line-soft);border-radius:7px;background:var(--surface-2)}
+.world-org-object-card__icon{width:34px;height:34px;display:grid;place-items:center;border-radius:6px;background:rgba(255,255,255,.04);color:var(--accent-2);font-size:17px}
+.world-org-object-card__body{min-width:0}.world-org-object-card__body strong,.world-org-object-card__body small{display:block}.world-org-object-card__body strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.world-org-object-card__body small{margin-top:2px;color:var(--accent-2);font-size:9px}.world-org-object-card__body p{margin:6px 0 0;color:var(--muted);font-size:10px;line-height:1.4;white-space:pre-wrap}
+.world-org-object-card__actions{display:flex;gap:1px}
+.world-org-objects-empty{min-height:260px!important}
+
+@media(max-width:1100px){
+ .world-organisation-layout{grid-template-columns:205px minmax(0,1fr)}
+ .world-hierarchy-levels{gap:38px;padding-inline:8px}
+ .world-hierarchy-level__members{gap:8px}
+ .world-hierarchy--levels .world-member-node{min-width:150px;max-width:190px}
+ .world-hierarchy--levels .world-member-node__main strong,.world-hierarchy--levels .world-member-node__main small{max-width:115px}
+}
+@media(max-width:760px){
+ .world-organisation-layout{grid-template-columns:1fr}
+ .world-organisation-profile{max-height:none}
+ .world-organisation-tabs{position:sticky;top:0;z-index:4}
+ .world-organisation-panel{padding:8px!important}
+ .world-hierarchy-levels{align-items:flex-start;gap:34px;padding-left:4px}
+ .world-hierarchy-level{justify-items:start}
+ .world-hierarchy-level__members{justify-content:flex-start}
+ .world-org-object-list{grid-template-columns:1fr}
+}

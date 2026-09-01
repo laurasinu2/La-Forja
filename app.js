@@ -601,7 +601,7 @@
   }
 
   function defaultWorldState() {
-    return { selectedSection: "creatures", selectedCreatureId: "", selectedCreatureCategoryId: "__all", selectedOrganisationId: "", selectedCharacterId: "", creatureCategories: [], creatures: [], characters: [], organisations: [] };
+    return { selectedSection: "creatures", selectedCreatureId: "", selectedCreatureCategoryId: "__all", selectedOrganisationId: "", selectedOrganisationPanel: "hierarchy", selectedCharacterId: "", creatureCategories: [], creatures: [], characters: [], organisations: [] };
   }
 
   function normaliseWorldStats(raw = {}) {
@@ -642,15 +642,66 @@
     const characters = Array.isArray(raw.characters) ? raw.characters.map(item => normaliseWorldCreature(item, "character")) : [];
     const characterIds = new Set(characters.map(item => item.id));
     const organisations = Array.isArray(raw.organisations) ? raw.organisations.map(item => {
-      const members = Array.isArray(item?.members) ? item.members.map(member => ({
-        id: String(member?.id || uid()), characterId: String(member?.characterId || ""), parentMemberId: String(member?.parentMemberId || ""), role: String(member?.role || "").slice(0, 140)
+      let members = Array.isArray(item?.members) ? item.members.map(member => ({
+        id: String(member?.id || uid()), characterId: String(member?.characterId || ""),
+        parentMemberId: String(member?.parentMemberId || ""),
+        parentMemberIds: Array.isArray(member?.parentMemberIds) ? member.parentMemberIds.map(String) : [],
+        levelId: String(member?.levelId || ""),
+        dependencyMode: ["none","previous-level","members"].includes(member?.dependencyMode) ? member.dependencyMode : "",
+        role: String(member?.role || "").slice(0, 140)
       })).filter(member => characterIds.has(member.characterId)) : [];
       const memberIds = new Set(members.map(member => member.id));
-      members.forEach(member => { if (!memberIds.has(member.parentMemberId) || member.parentMemberId === member.id) member.parentMemberId = ""; });
+      members.forEach(member => {
+        member.parentMemberIds = member.parentMemberIds.filter(id => memberIds.has(id) && id !== member.id);
+        if (!member.parentMemberIds.length && member.parentMemberId && memberIds.has(member.parentMemberId) && member.parentMemberId !== member.id) member.parentMemberIds = [member.parentMemberId];
+        member.parentMemberId = member.parentMemberIds[0] || "";
+      });
+
+      let hierarchyLevels = Array.isArray(item?.hierarchyLevels) ? item.hierarchyLevels.map((level, index) => ({
+        id: String(level?.id || uid()), name: String(level?.name || "").trim().slice(0, 100), order: Number.isFinite(Number(level?.order)) ? Number(level.order) : index
+      })) : [];
+      hierarchyLevels.sort((a,b) => a.order - b.order);
+      hierarchyLevels.forEach((level,index) => { level.order = index; });
+
+      if (!hierarchyLevels.length && members.length) {
+        const byId = new Map(members.map(member => [member.id, member]));
+        const depthMemo = new Map();
+        const depthOf = (member, seen = new Set()) => {
+          if (!member || depthMemo.has(member?.id)) return depthMemo.get(member?.id) || 0;
+          if (seen.has(member.id)) return 0;
+          const next = new Set(seen); next.add(member.id);
+          const parent = byId.get(member.parentMemberId);
+          const depth = parent ? depthOf(parent, next) + 1 : 0;
+          depthMemo.set(member.id, depth); return depth;
+        };
+        const maxDepth = Math.max(0, ...members.map(member => depthOf(member)));
+        hierarchyLevels = Array.from({length:maxDepth+1}, (_,index) => ({ id: uid(), name: "", order:index }));
+        members.forEach(member => {
+          const depth = depthOf(member);
+          member.levelId = hierarchyLevels[depth]?.id || hierarchyLevels[0]?.id || "";
+          member.dependencyMode = member.parentMemberIds.length ? "members" : "none";
+        });
+      }
+
+      const levelIds = new Set(hierarchyLevels.map(level => level.id));
+      if (members.length && !hierarchyLevels.length) hierarchyLevels.push({ id: uid(), name: "", order:0 });
+      members.forEach(member => {
+        if (!levelIds.has(member.levelId)) member.levelId = hierarchyLevels[0]?.id || "";
+        if (!member.dependencyMode) member.dependencyMode = member.parentMemberIds.length ? "members" : "none";
+        if (member.dependencyMode === "none") member.parentMemberIds = [];
+        member.parentMemberId = member.parentMemberIds[0] || "";
+      });
+
+      const objects = Array.isArray(item?.objects) ? item.objects.map(object => ({
+        id: String(object?.id || uid()), notebookEntryId: String(object?.notebookEntryId || ""),
+        relationship: ["symbol","standard","relic","rank","uniform","document","currency","secret","other"].includes(object?.relationship) ? object.relationship : "other",
+        notes: String(object?.notes || "").slice(0, 2000)
+      })) : [];
+
       return {
         id: String(item?.id || uid()), name: String(item?.name || "Organización sin nombre").slice(0, 140), imageId: String(item?.imageId || ""),
         description: String(item?.description || "").slice(0, 8000), headquarters: String(item?.headquarters || "").slice(0, 500), goals: String(item?.goals || "").slice(0, 5000), attitude: String(item?.attitude || "").slice(0, 1000), notes: String(item?.notes || "").slice(0, 8000),
-        members, createdAt: item?.createdAt || now(), updatedAt: item?.updatedAt || now()
+        hierarchyLevels, members, objects, createdAt: item?.createdAt || now(), updatedAt: item?.updatedAt || now()
       };
     }) : [];
     const creatureIds = new Set(creatures.map(item => item.id));
@@ -661,6 +712,7 @@
       selectedCreatureId: creatureIds.has(String(raw.selectedCreatureId || "")) ? String(raw.selectedCreatureId) : creatures[0]?.id || "",
       selectedCreatureCategoryId: selectedCreatureCategoryId === "__all" || creatureCategoryIds.has(selectedCreatureCategoryId) ? selectedCreatureCategoryId : "__all",
       selectedOrganisationId: organisationIds.has(String(raw.selectedOrganisationId || "")) ? String(raw.selectedOrganisationId) : organisations[0]?.id || "",
+      selectedOrganisationPanel: raw.selectedOrganisationPanel === "objects" ? "objects" : "hierarchy",
       selectedCharacterId: characterIds.has(String(raw.selectedCharacterId || "")) ? String(raw.selectedCharacterId) : "",
       creatureCategories, creatures, characters, organisations
     };

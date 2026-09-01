@@ -1,4 +1,4 @@
-# La Forja del Narrador · v2.14.1
+# La Forja del Narrador · v2.14.2
 
 Versión de consolidación basada en v2.13.0.
 
@@ -44,3 +44,12 @@ Versión de consolidación basada en v2.13.0.
 - Referencias de Misiones reorganizadas como árboles plegados.
 - Laterales de Atlas redimensionables.
 - Editor de marcadores conserva asociación/creación de fichas del Cuaderno de forma visible.
+
+
+## v2.14.2 — jerarquías por niveles y objetos de organización
+
+- Organizaciones con filas/niveles reales y varios personajes en la misma fila.
+- Dependencia de toda la fila superior o de personas concretas de niveles superiores.
+- Nombres opcionales, orden y gestión de niveles.
+- Nueva pestaña Objetos con fichas de Elementos del Cuaderno reutilizables.
+- Migración automática de jerarquías antiguas sin perder personajes ni cargos.
